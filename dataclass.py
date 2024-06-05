@@ -1,0 +1,43 @@
+from dataclasses import dataclass,field
+
+# 각 part별 DATA구조 설정
+@dataclass
+class Nutrition:
+    EatScore: float = field(default=0.0)
+    Carb: str = field(default="")
+    Protein: str =field(default="")
+    Fat: str =field(default="")
+    Fiber: str =field(default="")
+    Sodium: str =field(default="")
+    Sugar: str =field(default="")
+    SatFat: str =field(default="")
+    Cholesterol: str =field(default="")
+
+@dataclass
+class Vitastiq:
+    Mg: str =field(default="")
+    Biotin: str =field(default="")
+    Se: str =field(default="")
+    VitB2: str =field(default="")
+    Folate: str =field(default="")
+    Zn: str =field(default="")
+    VitC: str =field(default="")
+    VitE: str =field(default="")
+    VitB6: str =field(default="")
+    VitB1: str =field(default="")
+
+@dataclass
+class Inbody:
+    InbodyScore: int = field(default=0)
+    Weight: float = field(default=0.0)
+    BodyFat: float = field(default=0.0)
+    ApproWeight: float = field(default=0.0)
+    FatFree: float = field(default=0.0)
+    WeightControl: float = field(default=0.0)
+    MuscleControl: float = field(default=0.0)
+    FatControl: float = field(default=0.0)
+
+@dataclass
+class Agesensor:
+    Rating: str =field(default="")
+    Rank: int = field(default=0)
