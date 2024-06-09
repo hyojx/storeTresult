@@ -11,6 +11,8 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle
 from dataclasses import fields
 
+filepath="image/"
+
 # 폰트 등록 함수
 def register_fonts():
     # macOS의 산돌고딕 네오 폰트 경로
@@ -459,59 +461,59 @@ def Food_Image(c,Nutrition,height):
     
     #탄수화물
     if Nutrition.Carb=="과다":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Carb.png", 498, height - 214, 50,23,mask='auto')
+        c.drawImage(filepath+"Carb.png", 498, height - 214, 50,23,mask='auto')
     elif Nutrition.Carb=="적정":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Carb.png", 433, height - 214, 50,23,mask='auto')
+        c.drawImage(filepath+"Carb.png", 433, height - 214, 50,23,mask='auto')
     elif Nutrition.Carb=="부족":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Carb.png", 368, height - 214, 50,23,mask='auto')    
+        c.drawImage(filepath+"Carb.png", 368, height - 214, 50,23,mask='auto')    
     
     #단백질
     if Nutrition.Protein=="과다":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Pro.png", 498, height - 242.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Pro.png", 498, height - 242.5, 50,23,mask='auto')
     elif Nutrition.Protein=="적정":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Pro.png", 433, height - 242.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Pro.png", 433, height - 242.5, 50,23,mask='auto')
     elif Nutrition.Protein=="부족":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Pro.png", 368, height - 242.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Pro.png", 368, height - 242.5, 50,23,mask='auto')
 
     #지방
     if Nutrition.Fat=="과다":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Fat.png", 498, height - 270.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Fat.png", 498, height - 270.5, 50,23,mask='auto')
     elif Nutrition.Fat=="적정":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Fat.png", 433, height - 270.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Fat.png", 433, height - 270.5, 50,23,mask='auto')
     elif Nutrition.Fat=="부족":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Fat.png", 368, height - 270.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Fat.png", 368, height - 270.5, 50,23,mask='auto')
 
     #식이섬유
     if Nutrition.Fiber=="과다":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Fiber.png", 498, height - 298.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Fiber.png", 498, height - 298.5, 50,23,mask='auto')
     elif Nutrition.Fiber=="적정":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Fiber.png", 433, height - 298.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Fiber.png", 433, height - 298.5, 50,23,mask='auto')
     elif Nutrition.Fiber=="부족":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Fiber.png", 368, height - 298.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Fiber.png", 368, height - 298.5, 50,23,mask='auto')
 
     #나트륨
     if Nutrition.Sodium=="과다":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Sod.png", 498, height - 327.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Sod.png", 498, height - 327.5, 50,23,mask='auto')
     elif Nutrition.Sodium=="적정":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Sod.png", 433, height - 327.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Sod.png", 433, height - 327.5, 50,23,mask='auto')
 
     #당류
     if Nutrition.Sugar=="과다":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Sugar.png", 498, height - 355.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Sugar.png", 498, height - 355.5, 50,23,mask='auto')
     elif Nutrition.Sugar=="적정":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Sugar.png", 433, height - 355.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Sugar.png", 433, height - 355.5, 50,23,mask='auto')
 
     #포화지방
     if Nutrition.SatFat=="과다":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/SatF.png", 498, height - 384, 50,23,mask='auto')
+        c.drawImage(filepath+"SatF.png", 498, height - 384, 50,23,mask='auto')
     elif Nutrition.SatFat=="적정":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/SatF.png", 433, height - 384, 50,23,mask='auto')
+        c.drawImage(filepath+"SatF.png", 433, height - 384, 50,23,mask='auto')
 
     #콜레스테롤
     if Nutrition.Cholesterol=="과다":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Cho.png", 498, height - 412.5, 50,23,mask='auto')
+        c.drawImage(filepath+"Cho.png", 498, height - 412.5, 50,23,mask='auto')
     elif Nutrition.Cholesterol=="적정": 
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Cho.png", 433, height - 412.5, 50,23,mask='auto')                       
+        c.drawImage(filepath+"Cho.png", 433, height - 412.5, 50,23,mask='auto')                       
     
     return
 
@@ -523,54 +525,54 @@ def draw_star(c,Vitastiq,height):
     bet=107
 
     if Vitastiq.Mg=="낮은"or Vitastiq.Mg=="경미":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_red.png", baseX, baseY, star_size,star_size,mask='auto')
+        c.drawImage(filepath+"Star_red.png", baseX, baseY, star_size,star_size,mask='auto')
     else:
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_blue.png", baseX, baseY, star_size,star_size,mask='auto') 
+        c.drawImage(filepath+"Star_blue.png", baseX, baseY, star_size,star_size,mask='auto') 
 
     if Vitastiq.Biotin=="낮은" or Vitastiq.Biotin=="경미":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_red.png", baseX+(bet*1), baseY, star_size,star_size,mask='auto')
+        c.drawImage(filepath+"Star_red.png", baseX+(bet*1), baseY, star_size,star_size,mask='auto')
     else:
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_blue.png", baseX+(bet*1), baseY, star_size,star_size,mask='auto')  
+        c.drawImage(filepath+"Star_blue.png", baseX+(bet*1), baseY, star_size,star_size,mask='auto')  
 
     if Vitastiq.Se=="낮은" or Vitastiq.Se=="경미":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_red.png", baseX+(bet*2), baseY, star_size,star_size,mask='auto')
+        c.drawImage(filepath+"Star_red.png", baseX+(bet*2), baseY, star_size,star_size,mask='auto')
     else:
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_blue.png", baseX+(bet*2), baseY, star_size,star_size,mask='auto')
+        c.drawImage(filepath+"Star_blue.png", baseX+(bet*2), baseY, star_size,star_size,mask='auto')
 
     if Vitastiq.VitB2=="낮은" or Vitastiq.VitB2=="경미":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_red.png", baseX+(bet*3), baseY, star_size,star_size,mask='auto')
+        c.drawImage(filepath+"Star_red.png", baseX+(bet*3), baseY, star_size,star_size,mask='auto')
     else:
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_blue.png", baseX+(bet*3), baseY, star_size,star_size,mask='auto')  
+        c.drawImage(filepath+"Star_blue.png", baseX+(bet*3), baseY, star_size,star_size,mask='auto')  
 
     if Vitastiq.Folate=="낮은" or Vitastiq.Folate=="경미":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_red.png", baseX+(bet*4), baseY, star_size,star_size,mask='auto')
+        c.drawImage(filepath+"Star_red.png", baseX+(bet*4), baseY, star_size,star_size,mask='auto')
     else:
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_blue.png", baseX+(bet*4), baseY, star_size,star_size,mask='auto')  
+        c.drawImage(filepath+"Star_blue.png", baseX+(bet*4), baseY, star_size,star_size,mask='auto')  
 
     if Vitastiq.Zn=="낮은" or Vitastiq.Zn=="경미":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_red.png", baseX, baseY-68, star_size,star_size,mask='auto')
+        c.drawImage(filepath+"Star_red.png", baseX, baseY-68, star_size,star_size,mask='auto')
     else:
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_blue.png", baseX, baseY-68, star_size,star_size,mask='auto')    
+        c.drawImage(filepath+"Star_blue.png", baseX, baseY-68, star_size,star_size,mask='auto')    
 
     if Vitastiq.VitC=="낮은" or Vitastiq.VitC=="경미":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_red.png", baseX+(bet*1), baseY-68, star_size,star_size,mask='auto')
+        c.drawImage(filepath+"Star_red.png", baseX+(bet*1), baseY-68, star_size,star_size,mask='auto')
     else:
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_blue.png", baseX+(bet*1), baseY-68, star_size,star_size,mask='auto')  
+        c.drawImage(filepath+"Star_blue.png", baseX+(bet*1), baseY-68, star_size,star_size,mask='auto')  
 
     if Vitastiq.VitB1=="낮은" or Vitastiq.VitB1=="경미":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_red.png", baseX+(bet*2), baseY-68, star_size,star_size,mask='auto')
+        c.drawImage(filepath+"Star_red.png", baseX+(bet*2), baseY-68, star_size,star_size,mask='auto')
     else:
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_blue.png", baseX+(bet*2), baseY-68, star_size,star_size,mask='auto')
+        c.drawImage(filepath+"Star_blue.png", baseX+(bet*2), baseY-68, star_size,star_size,mask='auto')
 
     if Vitastiq.VitE=="낮은" or Vitastiq.VitE=="경미":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_red.png", baseX+(bet*3), baseY-68, star_size,star_size,mask='auto')
+        c.drawImage(filepath+"Star_red.png", baseX+(bet*3), baseY-68, star_size,star_size,mask='auto')
     else:
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_blue.png", baseX+(bet*3), baseY-68, star_size,star_size,mask='auto')  
+        c.drawImage(filepath+"Star_blue.png", baseX+(bet*3), baseY-68, star_size,star_size,mask='auto')  
 
     if Vitastiq.VitB6=="낮은" or Vitastiq.VitB6=="경미":
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_red.png", baseX+(bet*4), baseY-68, star_size,star_size,mask='auto')
+        c.drawImage(filepath+"Star_red.png", baseX+(bet*4), baseY-68, star_size,star_size,mask='auto')
     else:
-        c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_blue.png", baseX+(bet*4), baseY-68, star_size,star_size,mask='auto')             
+        c.drawImage(filepath+"Star_blue.png", baseX+(bet*4), baseY-68, star_size,star_size,mask='auto')             
              
     return
 
@@ -787,13 +789,13 @@ def draw_inbody(c,Inbody,height):
 #인바디 유형 그리기
 def draw_alpha(c,Inbody_cat,height):
     if "C" in Inbody_cat:
-        c.drawImage('/Users/jeonghyogyeong/Desktop/inbody/C_in.png',145,height-770,68,76,mask='auto')
+        c.drawImage(filepath+'C_in.png',145,height-770,68,76,mask='auto')
 
     if "D" in Inbody_cat:
-        c.drawImage('/Users/jeonghyogyeong/Desktop/inbody/D_in.png',145,height-770,68,76,mask='auto')    
+        c.drawImage(filepath+'D_in.png',145,height-770,68,76,mask='auto')    
 
     if "I" in Inbody_cat:
-        c.drawImage('/Users/jeonghyogyeong/Desktop/inbody/I_in.png',150,height-770,50,76,mask='auto')    
+        c.drawImage(filepath+'I_in.png',150,height-770,50,76,mask='auto')    
 
     return
 
@@ -803,17 +805,17 @@ def draw_panel(c,Agesensor,height):
     baseX=320
     baseY=height-750
     if Agesensor.Rating =="A":
-        c.drawImage('/Users/jeonghyogyeong/Desktop/inbody/A.png',baseX,baseY,130,69,mask='auto')
+        c.drawImage(filepath+'A.png',baseX,baseY,130,69,mask='auto')
         print("코드실행A")
     elif Agesensor.Rating =="B":
-        c.drawImage('/Users/jeonghyogyeong/Desktop/inbody/B.png',baseX,baseY,130,69,mask='auto')
+        c.drawImage(filepath+'B.png',baseX,baseY,130,69,mask='auto')
         print("코드실행B")
     elif Agesensor.Rating =="C":
-        c.drawImage('/Users/jeonghyogyeong/Desktop/inbody/C.png',baseX,baseY,130,69,mask='auto')    
+        c.drawImage(filepath+'C.png',baseX,baseY,130,69,mask='auto')    
     elif Agesensor.Rating =="D":
-        c.drawImage('/Users/jeonghyogyeong/Desktop/inbody/D.png',baseX,baseY,130,69,mask='auto')    
+        c.drawImage(filepath+'D.png',baseX,baseY,130,69,mask='auto')    
     elif Agesensor.Rating =="E":
-        c.drawImage('/Users/jeonghyogyeong/Desktop/inbody/E.png',baseX,baseY,130,69,mask='auto')    
+        c.drawImage(filepath+'E.png',baseX,baseY,130,69,mask='auto')    
 
     c.setFont('AppleGothic', 40)
     c.setFillColorRGB(1,208/255,20/255)
@@ -861,7 +863,7 @@ def draw_panel(c,Agesensor,height):
 
 # PDF 파일 생성
 def create_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
-    filename='/Users/jeonghyogyeong/Desktop/inbody/Basic_Health_Report.pdf'
+    filename=filepath+'Basic_Health_Report.pdf'
     c = canvas.Canvas(filename, pagesize=A4)
     width, height = A4
     register_fonts()
@@ -876,7 +878,7 @@ def create_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
     c.line(450, height - 100, 550, height - 100)
     
     # 내담자명
-    c.drawImage('/Users/jeonghyogyeong/Desktop/inbody/user.png',455,height-100,20,20,mask='auto')
+    c.drawImage(filepath+'user.png',455,height-100,20,20,mask='auto')
 
     username= Name+"님"
     c.setFont('AppleGothic', 13)
@@ -902,10 +904,10 @@ def create_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
     c.drawString(35,height-160,"•4가지 항목의 종합적인 점수에요.")
 
     # 4가지 점수표현 칸
-    c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/score.png", 185, height - 240, 80,45,mask='auto')
-    c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/score.png", 185, height - 295, 80,45,mask='auto')
-    c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/score.png", 185, height - 350, 80,45,mask='auto')
-    c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/score.png", 185, height - 405, 80,45,mask='auto')
+    c.drawImage(filepath+"score.png", 185, height - 240, 80,45,mask='auto')
+    c.drawImage(filepath+"score.png", 185, height - 295, 80,45,mask='auto')
+    c.drawImage(filepath+"score.png", 185, height - 350, 80,45,mask='auto')
+    c.drawImage(filepath+"score.png", 185, height - 405, 80,45,mask='auto')
 
     # 점수
     vitascore=100
@@ -1031,14 +1033,14 @@ def create_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
     c.setFillColorRGB(0, 0, 0)
     c.setFont('AppleGothic', 12)
     c.drawString(35,height-460,"비타민/무기질")
-    c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Vit_Min.png",30,height-610,530,130,mask='auto')
+    c.drawImage(filepath+"Vit_Min.png",30,height-610,530,130,mask='auto')
 
-    c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_red.png",160,height-468,20,20,mask='auto')
+    c.drawImage(filepath+"Star_red.png",160,height-468,20,20,mask='auto')
     c.setFillColorRGB(0.5, 0.5, 0.5)
     c.setFont('AppleGothic', 10)
     c.drawString(183,height-462,"체내 영양소가 낮은 경향으로 보여요.")
 
-    c.drawImage("/Users/jeonghyogyeong/Desktop/inbody/Star_blue.png",355,height-468,20,20,mask='auto')
+    c.drawImage(filepath+"Star_blue.png",355,height-468,20,20,mask='auto')
     c.setFillColorRGB(0.5, 0.5, 0.5)
     c.setFont('AppleGothic', 10)
     c.drawString(378,height-462,"체내 영양소가 적정한 경향으로 보여요.")
@@ -1081,7 +1083,7 @@ def create_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
     # PDF를 이미지로 변환
     images = convert_from_path(filename)
     # 첫 번째 페이지를 이미지로 저장
-    img_path = "/Users/jeonghyogyeong/Desktop/inbody/Basic_Health_Report.png"
+    img_path = filepath+"Basic_Health_Report.png"
     images[0].save(img_path, "PNG")
 
     return img_path 
