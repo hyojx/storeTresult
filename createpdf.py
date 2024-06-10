@@ -591,6 +591,8 @@ def set_category(Inbody):
             C_id="D_ss"
         elif 90<skeletalP<110 and 80<fatP<160:
             C_id="I_sh"
+        else:
+            C_id="N"    
     if 115<=weightP:
         if skeletalP<=110 and 160<=fatP:
             C_id="C_ow"
@@ -598,11 +600,15 @@ def set_category(Inbody):
             C_id="D_os"
         if 110<=skeletalP and 160<=fatP:
             C_id="I_oo"
+        else:
+            C_id="N"     
     if weightP<=85:
         if 90<skeletalP and fatP<=80:
             C_id="D_ls"
         if skeletalP<90 and fatP<=80:
-            C_id="I_lw"            
+            C_id="I_lw"    
+        else:
+            C_id="N"             
     return C_id
 
 #인바디 유형별 코멘트 작성
@@ -697,7 +703,12 @@ def write_comment(c,Inbody_cat,height):
         c.setFont('AppleGothic', 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height-800,'•체중, 골격근량, 체지방량이 모두 표준이상인 유형')
-        c.drawString(32,height-815,'•전체적으로 표준보다 체구성 성분이 많아서 나타나는 유형')                              
+        c.drawString(32,height-815,'•전체적으로 표준보다 체구성 성분이 많아서 나타나는 유형')      
+
+    elif Inbody_cat=="N":
+        c.setFont('AppleGothic', 11)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height-675,'"유형을 분류할 수 없습니다. 인바디 값을 확인해주세요."')
     return
 
 #인바디 그래프 그리기
@@ -791,12 +802,13 @@ def draw_alpha(c,Inbody_cat,height):
     if "C" in Inbody_cat:
         c.drawImage(filepath+'C_in.png',145,height-770,68,76,mask='auto')
 
-    if "D" in Inbody_cat:
+    elif "D" in Inbody_cat:
         c.drawImage(filepath+'D_in.png',145,height-770,68,76,mask='auto')    
 
-    if "I" in Inbody_cat:
-        c.drawImage(filepath+'I_in.png',150,height-770,50,76,mask='auto')    
-
+    elif "I" in Inbody_cat:
+        c.drawImage(filepath+'I_in.png',150,height-770,50,76,mask='auto')   
+    elif "N" in Inbody_cat:
+        print("유형을 분류할 수 없는 항목")
     return
 
 # 에이지 센서 패널
