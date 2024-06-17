@@ -11,7 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle
 from dataclasses import fields
 
-filepath="static/image/"
+filepath="static/image/basic"
 resultfilepath="static/result/"
 
 # 폰트 등록 함수

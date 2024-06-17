@@ -11,7 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle
 from dataclasses import fields
 
-filepath="static/image/"
+filepath="static/image/diet"
 resultfilepath="static/result/"
 mainfontname='AppleGothic'
 
