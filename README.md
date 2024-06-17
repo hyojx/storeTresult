@@ -11,3 +11,6 @@
 **3. dataclass**
 - 구현에 필요한 dataclass
 - 측정하는 기기 별로 구성
+
+**4. create_pdf2**
+- diet 결과지 생성하는 부분
