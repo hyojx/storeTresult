@@ -11,7 +11,8 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle
 from dataclasses import fields
 
-filepath="image/"
+filepath="static/image/"
+resultfilepath="static/result/"
 
 # 폰트 등록 함수
 def register_fonts():
@@ -717,10 +718,6 @@ def draw_inbody(c,Inbody,height):
     skeletalP=Inbody.FatFree/(Inbody.FatFree+Inbody.MuscleControl)*100
     fatP=Inbody.BodyFat/(Inbody.BodyFat+Inbody.FatControl)*100
 
-    print(weightP)
-    print(skeletalP)
-    print(fatP)
-
     c.setFillColorRGB(0.9, 0.9, 0.9)
     c.setStrokeColorRGB(0.9, 0.9, 0.9)
     c.roundRect(90,height-710, 180, 15,7.5,fill=1)
@@ -733,10 +730,6 @@ def draw_inbody(c,Inbody,height):
         fatW=54*(fatP-40)/60
     elif 100<fatP:    
         fatW=54+126*(fatP-100)/420
-    
-    print(weightW)
-    print(skeletalW)
-    print(fatW)
 
     if weightP<=85 :
         c.setFillColorRGB(1,208/255,20/255)
@@ -818,10 +811,8 @@ def draw_panel(c,Agesensor,height):
     baseY=height-750
     if Agesensor.Rating =="A":
         c.drawImage(filepath+'A.png',baseX,baseY,130,69,mask='auto')
-        print("코드실행A")
     elif Agesensor.Rating =="B":
         c.drawImage(filepath+'B.png',baseX,baseY,130,69,mask='auto')
-        print("코드실행B")
     elif Agesensor.Rating =="C":
         c.drawImage(filepath+'C.png',baseX,baseY,130,69,mask='auto')    
     elif Agesensor.Rating =="D":
@@ -874,10 +865,12 @@ def draw_panel(c,Agesensor,height):
 
 
 # PDF 파일 생성
-def create_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
-    filename=filepath+'Basic_Health_Report.pdf'
+def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
+    filename=resultfilepath+'Basic_Health_Report.pdf'
     c = canvas.Canvas(filename, pagesize=A4)
     width, height = A4
+    print("width : "+str(width))
+    print("height : "+str(height))
     register_fonts()
     
     # 제목1 추가 (한글) - 페이지 가운데에 배치
@@ -936,13 +929,9 @@ def create_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
     InboS=str(Inbody.InbodyScore)+"점"
     AgeS=str(100-Agesensor.Rank)+"점"
 
-    print(type(Nutrition.EatScore))
-    print(type(vitascore))
-    print(type(Inbody.InbodyScore))
-    print(type(100-Agesensor.Rank))
     TotalScore=float(Nutrition.EatScore+vitascore+Inbody.InbodyScore+100-Agesensor.Rank)/4
     
-    print(str(TotalScore)+"---------")
+    print("Total Score : "+str(TotalScore))
 
     c.setFont('AppleGothic', 10)
     c.setFillColorRGB(0, 0, 0)
@@ -1066,7 +1055,7 @@ def create_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
     c.drawString(35,height-655,"인바디")
 
     Inbody_cat=set_category(Inbody)
-    print(Inbody_cat)
+    print("Inbody_cat"+Inbody_cat)
     write_comment(c,Inbody_cat,height)
 
     c.setFont('AppleGothic', 9)
@@ -1095,10 +1084,11 @@ def create_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
     # PDF를 이미지로 변환
     images = convert_from_path(filename)
     # 첫 번째 페이지를 이미지로 저장
-    img_path = filepath+"Basic_Health_Report.png"
+    img_path = resultfilepath+"Basic_Health_Report.png"
     images[0].save(img_path, "PNG")
 
     return img_path 
+
 
 # PDF 생성 테스트용
 if __name__ == "__main__":
@@ -1106,4 +1096,4 @@ if __name__ == "__main__":
     Vita=Vitastiq(Biotin="", VitC="", Mg="", VitB1="", VitB2="", Zn="", Se="경미", VitB6="낮은", VitE="경미", Folate="낮은")
     Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=19.5,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9)
     Age=Agesensor(Rating="B",Rank=30)
-    create_pdf(Nutri,Vita,Inbo,Age,"김건강")
+    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강")

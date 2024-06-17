@@ -30,6 +30,7 @@ class Vitastiq:
 class Inbody:
     InbodyScore: int = field(default=0)
     Weight: float = field(default=0.0)
+    BMI: float= field(default=0.0)
     BodyFat: float = field(default=0.0)
     ApproWeight: float = field(default=0.0)
     FatFree: float = field(default=0.0)
@@ -41,3 +42,44 @@ class Inbody:
 class Agesensor:
     Rating: str =field(default="")
     Rank: int = field(default=0)
+
+@dataclass
+class DietGoal:
+    Gweight: float = field(default=0.0)
+    NMeal: int = field(default=3)    
+    Rcal: float = field(default=0.0)
+    Period: str =field(default="")
+    FoodR: int = field(default=0)
+    WorkOutR: int =field(default=0) 
+
+@dataclass
+class InbodyDetail:
+    UpperLF: str =field(default="")
+    UpperRF: str =field(default="")
+    UpperLS: str =field(default="")
+    UpperRS: str =field(default="")
+    LowerLF: str =field(default="")
+    LowerRF: str =field(default="")
+    LowerLS: str =field(default="")
+    LowerRS: str =field(default="")   
+
+@dataclass
+class SkinState:
+    Concern: str =field(default="")
+    Type: str =field(default="")
+    TZWater: str =field(default="")
+    UZWater: str =field(default="")
+    TZOil: str =field(default="")
+    UZOil: str =field(default="")
+    CScore: float = field(default=0.0)
+    CAScore: float = field(default=0.0)
+    CState: str =field(default="")
+    WScore: float = field(default=0.0)
+    WAScore: float = field(default=0.0)
+    WState: str =field(default="")
+    TScore: float = field(default=0.0)
+    TAScore: float = field(default=0.0)
+    TState: str =field(default="")
+    HScore: float = field(default=0.0)
+    HAScore: float = field(default=0.0)
+    HState: str =field(default="")

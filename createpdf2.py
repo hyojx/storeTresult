@@ -1,0 +1,576 @@
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+from dataclass import Inbody,Agesensor,DietGoal,InbodyDetail
+from PIL import Image
+from pdf2image import convert_from_path
+from reportlab.lib.colors import Color
+from reportlab.lib.units import mm
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Table, TableStyle
+from dataclasses import fields
+
+filepath="static/image/"
+resultfilepath="static/result/"
+mainfontname='AppleGothic'
+
+# 폰트 등록 함수
+def register_fonts():
+    # macOS의 산돌고딕 네오 폰트 경로
+    font_path = "/System/Library/Fonts/Supplemental/AppleGothic.ttf"
+    pdfmetrics.registerFont(TTFont(mainfontname, font_path))
+
+# 문자열 중앙배치 함수
+def draw_centered_string(c, text, y, font_name, font_size, page_width):
+    c.setFont(font_name, font_size)
+    text_width = pdfmetrics.stringWidth(text, font_name, font_size)
+    x = (page_width - text_width) / 2
+    c.drawString(x, y, text)
+
+# 인바디 유형결정
+def set_category(Inbody):
+    C_id=""
+    weightP=Inbody.Weight/(Inbody.Weight+Inbody.WeightControl)*100
+    skeletalP=Inbody.FatFree/(Inbody.FatFree+Inbody.MuscleControl)*100
+    fatP=Inbody.BodyFat/(Inbody.BodyFat+Inbody.FatControl)*100
+    if 85 < weightP <115:
+        if skeletalP <= 90 and 80<fatP <160:
+            C_id="C_sw"
+        elif skeletalP<= 110 and 160<=fatP:
+            C_id="C_so"
+        elif 110<=skeletalP and fatP<160:
+            C_id="D_ss"
+        elif 90<skeletalP<110 and 80<fatP<160:
+            C_id="I_sh"
+        else:
+            C_id="N"    
+    if 115<=weightP:
+        if skeletalP<=110 and 160<=fatP:
+            C_id="C_ow"
+        if 110<=skeletalP and 80<fatP<160:
+            C_id="D_os"
+        if 110<=skeletalP and 160<=fatP:
+            C_id="I_oo"
+        else:
+            C_id="N"     
+    if weightP<=85:
+        if 90<skeletalP and fatP<=80:
+            C_id="D_ls"
+        if skeletalP<90 and fatP<=80:
+            C_id="I_lw"    
+        else:
+            C_id="N"             
+    return C_id
+
+#인바디 유형별 코멘트 작성
+def write_comment(c,Inbody_cat,height):
+    height1=height-385
+    height2=height-510
+    height3=height-525
+
+    if Inbody_cat=="C_sw":
+        c.setFont(mainfontname, 11)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height1,'"표준체중 허약형 (C자)"')
+        c.setFont(mainfontname, 9)
+        c.setFillColorRGB(0.2, 0.2, 0.2)
+        c.drawString(32,height2,'•체중, 체지방량으로는 정상이지만 골격근이 부족한 유형')
+        c.drawString(32,height3,'•근육을 구성하는 단백질이 부족한 것이 원인')
+
+    elif Inbody_cat=="C_so":
+        c.setFont(mainfontname, 11)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height1,'"표준체중 비만형 (C자)"')
+        c.setFont(mainfontname, 9)
+        c.setFillColorRGB(0.2, 0.2, 0.2)
+        c.drawString(32,height2,'•체중, 근육량은 정상이지만 체지방이 과다한 유형')
+        c.drawString(32,height3,'•탄수화물, 지방 위주의 과도한 칼로리 섭취가 원인') 
+
+    elif Inbody_cat=="C_ow":
+        c.setFont(mainfontname, 11)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height1,'"과체중 허약형 (C자)"')
+        c.setFont(mainfontname, 9)
+        c.setFillColorRGB(0.2, 0.2, 0.2)
+        c.drawString(32,height2,'•체중과 체지방량이 골격근량 대비하여 과다한 유형')
+        c.drawString(32,height3,'•과도한 칼로리, 부족한 단백질 섭취, 근력운동 부족이 원인')
+
+    elif Inbody_cat=="D_ss":
+        c.setFont(mainfontname, 11)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height1,'"표준체중 강인형 (D자)"')
+        c.setFont(mainfontname, 9)
+        c.setFillColorRGB(0.2, 0.2, 0.2)
+        c.drawString(32,height2,'•날씬하면서 근육이 탄탄하게 잘 다듬어져 있는 유형')
+        c.drawString(32,height3,'•균형잡힌 섭취와 유산소, 근력운동 병행을 통한 상태유지')
+
+    elif Inbody_cat=="D_ss":
+        c.setFont(mainfontname, 11)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height1,'"표준체중 강인형 (D자)"')
+        c.setFont(mainfontname, 9)
+        c.setFillColorRGB(0.2, 0.2, 0.2)
+        c.drawString(32,height2,'•날씬하면서 근육이 탄탄하게 잘 다듬어져 있는 유형')
+        c.drawString(32,height3,'•균형잡힌 섭취와 유산소, 근력운동 병행을 통한 상태유지') 
+
+    elif Inbody_cat=="D_ls":
+    #elif Inbody_cat=="C_so":    
+        c.setFont(mainfontname, 11)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height1,'"저체중 강인형 (D자)"')
+        c.setFont(mainfontname, 9)
+        c.setFillColorRGB(0.2, 0.2, 0.2)
+        c.drawString(32,height2,'•근육량은 표준이상, 체중과 체지방량이 표준이하인 유형')
+        c.drawString(32,height3,'•근력운동, 균형잡힌 섭취를 통해 체지방, 골격근 유지 필요') 
+
+    elif Inbody_cat=="D_os":
+        c.setFont(mainfontname, 11)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height1,'"과체중 강인형 (D자)"')
+        c.setFont(mainfontname, 9)
+        c.setFillColorRGB(0.2, 0.2, 0.2)
+        c.drawString(32,height2,'•과체중이지만 체지방에 비해 골격근이 발달한 유형')
+        c.drawString(32,height3,'•주로 운동선수들에게 나타나는 유형으로 체지방 유지 필요')
+
+    elif Inbody_cat=="I_sh":
+        c.setFont(mainfontname, 11)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height1,'"표준체중 건강형 (I자)"')
+        c.setFont(mainfontname, 9)
+        c.setFillColorRGB(0.2, 0.2, 0.2)
+        c.drawString(32,height2,'•체중, 골격근량, 체지방량이 모두 표준인 유형')
+        c.drawString(32,height3,'•유산소, 근력운동 병행을 통해 체지방량이 유지 필요')
+
+    elif Inbody_cat=="I_lw":
+        c.setFont(mainfontname, 11)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height1,'"저체중 허약형 (I자)"')
+        c.setFont(mainfontname, 9)
+        c.setFillColorRGB(0.2, 0.2, 0.2)
+        c.drawString(32,height2,'•체중, 골격근량, 체지방량이 모두 표준이하인 유형')
+        c.drawString(32,height3,'•섭취하는 영양소의 양이 전반적으로 부족한것이 원인')    
+
+    elif Inbody_cat=="I_oo":
+    #elif Inbody_cat=="C_so":    
+        c.setFont(mainfontname, 11)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height1,'"과체중 비만형 (I자)"')
+        c.setFont(mainfontname, 9)
+        c.setFillColorRGB(0.2, 0.2, 0.2)
+        c.drawString(32,height2,'•체중, 골격근량, 체지방량이 모두 표준이상인 유형')
+        c.drawString(32,height3,'•전체적으로 표준보다 체구성 성분이 많아서 나타나는 유형')      
+
+    elif Inbody_cat=="N":
+        c.setFont(mainfontname, 11)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height1,'"유형을 분류할 수 없습니다. 인바디 값을 확인해주세요."')
+    return
+
+#인바디 그래프 그리기
+def draw_inbody(c,Inbody,height):
+    weightP=Inbody.Weight/(Inbody.Weight+Inbody.WeightControl)*100
+    skeletalP=Inbody.FatFree/(Inbody.FatFree+Inbody.MuscleControl)*100
+    fatP=Inbody.BodyFat/(Inbody.BodyFat+Inbody.FatControl)*100
+
+    height1=height-420
+    height2=height-450
+    height3=height-480
+
+    c.setFillColorRGB(0.9, 0.9, 0.9)
+    c.setStrokeColorRGB(0.9, 0.9, 0.9)
+    c.roundRect(90,height1, 180, 15,7.5,fill=1)
+    c.roundRect(90,height2, 180, 15,7.5,fill=1)
+    c.roundRect(90,height3, 180, 15,7.5,fill=1)
+
+    weightW=180*(weightP-55)/150
+    skeletalW=180*(skeletalP-70)/100
+    if fatP<=100:
+        fatW=54*(fatP-40)/60
+    elif 100<fatP:    
+        fatW=54+126*(fatP-100)/420
+
+    if weightP<=85 :
+        c.setFillColorRGB(1,208/255,20/255)
+        c.setStrokeColorRGB(1,208/255,20/255)
+        c.roundRect(90,height1, weightW, 15,7.5,fill=1)
+
+    if 85<weightP<115 :
+        c.setFillColorRGB(134/255,206/255,2/255)
+        c.setStrokeColorRGB(134/255,206/255,2/255)
+        c.roundRect(90,height1, weightW, 15,7.5,fill=1)
+
+    if 115<=weightP :
+        c.setFillColorRGB(1,111/255,111/255)
+        c.setStrokeColorRGB(1,111/255,111/255)
+        c.roundRect(90,height1, weightW, 15,7.5,fill=1)   
+
+
+    if skeletalP<=90 :
+        c.setFillColorRGB(1,208/255,20/255)
+        c.setStrokeColorRGB(1,208/255,20/255)
+        c.roundRect(90,height2, skeletalW, 15,7.5,fill=1)
+
+    if 90<skeletalP<110 :
+        c.setFillColorRGB(134/255,206/255,2/255)
+        c.setStrokeColorRGB(134/255,206/255,2/255)
+        c.roundRect(90,height2, skeletalW, 15,7.5,fill=1)
+
+    if 110<=skeletalP :
+        c.setFillColorRGB(1,111/255,111/255)
+        c.setStrokeColorRGB(1,111/255,111/255)
+        c.roundRect(90,height2, skeletalW, 15,7.5,fill=1)    
+
+
+    if fatP<=85 :
+        c.setFillColorRGB(1,208/255,20/255)
+        c.setStrokeColorRGB(1,208/255,20/255)
+        c.roundRect(90,height3, fatW, 15,7.5,fill=1)
+
+    if 85<fatP<115 :
+        c.setFillColorRGB(134/255,206/255,2/255)
+        c.setStrokeColorRGB(134/255,206/255,2/255)
+        c.roundRect(90,height3, fatW, 15,7.5,fill=1)
+
+    if 115<=fatP :
+        c.setFillColorRGB(1,111/255,111/255)
+        c.setStrokeColorRGB(1,111/255,111/255)
+        c.roundRect(90,height3, fatW, 15,7.5,fill=1)     
+
+    c.setLineWidth(0.5)
+    c.setStrokeColorRGB(0.9,0.9,0.9)
+    c.line(126, height1+15, 126, height1)
+    c.line(126, height2+15, 126, height2)
+    c.line(126, height3+15, 126, height3)
+
+    c.line(162, height1+15, 162, height1)
+    c.line(162, height2+15, 162, height2)
+    c.line(162, height3+15, 162, height3)
+
+    return
+
+#인바디 유형 그리기
+def draw_alpha(c,Inbody_cat,height):
+    if "C" in Inbody_cat:
+        c.drawImage(filepath+'C_in.png',145,height-480,68,76,mask='auto')
+
+    elif "D" in Inbody_cat:
+        c.drawImage(filepath+'D_in.png',145,height-480,68,76,mask='auto')    
+
+    elif "I" in Inbody_cat:
+        c.drawImage(filepath+'I_in.png',150,height-480,50,76,mask='auto')   
+    elif "N" in Inbody_cat:
+        print("유형을 분류할 수 없는 항목")
+    return
+
+# 에이지 센서 패널
+def draw_panel(c,Agesensor,height):
+    
+    baseX=320
+    baseY=height-750
+    if Agesensor.Rating =="A":
+        c.drawImage(filepath+'A.png',baseX,baseY,130,69,mask='auto')
+    elif Agesensor.Rating =="B":
+        c.drawImage(filepath+'B.png',baseX,baseY,130,69,mask='auto')
+    elif Agesensor.Rating =="C":
+        c.drawImage(filepath+'C.png',baseX,baseY,130,69,mask='auto')    
+    elif Agesensor.Rating =="D":
+        c.drawImage(filepath+'D.png',baseX,baseY,130,69,mask='auto')    
+    elif Agesensor.Rating =="E":
+        c.drawImage(filepath+'E.png',baseX,baseY,130,69,mask='auto')    
+
+    c.setFont(mainfontname, 40)
+    c.setFillColorRGB(1,208/255,20/255)
+    rating=str(Agesensor.Rating)
+    c.drawString(baseX+165+3,baseY+35,rating)
+
+    c.setFont(mainfontname, 15)
+    c.setFillColorRGB(0.5,0.5,0.5)
+    c.drawString(baseX+195+3,baseY+40,"등급")  
+
+    c.setFont(mainfontname, 12)
+    rank=str(Agesensor.Rank)+"등 / 100명"
+    c.drawString(baseX+155+3,baseY+10,rank)  
+
+    c.setFont(mainfontname, 8)
+    c.setFillColorRGB(0.2,0.2,0.2)
+    c.drawString(baseX-10,baseY+28,"2%")
+    c.drawString(baseX+8,baseY+60,"14%")
+    c.drawString(baseX+55,baseY+73,"34%")
+    c.drawString(baseX+103,baseY+60,"43%")
+    c.drawString(baseX+128,baseY+28,"7%")
+
+    c.roundRect(baseX-5,baseY-70, 140, 65,10)
+    c.roundRect(baseX+145,baseY-70, 95, 65,10)
+
+    c.setFont(mainfontname, 10)
+    c.setFillColorRGB(0.1,0.1,0.1)
+    c.drawString(baseX+5,baseY-20,"AGEs(당독소)란?")
+    c.setFont(mainfontname, 8.5)
+    c.setFillColorRGB(0.5,0.5,0.5)
+    c.drawString(baseX+5,baseY-35,"포도당, 과당과 같은 당이 단백질")
+    c.drawString(baseX+5,baseY-47,"또는 지방에 결합하여 당화된")
+    c.drawString(baseX+5,baseY-59,"물질로 노화 시 증가")
+
+    c.setFont(mainfontname, 10)
+    c.setFillColorRGB(0.1,0.1,0.1)
+    c.drawString(baseX+155,baseY-20,"당독소 과다증")
+    c.setFont(mainfontname, 8.5)
+    c.setFillColorRGB(0.5,0.5,0.5)
+    c.drawString(baseX+155,baseY-35,"노화,비만,당뇨,")
+    c.drawString(baseX+155,baseY-47,"노안,간염")
+    c.drawString(baseX+155,baseY-59,"뇌 기능 장애")
+    return
+
+
+
+
+def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
+#def create_diet_pdf(DietGoal,Inbody,InbodyDetail,Agesensor,Name):
+    filename=resultfilepath+'Diet_Report.pdf'
+    c = canvas.Canvas(filename, pagesize=A4)
+    width, height = A4
+    register_fonts()
+    
+    # 제목1 추가 (한글) - 페이지 가운데에 배치
+    draw_centered_string(c, "Greating store healthcare", height - 40, mainfontname, 12, width)
+    draw_centered_string(c, "다이어트 프로그램 결과차트", height - 70, mainfontname, 20, width)
+    
+    # 선 그리기 (x1, y1, x2, y2)
+    c.setLineWidth(0.7)  # 라인의 굵기 설정
+    c.setStrokeColorRGB(0.75, 0.75, 0.75)  # 라인의 색상 설정
+    c.line(450, height - 100, 550, height - 100)
+    
+    # 내담자명
+    c.drawImage(filepath+'user.png',455,height-100,20,20,mask='auto')
+
+    username= Name+"님"
+    c.setFont(mainfontname, 13)
+    c.setFillColorRGB(0.5, 0.5, 0.5)
+    c.drawString(485,height-95,username)
+    
+    # 사각형 그리기 (x, y, width, height)
+    c.roundRect(20,height-325, 220, 210,15)
+    c.roundRect(250,height-325, 320, 210,15)
+    c.roundRect(20,height-625, 270, 290,15)
+    c.roundRect(300,height-625, 270, 290,15)
+    c.roundRect(20,height-830, 270, 195,15)
+    c.roundRect(300,height-830, 270, 195,15)
+    
+    
+    #-------------- part1 다이어트 플랜 --------------
+
+    # 본문 채우기 
+    c.setFont(mainfontname, 12)
+    c.setFillColorRGB(0, 0, 0)
+    c.drawString(35,height-140,"한눈에 보는 나의 다이어트 플랜")
+
+    c.setLineWidth(1)  # 라인의 굵기 설정
+
+    c.setFillColorRGB(199/255, 219/255, 241/255)
+    c.setStrokeColorRGB(89/255,187/255,226/255)
+    c.roundRect(38,height-205,190,40,20,fill=True)
+
+    c.setFillColorRGB(251/255,200/255,179/255)
+    c.setStrokeColorRGB(247/255, 150/255, 110/255)
+    c.roundRect(38,height-255,190,40,20,fill=True)
+
+    c.setFillColorRGB(254/255,222/255,180/255)
+    c.setStrokeColorRGB(252/255, 184/255, 92/255)
+    c.roundRect(38,height-305,190,40,20,fill=True)
+
+    c.setFont(mainfontname, 10)
+    c.setFillColorRGB(0, 0, 0)
+    c.drawString(48,height-189,DGoal.Period)
+    c.drawString(66,height-189,"동안 하루 총")
+    c.drawString(176,height-189,"조절해요!")
+    c.drawString(48,height-239,"하루 식사로는")
+    c.drawString(168,height-239,"줄여요!")
+    c.drawString(48,height-289,"하루 운동으로는")
+    c.drawString(175,height-289,"소모해요!")
+    
+    if DGoal.Period=="2주":
+        period=14
+    elif DGoal.Period=="3주":
+        period=21
+    elif DGoal.Period=="4주":
+        period=28 
+    elif DGoal.Period=="2개월":
+        period=56 
+    elif DGoal.Period=="3개월":
+        period=84
+    elif DGoal.Period=="4개월":
+        period=112
+    elif DGoal.Period=="5개월":
+        period=140            
+
+    reducecal=(Inbody.Weight-DGoal.Gweight)*7000/period
+    dayreduce=round(DGoal.Rcal-reducecal)
+
+    foodcontrol=round(dayreduce*DGoal.FoodR/10)
+    
+    workcontrol=round(dayreduce*DGoal.WorkOutR/10)
+
+
+    c.setFillColorRGB(1,1,1)
+    c.setStrokeColorRGB(1,1,1)
+    c.roundRect(127,height-195,45,20,10,fill=True)
+    c.roundRect(117,height-245,45,20,10,fill=True)
+    c.roundRect(125,height-295,45,20,10,fill=True)
+
+    c.setFont(mainfontname, 8)
+    c.setFillColorRGB(0, 0, 0)
+    c.drawString(133,height-188,str(dayreduce)+"kcal")
+
+    c.setFont(mainfontname, 8)
+    c.setFillColorRGB(0, 0, 0)
+    c.drawString(123,height-238,str(foodcontrol)+"kcal")
+
+    c.setFont(mainfontname, 8)
+    c.setFillColorRGB(0, 0, 0)
+    c.drawString(131,height-288,str(workcontrol)+"kcal")
+
+    
+    #-------------- part2 나의 체형 알아보기 --------------
+    # 본문 채우기 
+    c.setFillColorRGB(0, 0, 0)
+    c.setFont(mainfontname, 12)
+    c.drawString(265,height-140,"나의 체형 알아보기")
+
+    # 한줄피드백 작성
+    c.setFont(mainfontname, 10)
+    c.setFillColorRGB(0.5, 0.5, 0.5)
+    if Inbody.BMI<18.5:
+        c.drawString(265,height-160,'" BMI '+str(Inbody.BMI)+', 저체중 "')
+        c.drawImage(filepath+'Low.png',265,height-312,290,136,mask='auto')
+    elif 18.5<=Inbody.BMI<24.9:
+        c.drawString(265,height-160,'" BMI '+str(Inbody.BMI)+', 정상체중 "')
+        c.drawImage(filepath+'Normal.png',265,height-312,290,136,mask='auto') 
+    elif 25<=Inbody.BMI<29.9:
+        c.drawString(265,height-160,'" BMI '+str(Inbody.BMI)+', 과체중 "')
+        c.drawImage(filepath+'Over.png',265,height-312,290,136,mask='auto')   
+    elif 30<=Inbody.BMI<39.9:
+        c.drawString(265,height-160,'" BMI '+str(Inbody.BMI)+', 비만 "')
+        c.drawImage(filepath+'Obes.png',265,height-312,290,136,mask='auto')  
+    elif 40<=Inbody.BMI:
+        c.drawString(265,height-160,'" BMI '+str(Inbody.BMI)+', 고도비만 "')
+        c.drawImage(filepath+'HighObes.png',265,height-312,290,136,mask='auto')              
+
+    #-------------- part3 인바디 --------------
+    # 본문 채우기 
+    c.setFillColorRGB(0, 0, 0)
+    c.setFont(mainfontname, 12)
+    c.drawString(35,height-360,"인바디")
+
+    Inbody_cat=set_category(Inbody)
+    print("Inbody_cat"+Inbody_cat)
+    write_comment(c,Inbody_cat,height)
+
+    c.setFont(mainfontname, 9)
+    c.setFillColorRGB(0.5, 0.5, 0.5)
+    c.drawString(37,height-415,'체중')
+    c.drawString(37,height-445,'골격근량')
+    c.drawString(37,height-475,'체지방량')
+
+    draw_inbody(c,Inbody,height)
+    draw_alpha(c,Inbody_cat,height)
+
+    #-------------- part4 체중관리 계획 --------------
+    # 본문 채우기 
+    comment="지방은 "+str(Inbody.FatControl)+"kg 줄이고, 근육은 "+str(Inbody.MuscleControl)+"kg 늘리기"
+    c.setFillColorRGB(0, 0, 0)
+    c.setFont(mainfontname, 12)
+    c.drawString(315,height-360,"체중관리 계획")
+
+    c.setFont(mainfontname, 10)
+    c.setFillColorRGB(0.5, 0.5, 0.5)
+    c.drawString(315,height-380,comment)
+
+    c.setFillColorRGB(1,227/255,163/255)
+    c.setStrokeColorRGB(1,227/255,163/255)
+    c.roundRect(315,height-420, 60, 20,10,fill=True)
+    c.setFillColorRGB(0,0,0)
+    c.setFont(mainfontname, 12)
+    c.drawString(333,height-415,"지방")
+
+    c.setFillColorRGB(223/255,183/255,187/255)
+    c.setStrokeColorRGB(223/255,183/255,187/255)
+    c.roundRect(315,height-545, 60, 20,10,fill=True)
+    c.setFillColorRGB(0,0,0)
+    c.setFont(mainfontname, 12)
+    c.drawString(333,height-540,"근육")
+
+    c.drawImage(filepath+'fat_img.png',320,height-490,60,61,mask='auto')
+    c.drawImage(filepath+'fat_hand.png',392,height-488,86,60,mask='auto')
+    c.drawImage(filepath+'muscle_img.png',328,height-602,50,40,mask='auto')
+    c.drawImage(filepath+'muscle_hand.png',410,height-613,46,60,mask='auto')
+
+    c.setStrokeColorRGB(0.75,0.75,0.75)
+    c.line(315, height - 505, 560, height - 505)
+
+    c.setLineWidth(1.5)
+    c.setStrokeColorRGB(0.75,0.75,0.75)
+    c.roundRect(485,height-475, 70, 30,15)
+    c.roundRect(485,height-600, 70, 30,15)
+
+    c.setFont(mainfontname, 12)
+    c.setFillColorRGB(1, 0, 0)
+    if 0<Inbody.FatControl:
+        c.drawString(495,height-465,"+ "+str(Inbody.FatControl)+"kg")
+    else:     
+        c.drawString(495,height-465,str(Inbody.FatControl)+"kg")
+
+    c.setFillColorRGB(0, 0, 1)
+    if 0<Inbody.MuscleControl:
+        c.drawString(495,height-590,"+ "+str(Inbody.MuscleControl)+"kg")
+    else:
+        c.drawString(495,height-590,str(Inbody.MuscleControl)+"kg")
+
+    #-------------- part5 집중관리 부위 --------------    
+    c.setFillColorRGB(0, 0, 0)
+    c.setFont(mainfontname, 12)
+    c.drawString(35,height-655,"집중 관리 부위")
+    
+    c.setFillColorRGB(1, 217/255,102/255)
+    c.setStrokeColorRGB(1, 217/255,102/255)
+    c.roundRect(35,height-680, 60, 12,6,fill=True)
+    c.setFillColorRGB(0,0,0)
+    c.setFont(mainfontname, 9)
+    c.drawString(41,height-678,"체지방 과다")
+
+    c.setFillColorRGB(1, 155/255,155/255)
+    c.setStrokeColorRGB(1, 155/255,155/255)
+    c.roundRect(155,height-680, 50, 12,6,fill=True)
+    c.setFillColorRGB(0,0,0)
+    c.setFont(mainfontname, 9)
+    c.drawString(161,height-678,"근육부족")
+    
+    #-------------- part6 Age sensor --------------
+    # 본문 채우기 
+    c.setFillColorRGB(0, 0, 0)
+    c.setFont(mainfontname, 12)
+    c.drawString(315,height-655,"AGEs sensor")
+    c.setStrokeColorRGB(0.75,0.75,0.75)
+    c.setLineWidth(0.7)
+    draw_panel(c,Agesensor,height)
+    
+    #-------------- 페이지 저장 및 이미지 변환 --------------
+
+    # 페이지 저장
+    c.showPage()
+    c.save()
+
+    # PDF를 이미지로 변환
+    images = convert_from_path(filename)
+    # 첫 번째 페이지를 이미지로 저장
+    img_path = resultfilepath+"Basic_Diet_Report.png"
+    images[0].save(img_path, "PNG")
+
+    return img_path 
+
+if __name__=="__main__":
+    Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=19.5,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9)
+    Age=Agesensor(Rating="B",Rank=30)
+    DGoal=DietGoal(Period="2주",Gweight=58,Rcal=2800,FoodR=5,WorkOutR=5)
+    IDetail=InbodyDetail()
+    create_diet_pdf("김건강",Inbo,Age,DGoal,IDetail)
