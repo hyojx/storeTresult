@@ -624,15 +624,18 @@ def create_skin_pdf(Name,SkinState,Agesensor):
 
     # 페이지 저장
     c.showPage()
+
     c.save()
 
-    # PDF를 이미지로 변환
+     # PDF를 이미지로 변환
     images = convert_from_path(filename)
-    # 첫 번째 페이지를 이미지로 저장
-    img_path = resultfilepath+"Skin_Report.png"
-    images[0].save(img_path, "PNG")
-
-    return img_path 
+    img_paths = [resultfilepath + f"Basic_Report_Page_{i + 1}.png" for i in range(len(images))]
+    
+    for i, image in enumerate(images):
+        image.save(img_paths[i], "PNG")
+    #images[0].save(img_paths, "PNG")
+    print(img_paths)
+    return img_paths 
 
 if __name__=="__main__":
     SState=SkinState(Concern=["모공크기","잡티"],Type="복합성",TZWater="Normal",UZWater="Normal",TZOil="Sebum",UZOil="Sebum",CScore=70,CAScore=70,CState="최적",WScore=80,WAScore=80,WState="주의",TScore=60,TAScore=60,TState="관리 필요",HScore=40,HAScore=45,HState="집중 관리 필요")

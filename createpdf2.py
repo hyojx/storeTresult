@@ -564,17 +564,27 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     
     #-------------- 페이지 저장 및 이미지 변환 --------------
 
-    # 페이지 저장
+    # 1페이지 마감
     c.showPage()
+
+    # 2페이지 마감
+    c.setFont('AppleGothic', 9)
+    c.setFillColorRGB(0.5, 0.5, 0.5)
+    c.drawString(200,200,'두번째 페이지 생성 테스트')
+    c.showPage()
+
+    # 최종 저장
     c.save()
 
     # PDF를 이미지로 변환
     images = convert_from_path(filename)
-    # 첫 번째 페이지를 이미지로 저장
-    img_path = resultfilepath+"Basic_Diet_Report.png"
-    images[0].save(img_path, "PNG")
-
-    return img_path 
+    img_paths = [resultfilepath + f"Basic_Report_Page_{i + 1}.png" for i in range(len(images))]
+    
+    for i, image in enumerate(images):
+        image.save(img_paths[i], "PNG")
+    #images[0].save(img_paths, "PNG")
+    print(img_paths)
+    return img_paths 
 
 if __name__=="__main__":
     Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=37,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9)

@@ -4,7 +4,12 @@ from createpdf import create_basic_pdf
 from createpdf2 import create_diet_pdf
 from createpdf3 import create_skin_pdf
 
-
+css = """
+#gallery .gallery-item img {
+    max-width: 100%;
+    height: auto;
+}
+"""
 
 def update_ratio(slider_value):
     return slider_value, 100 - slider_value
@@ -15,9 +20,9 @@ def process_basic_inputs(Name,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFa
     Inbo=Inbody(InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl)
     Age=Agesensor(Rating,Rank)
 
-    img_adress=create_basic_pdf(Nutri,Vita,Inbo,Age,Name)
+    img_adresses=create_basic_pdf(Nutri,Vita,Inbo,Age,Name)
 
-    return img_adress
+    return img_adresses
 
 def process_diet_inputs(Name,GWeight,NMeal,RCal,Period,FoodR,WorkOutR,InbodyScore,Weight,BodyFat,BMI,ApproWeight,WeightControl,MuscleControl,FatControl,FatFree,UpperLF,UpperRF,LowerLF,LowerRF,UpperLS,UpperRS,LowerLS,LowerRS,Rating,Rank):
     DGoal=DietGoal(Gweight=GWeight,NMeal=NMeal,Rcal=RCal,Period=Period,FoodR=FoodR,WorkOutR=WorkOutR)
@@ -25,19 +30,19 @@ def process_diet_inputs(Name,GWeight,NMeal,RCal,Period,FoodR,WorkOutR,InbodyScor
     InboD=InbodyDetail(UpperLF=UpperLF,UpperRF=UpperRF,LowerLF=LowerLF,LowerRF=LowerRF,UpperLS=UpperLS,UpperRS=UpperRS,LowerLS=LowerLS,LowerRS=LowerRS)
     Age=Agesensor(Rating=Rating,Rank=Rank)
 
-    img_adress=create_diet_pdf(Name,Inbo,Age,DGoal,InboD)
+    img_adresses=create_diet_pdf(Name,Inbo,Age,DGoal,InboD)
 
-    return img_adress
+    return img_adresses
 
 def process_skin_inputs(Name,Concern,Type,TZWater,UZWater,TZOil,UZOil,CScore,CAScore,CState,WScore,WAScore,WState,TScore,TAScore,TState,HScore,HAScore,HState,Rating,Rank):
     Skin=SkinState(Concern=Concern,Type=Type,TZWater=TZWater,UZWater=UZWater,TZOil=TZOil,UZOil=UZOil,CScore=CScore,CAScore=CAScore,CState=CState,WScore=WScore,WAScore=WAScore,WState=WState,TScore=TScore,TAScore=TAScore,TState=TState,HScore=HScore,HAScore=HAScore,HState=HState)
     Age=Agesensor(Rating=Rating,Rank=Rank)
-    img_adress=create_skin_pdf(Name,Skin,Age)
+    img_adresses=create_skin_pdf(Name,Skin,Age)
 
-    return img_adress
+    return img_adresses
 
 
-with gr.Blocks() as basic_health:
+with gr.Blocks(css=css) as basic_health:
     gr.Markdown("""<h1 style = 'border-radius: 5px; padding-top: 10px; padding-bottom: 10px;'>기본건강 고객정보 입력</h1>""")
     Name=gr.Textbox(label="이름",placeholder="내담자명을 입력해주세요",elem_id="name")
     
@@ -91,7 +96,7 @@ with gr.Blocks() as basic_health:
         Rank=gr.Number(value=None, minimum=0, maximum=100, label="등수(1 ~ 100)")    
         
     generate_btn = gr.Button("결과보기")
-    output_image = gr.Image()
+    output_image = gr.Gallery()
 
     generate_btn.click(
         fn=process_basic_inputs,
@@ -157,7 +162,7 @@ with gr.Blocks() as diet:
         Rank=gr.Number(value=None, minimum=0, maximum=100, label="등수(1 ~ 100)")        
         
     generate_btn = gr.Button("결과보기")
-    output_image = gr.Image()
+    output_image = gr.Gallery()
 
     generate_btn.click(
         fn=process_diet_inputs,
@@ -213,7 +218,7 @@ with gr.Blocks() as skin:
         Rank=gr.Number(value=None, minimum=0, maximum=100, label="등수(1 ~ 100)")        
         
     generate_btn = gr.Button("결과보기")
-    output_image = gr.Image()
+    output_image = gr.Gallery()
 
     generate_btn.click(
         fn=process_skin_inputs,

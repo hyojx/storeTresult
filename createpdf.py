@@ -11,7 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle
 from dataclasses import fields
 
-filepath="static/image/basic"
+filepath="static/image/basic/"
 resultfilepath="static/result/"
 
 # 폰트 등록 함수
@@ -1077,17 +1077,27 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
     
     #-------------- 페이지 저장 및 이미지 변환 --------------
 
-    # 페이지 저장
+    # 1페이지 마감
     c.showPage()
+
+    # 2페이지 마감
+    c.setFont('AppleGothic', 9)
+    c.setFillColorRGB(0.5, 0.5, 0.5)
+    c.drawString(200,200,'두번째 페이지 생성 테스트')
+    c.showPage()
+
+    # 최종 저장
     c.save()
 
     # PDF를 이미지로 변환
     images = convert_from_path(filename)
-    # 첫 번째 페이지를 이미지로 저장
-    img_path = resultfilepath+"Basic_Health_Report.png"
-    images[0].save(img_path, "PNG")
-
-    return img_path 
+    img_paths = [resultfilepath + f"Basic_Report_Page_{i + 1}.png" for i in range(len(images))]
+    
+    for i, image in enumerate(images):
+        image.save(img_paths[i], "PNG")
+    #images[0].save(img_paths, "PNG")
+    print(img_paths)
+    return img_paths 
 
 
 # PDF 생성 테스트용
