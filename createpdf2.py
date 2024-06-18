@@ -11,7 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle
 from dataclasses import fields
 
-filepath="static/image/diet"
+filepath="static/image/diet/"
 resultfilepath="static/result/"
 mainfontname='AppleGothic'
 
@@ -34,6 +34,9 @@ def set_category(Inbody):
     weightP=Inbody.Weight/(Inbody.Weight+Inbody.WeightControl)*100
     skeletalP=Inbody.FatFree/(Inbody.FatFree+Inbody.MuscleControl)*100
     fatP=Inbody.BodyFat/(Inbody.BodyFat+Inbody.FatControl)*100
+    print(weightP)
+    print(skeletalP)
+    print(fatP)
     if 85 < weightP <115:
         if skeletalP <= 90 and 80<fatP <160:
             C_id="C_sw"
@@ -66,8 +69,9 @@ def set_category(Inbody):
 #인바디 유형별 코멘트 작성
 def write_comment(c,Inbody_cat,height):
     height1=height-385
-    height2=height-510
-    height3=height-525
+    height2=height-520
+    height3=height-550
+    height4=height-580
 
     if Inbody_cat=="C_sw":
         c.setFont(mainfontname, 11)
@@ -75,8 +79,9 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(35,height1,'"표준체중 허약형 (C자)"')
         c.setFont(mainfontname, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
-        c.drawString(32,height2,'•체중, 체지방량으로는 정상이지만 골격근이 부족한 유형')
-        c.drawString(32,height3,'•근육을 구성하는 단백질이 부족한 것이 원인')
+        c.drawString(32,height2,'• 체중, 체지방량으로는 정상이지만 근육량이 부족한 상태')
+        c.drawString(32,height3,'• 부족한 단백질 섭취와 근력운동이 원인')
+        c.drawString(32,height4,'• 주 2-3회 근력운동을 진행하여 근육량 늘리기')
 
     elif Inbody_cat=="C_so":
         c.setFont(mainfontname, 11)
@@ -84,8 +89,12 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(35,height1,'"표준체중 비만형 (C자)"')
         c.setFont(mainfontname, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
-        c.drawString(32,height2,'•체중, 근육량은 정상이지만 체지방이 과다한 유형')
-        c.drawString(32,height3,'•탄수화물, 지방 위주의 과도한 칼로리 섭취가 원인') 
+        c.drawString(32,height2,'• 체중, 근육량은 정상이지만 체지방이 과다한 상태')
+        c.drawString(32,height3,'• 탄수화물, 지방 위주의 과도한 칼로리 섭취가 원인') 
+        #c.drawString(32,height4,'• 주 3일 30분 이상 유산소 운동을 통해 페지방 감량하기')
+        # 길이 테스트
+        c.drawString(32,height4,'• 주 3회 30분 이상의 유산소 운동과 주 2-3회 근력 운동을')
+        c.drawString(32,height4-15,'    진행하여 체지방량은 줄이고, 근육량은 늘리기')
 
     elif Inbody_cat=="C_ow":
         c.setFont(mainfontname, 11)
@@ -93,8 +102,10 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(35,height1,'"과체중 허약형 (C자)"')
         c.setFont(mainfontname, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
-        c.drawString(32,height2,'•체중과 체지방량이 골격근량 대비하여 과다한 유형')
-        c.drawString(32,height3,'•과도한 칼로리, 부족한 단백질 섭취, 근력운동 부족이 원인')
+        c.drawString(32,height2,'• 근육량과 비교하여 체중과 체지방량이 과다한 상태')
+        c.drawString(32,height3,'• 탄수화물, 지방 위주의 과도한 칼로리 섭취 및 부족한 근력운동이 원인')
+        c.drawString(32,height4,'• 주 3회 30분 이상의 유산소 운동과 주 2-3회 근력 운동을')
+        c.drawString(32,height4-15,'    진행하여 체지방량은 줄이고, 근육량은 늘리기')
 
     elif Inbody_cat=="D_ss":
         c.setFont(mainfontname, 11)
@@ -102,17 +113,10 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(35,height1,'"표준체중 강인형 (D자)"')
         c.setFont(mainfontname, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
-        c.drawString(32,height2,'•날씬하면서 근육이 탄탄하게 잘 다듬어져 있는 유형')
-        c.drawString(32,height3,'•균형잡힌 섭취와 유산소, 근력운동 병행을 통한 상태유지')
+        c.drawString(32,height2,'• 날씬하면서 근육이 탄탄하게 잘 다듬어져 있는 유형')
+        c.drawString(32,height3,'• 현재와 같이 균형잡힌 식습관과 유산소 운동, 근력운동의 병행을 통해')
+        c.drawString(32,height3-15,'    현재 상태 유지하기')
 
-    elif Inbody_cat=="D_ss":
-        c.setFont(mainfontname, 11)
-        c.setFillColorRGB(0.5, 0.5, 0.5)
-        c.drawString(35,height1,'"표준체중 강인형 (D자)"')
-        c.setFont(mainfontname, 9)
-        c.setFillColorRGB(0.2, 0.2, 0.2)
-        c.drawString(32,height2,'•날씬하면서 근육이 탄탄하게 잘 다듬어져 있는 유형')
-        c.drawString(32,height3,'•균형잡힌 섭취와 유산소, 근력운동 병행을 통한 상태유지') 
 
     elif Inbody_cat=="D_ls":
     #elif Inbody_cat=="C_so":    
@@ -121,8 +125,9 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(35,height1,'"저체중 강인형 (D자)"')
         c.setFont(mainfontname, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
-        c.drawString(32,height2,'•근육량은 표준이상, 체중과 체지방량이 표준이하인 유형')
-        c.drawString(32,height3,'•근력운동, 균형잡힌 섭취를 통해 체지방, 골격근 유지 필요') 
+        c.drawString(32,height2,'• 근육량 대비 체중과 체지방이 부족한 유형')
+        c.drawString(32,height3,'• 과도한 체지방 감량이 원인으로 체지방을 감량하는 유산소 운동 보다는') 
+        c.drawString(32,height3-15,'    근력운동을 통해 현재 골격근 유지하기')
 
     elif Inbody_cat=="D_os":
         c.setFont(mainfontname, 11)
@@ -130,8 +135,8 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(35,height1,'"과체중 강인형 (D자)"')
         c.setFont(mainfontname, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
-        c.drawString(32,height2,'•과체중이지만 체지방에 비해 골격근이 발달한 유형')
-        c.drawString(32,height3,'•주로 운동선수들에게 나타나는 유형으로 체지방 유지 필요')
+        c.drawString(32,height2,'• 체중이 표준이상이지만 체지방량에 비해 골격근이 발달한 운동선수 유형')
+        c.drawString(32,height3,'• 체지방량이 과다해지지 않도록 유산소운동을 통해 체지방량 관리하기')
 
     elif Inbody_cat=="I_sh":
         c.setFont(mainfontname, 11)
@@ -139,8 +144,9 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(35,height1,'"표준체중 건강형 (I자)"')
         c.setFont(mainfontname, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
-        c.drawString(32,height2,'•체중, 골격근량, 체지방량이 모두 표준인 유형')
-        c.drawString(32,height3,'•유산소, 근력운동 병행을 통해 체지방량이 유지 필요')
+        c.drawString(32,height2,'• 체중, 근육량 체지방량이 모두 표준으로 밸런스가 잘 맞는 건강한 유형')
+        c.drawString(32,height3,'• 주 3회, 30분 이상의 유산소 운동과 주 2-3회 근력 운동을 진행하여')
+        c.drawString(32,height3-15,'    체지방량이 표준이상으로 넘어가지 않는것을 목표로 하기')
 
     elif Inbody_cat=="I_lw":
         c.setFont(mainfontname, 11)
@@ -148,8 +154,10 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(35,height1,'"저체중 허약형 (I자)"')
         c.setFont(mainfontname, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
-        c.drawString(32,height2,'•체중, 골격근량, 체지방량이 모두 표준이하인 유형')
-        c.drawString(32,height3,'•섭취하는 영양소의 양이 전반적으로 부족한것이 원인')    
+        c.drawString(32,height2,'• 체중, 근육량, 체지방량이 모두 부족한 마른몸매 유형')
+        c.drawString(32,height3,'• 음식 섭취량이 부족한 것이 원인')    
+        c.drawString(32,height4,'• 섭취량을 늘리고 근력운동을 통해 근육량을 표준으로 끌어올리기')    
+
 
     elif Inbody_cat=="I_oo":
     #elif Inbody_cat=="C_so":    
@@ -158,8 +166,8 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(35,height1,'"과체중 비만형 (I자)"')
         c.setFont(mainfontname, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
-        c.drawString(32,height2,'•체중, 골격근량, 체지방량이 모두 표준이상인 유형')
-        c.drawString(32,height3,'•전체적으로 표준보다 체구성 성분이 많아서 나타나는 유형')      
+        c.drawString(32,height2,'• 체중, 근육량, 체지방량이 모두 표준 이상인 유형')
+        c.drawString(32,height3,'• 주 3일 30분 이상 유산소 운동을 통해 체지방 감량하기')      
 
     elif Inbody_cat=="N":
         c.setFont(mainfontname, 11)
@@ -569,7 +577,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     return img_path 
 
 if __name__=="__main__":
-    Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=19.5,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9)
+    Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=37,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9)
     Age=Agesensor(Rating="B",Rank=30)
     DGoal=DietGoal(Period="2주",Gweight=58,Rcal=2800,FoodR=5,WorkOutR=5)
     IDetail=InbodyDetail()
