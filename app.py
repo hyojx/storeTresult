@@ -2,6 +2,7 @@ import gradio as gr
 from dataclass import Nutrition,Vitastiq,Inbody,Agesensor,DietGoal,InbodyDetail,SkinState
 from createpdf import create_basic_pdf
 from createpdf2 import create_diet_pdf
+from createpdf3 import create_skin_pdf
 
 
 
@@ -31,7 +32,7 @@ def process_diet_inputs(Name,GWeight,NMeal,RCal,Period,FoodR,WorkOutR,InbodyScor
 def process_skin_inputs(Name,Concern,Type,TZWater,UZWater,TZOil,UZOil,CScore,CAScore,CState,WScore,WAScore,WState,TScore,TAScore,TState,HScore,HAScore,HState,Rating,Rank):
     Skin=SkinState(Concern=Concern,Type=Type,TZWater=TZWater,UZWater=UZWater,TZOil=TZOil,UZOil=UZOil,CScore=CScore,CAScore=CAScore,CState=CState,WScore=WScore,WAScore=WAScore,WState=WState,TScore=TScore,TAScore=TAScore,TState=TState,HScore=HScore,HAScore=HAScore,HState=HState)
     Age=Agesensor(Rating=Rating,Rank=Rank)
-    img_adress=create_skin_pdf(Skin,Age,Name)
+    img_adress=create_skin_pdf(Name,Skin,Age)
 
     return img_adress
 
@@ -171,7 +172,7 @@ with gr.Blocks() as skin:
     
     gr.HTML("""<h2 style = 'border-radius: 5px; text-indent: 10px; padding-top: 5px; padding-bottom: 5px;'>1. 피부측정</h2>""")
     with gr.Row():
-        Concern=gr.Radio(["유/수분 밸런스", "민감성(여드름)","잡티","주름","모공크기"],label="고객 피부 고민")
+        Concern=gr.CheckboxGroup(["유/수분 밸런스", "민감성(여드름)","잡티","주름","모공크기"],label="고객 피부 고민")
         Type=gr.Radio(["건성", "지성","복합성"],label="보습")
 
     with gr.Group():

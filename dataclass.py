@@ -65,7 +65,7 @@ class InbodyDetail:
 
 @dataclass
 class SkinState:
-    Concern: str =field(default="")
+    Concern: list
     Type: str =field(default="")
     TZWater: str =field(default="")
     UZWater: str =field(default="")
@@ -83,3 +83,7 @@ class SkinState:
     HScore: float = field(default=0.0)
     HAScore: float = field(default=0.0)
     HState: str =field(default="")
+    CRank: int =field(default=0)
+    WRank: int =field(default=0)
+    TRank: int =field(default=0)
+    HRank: int =field(default=0)
