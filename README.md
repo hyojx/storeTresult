@@ -15,3 +15,5 @@
 **4. create_pdf2**
 - diet 결과지 생성하는 부분
 - write_comment 함수 코멘트 내용 변경 (06.18)
+
+clone test
