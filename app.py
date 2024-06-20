@@ -39,7 +39,9 @@ def process_skin_inputs(Name,Concern,Type,TZWater,UZWater,TZOil,UZOil,CScore,CAS
 
 with gr.Blocks() as basic_health:
     gr.Markdown("""<h1 style = 'border-radius: 5px; padding-top: 10px; padding-bottom: 10px;'>기본건강 고객정보 입력</h1>""")
-    Name=gr.Textbox(label="이름",placeholder="내담자명을 입력해주세요",elem_id="name")
+    with gr.Row():
+        Name=gr.Textbox(label="이름",placeholder="내담자명을 입력해주세요",elem_id="name",scale=3)
+        gr.Radio(['남성','여성'],label="성별",scale=1)
     
     with gr.Column():
         gr.HTML("""<h2 style = 'border-radius: 5px; text-indent: 10px; padding-top: 5px; padding-bottom: 5px;'>1. 영양진단</h2>""")
