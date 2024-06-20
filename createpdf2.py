@@ -257,7 +257,7 @@ def draw_inbody(c,Inbody,height):
 
     return
 
-#인바디 유형 그리기
+# 인바디 유형 그리기
 def draw_alpha(c,Inbody_cat,height):
     if "C" in Inbody_cat:
         c.drawImage(filepath+'C_in.png',145,height-480,68,76,mask='auto')
@@ -330,6 +330,180 @@ def draw_panel(c,Agesensor,height):
     c.drawString(baseX+155,baseY-59,"뇌 기능 장애")
     return
 
+# 인바디 디테일 코멘트 세팅
+def set_comment(IDetail):
+    first_Fcomment=""
+    second_Fcomment=""
+    first_Scomment=""
+    second_Scomment=""
+    idetail_flist=[IDetail.UpperLF,IDetail.UpperRF,IDetail.LowerLF,IDetail.LowerRF]
+    idetail_slist=[IDetail.UpperLS,IDetail.UpperRS,IDetail.LowerLS,IDetail.LowerRS]
+
+    highfat_count=idetail_flist.count("이상")
+    lowfat_count=idetail_flist.count("이하")
+
+    highske_count=idetail_slist.count("이상")
+    lowske_count=idetail_slist.count("이하")
+
+
+    # 체지방 코멘트 정하기 
+    if highfat_count==0 and 1<=lowfat_count:
+        first_Fcomment="체지방 부족"
+
+        if lowfat_count==4:
+            second_Fcomment="전신 체지방 부족" 
+
+        elif lowfat_count==3:
+            if IDetail.UpperLF==IDetail.UpperRF=="이하":
+                if IDetail.LowerLF=="이하":
+                    second_Fcomment="상체, 왼쪽 하체 체지방 부족"
+                elif IDetail.LowerRF=="이하":
+                    second_Fcomment="상체, 오른쪽 하체 체지방 부족"
+            elif IDetail.LowerLF==IDetail.LowerRF=="이하":
+                if IDetail.UpperLF=="이하":
+                    second_Fcomment="하체, 왼쪽 상체 체지방 부족"
+                elif IDetail.UpperRF=="이하":
+                    second_Fcomment="하체, 오른쪽 상체 체지방 부족"
+
+        elif lowfat_count==2:
+            if IDetail.UpperLF==IDetail.UpperRF=="이하":
+                second_Fcomment="상체 체지방 부족"
+            elif IDetail.LowerLF==IDetail.LowerRF=="이하":
+                second_Fcomment="하체 체지방 부족"
+            elif IDetail.UpperLF==IDetail.LowerRF=="이하":
+                second_Fcomment="왼쪽 상체, 오른쪽 하체 체지방 부족"
+            elif IDetail.UpperLF==IDetail.LowerLF=="이하":
+                second_Fcomment="왼쪽 상체, 왼쪽 하체 체지방 부족" 
+            elif IDetail.UpperRF==IDetail.LowerRF=="이하":
+                second_Fcomment="오른쪽 상체, 오른쪽 하체 체지방 부족"
+            elif IDetail.UpperRF==IDetail.LowerLF=="이하":
+                second_Fcomment="오른쪽 상체, 왼쪽 하체 체지방 부족"     
+
+        elif lowfat_count==1:
+            if IDetail.UpperLF=="이하":
+                second_Fcomment="왼쪽 상체 체지방 부족"
+            elif IDetail.LowerLF=="이하":
+                second_Fcomment="왼쪽 하체 체지방 부족"
+            elif IDetail.UpperRF=="이하":
+                second_Fcomment="오른쪽 상체 체지방 부족"
+            elif IDetail.LowerRF=="이하":
+                second_Fcomment="오른쪽 하체 체지방 부족" 
+
+    elif 1<=highfat_count:
+        first_Fcomment="체지방 과다"
+
+        if highfat_count==4:
+            second_Fcomment="전신 체지방 집중 감량"
+
+        elif highfat_count==3:
+            if IDetail.UpperLF==IDetail.UpperRF=="이상":
+                if IDetail.LowerLF=="이상":
+                    second_Fcomment="상체, 왼쪽 하체 체지방 집중감량"
+                elif IDetail.LowerRF=="이상":
+                    second_Fcomment="상체, 오른쪽 하체 체지방 집중감량"
+            elif IDetail.LowerLF==IDetail.LowerRF=="이상":
+                if IDetail.UpperLF=="이상":
+                    second_Fcomment="하체, 왼쪽 상체 체지방 집중감량"
+                elif IDetail.UpperRF=="이상":
+                    second_Fcomment="하체, 오른쪽 상체 체지방 집중감량"
+
+        elif highfat_count==2:
+            if IDetail.UpperLF==IDetail.UpperRF=="이상":
+                second_Fcomment="상체 체지방 집중감량"
+            elif IDetail.LowerLF==IDetail.LowerRF=="이상":
+                second_Fcomment="하체 체지방 집중감량"
+            elif IDetail.UpperLF==IDetail.LowerRF=="이상":
+                second_Fcomment="왼쪽 상체, 오른쪽 하체 체지방 집중감량"
+            elif IDetail.UpperLF==IDetail.LowerLF=="이상":
+                second_Fcomment="왼쪽 상체, 왼쪽 하체 체지방 집중감량" 
+            elif IDetail.UpperRF==IDetail.LowerRF=="이상":
+                second_Fcomment="오른쪽 상체, 오른쪽 하체 체지방 집중감량"
+            elif IDetail.UpperRF==IDetail.LowerLF=="이상":
+                second_Fcomment="오른쪽 상체, 왼쪽 하체 체지방 집중감량"      
+
+        elif highfat_count==1:
+            if IDetail.UpperLF=="이상":
+                second_Fcomment="왼쪽 상체 체지방 집중감량"
+            elif IDetail.LowerLF=="이상":
+                second_Fcomment="왼쪽 하체 체지방 집중감량"
+            elif IDetail.UpperRF=="이상":
+                second_Fcomment="오른쪽 상체 체지방 집중감량"
+            elif IDetail.LowerRF=="이상":
+                second_Fcomment="오른쪽 하체 체지방 집중감량" 
+
+    else: 
+        first_Fcomment="체지방 적정"
+        second_Fcomment="전신 체지방 적정" 
+
+
+
+    # 근육량 코멘트 정하기
+
+    if lowske_count==0 and 1<=highske_count:
+        first_Scomment="근육량 충분"
+
+        if 2<=highske_count:
+            second_Scomment="상체/하체 근육량 밸런스 유지"    
+
+        elif highske_count==1:
+            if IDetail.UpperLS=="이상":
+                second_Scomment="상체 근육량 밸런스 유지"
+            elif IDetail.LowerLS=="이상":
+                second_Scomment="하체 근육량 밸런스 유지"
+            elif IDetail.UpperRS=="이상":
+                second_Scomment="상체 근육량 밸런스 유지"
+            elif IDetail.LowerRS=="이상":
+                second_Scomment="하체 근육량 밸런스 유지" 
+
+    elif 1<=lowske_count:
+        first_Scomment="근육량 부족"
+
+        if lowske_count==4:
+            second_Scomment="전신 근육량 강화" 
+
+        elif lowske_count==3:
+            if IDetail.UpperLS==IDetail.UpperRS=="이하":
+                if IDetail.LowerLS=="이하":
+                    second_Scomment="상체, 왼쪽 하체 근육량 강화"
+                elif IDetail.LowerRS=="이하":
+                    second_Scomment="상체, 오른쪽 하체 근육량 강화"
+            elif IDetail.LowerLS==IDetail.LowerRS=="이하":
+                if IDetail.UpperLS=="이하":
+                    second_Scomment="하체, 왼쪽 상체 근육량 강화"
+                elif IDetail.UpperRS=="이하":
+                    second_Scomment="하체, 오른쪽 상체 근육량 강화"
+
+        elif lowske_count==2:
+            if IDetail.UpperLS==IDetail.UpperRS=="이하":
+                second_Scomment="상체 근육량 강화"
+            elif IDetail.LowerLS==IDetail.LowerRS=="이하":
+                second_Scomment="하체 근육량 강화"
+            elif IDetail.UpperLS==IDetail.LowerRS=="이하":
+                second_Scomment="왼쪽 상체, 오른쪽 하체 근육량 강화"
+            elif IDetail.UpperLS==IDetail.LowerLS=="이하":
+                second_Scomment="왼쪽 상체, 왼쪽 하체 근육량 강화" 
+            elif IDetail.UpperRS==IDetail.LowerRS=="이하":
+                second_Scomment="오른쪽 상체, 오른쪽 하체 근육량 강화"
+            elif IDetail.UpperRS==IDetail.LowerLS=="이하":
+                second_Scomment="오른쪽 상체, 왼쪽 하체 근육량 강화"     
+
+        elif lowske_count==1:
+            if IDetail.UpperLS=="이하":
+                second_Scomment="왼쪽 상체 근육량 강화"
+            elif IDetail.LowerLS=="이하":
+                second_Scomment="왼쪽 하체 근육량 강화"
+            elif IDetail.UpperRS=="이하":
+                second_Scomment="오른쪽 상체 근육량 강화"
+            elif IDetail.LowerRS=="이하":
+                second_Scomment="오른쪽 하체 근육량 강화"  
+
+    else: 
+        first_Scomment="근육량 적정"
+        second_Scomment="전신 근육량 적정"    
+
+    comments=[first_Fcomment,second_Fcomment,first_Scomment,second_Scomment]    
+
+    return comments
 
 
 
@@ -538,21 +712,56 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.setFillColorRGB(0, 0, 0)
     c.setFont(mainfontname, 12)
     c.drawString(35,height-655,"집중 관리 부위")
+
+    comments=set_comment(IDetail)
     
     c.setFillColorRGB(1, 217/255,102/255)
     c.setStrokeColorRGB(1, 217/255,102/255)
     c.roundRect(35,height-680, 60, 12,6,fill=True)
     c.setFillColorRGB(0,0,0)
     c.setFont(mainfontname, 9)
-    c.drawString(41,height-678,"체지방 과다")
+    c.drawString(41,height-678,comments[0])
 
     c.setFillColorRGB(1, 155/255,155/255)
     c.setStrokeColorRGB(1, 155/255,155/255)
-    c.roundRect(155,height-680, 50, 12,6,fill=True)
+    c.roundRect(160,height-680, 60, 12,6,fill=True)
     c.setFillColorRGB(0,0,0)
     c.setFont(mainfontname, 9)
-    c.drawString(161,height-678,"근육부족")
-    
+    c.drawString(166,height-678,comments[2])
+
+    c.setLineWidth(0.5)
+    c.setStrokeColorRGB(0.75,0.75,0.75)
+    c.line(155,height-688,155,height-820)
+
+    c.setFillColorRGB(1, 217/255,102/255)
+    c.setFont(mainfontname, 8)
+    c.drawString(35,height-695,comments[1].split("체지방")[0])
+    text_width = pdfmetrics.stringWidth(comments[1].split("체지방")[0], mainfontname, 8)
+    if 150<=35+pdfmetrics.stringWidth(comments[1],mainfontname,8):
+        c.setFillColorRGB(0,0,0)
+        c.drawString(35,height-708," 체지방"+comments[1].split("체지방")[1]+'')
+    else : 
+        c.setFillColorRGB(0,0,0)
+        c.drawString(35+text_width,height-695," 체지방"+comments[1].split("체지방")[1])
+
+
+    c.setFillColorRGB(1, 155/255,155/255)
+    c.setFont(mainfontname, 8)
+    c.drawString(162,height-695,comments[3].split("근육량")[0])
+    text_width = pdfmetrics.stringWidth(comments[3].split("근육량")[0], mainfontname, 8)
+    if 150<=35+pdfmetrics.stringWidth(comments[3],mainfontname,8):
+        c.setFillColorRGB(0,0,0)
+        c.drawString(162,height-708," 근육량"+comments[3].split("근육량")[1]+'')
+    else : 
+        c.setFillColorRGB(0,0,0)
+        c.drawString(162+text_width,height-695," 근육량"+comments[3].split("근육량")[1])  
+
+    # set_image(IDetail) 작성필요_이미지 작업 중 완성 후 반영 예정
+    c.drawImage(filepath+'muscle.png',65,height-820,47,110,mask='auto') 
+    c.drawImage(filepath+'fat.png',195,height-820,47,110,mask='auto') 
+
+
+                            
     #-------------- part6 Age sensor --------------
     # 본문 채우기 
     c.setFillColorRGB(0, 0, 0)
@@ -580,5 +789,5 @@ if __name__=="__main__":
     Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=37,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9)
     Age=Agesensor(Rating="B",Rank=30)
     DGoal=DietGoal(Period="2주",Gweight=58,Rcal=2800,FoodR=5,WorkOutR=5)
-    IDetail=InbodyDetail()
+    IDetail=InbodyDetail(UpperLF="이상",UpperRF="표준",LowerLF="표준",LowerRF="표준",UpperLS="표준",UpperRS="이하",LowerLS="표준",LowerRS="이상")
     create_diet_pdf("김건강",Inbo,Age,DGoal,IDetail)
