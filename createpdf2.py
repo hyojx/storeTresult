@@ -356,88 +356,119 @@ def set_comment(IDetail):
 
         if lowfat_count==4:
             comments["second_Fcomment"]="전신" 
+            comments["fat_img"]="LF_all.png"
 
         elif lowfat_count==3:
             if IDetail.UpperLF==IDetail.UpperRF=="이하":
                 if IDetail.LowerLF=="이하":
                     comments["second_Fcomment"]="상체, 왼쪽 하체"
+                    comments["fat_img"]="LF_uadl.png"
                 elif IDetail.LowerRF=="이하":
                     comments["second_Fcomment"]="상체, 오른쪽 하체"
+                    comments["fat_img"]="LF_uadr.png"
             elif IDetail.LowerLF==IDetail.LowerRF=="이하":
                 if IDetail.UpperLF=="이하":
                     comments["second_Fcomment"]="하체, 왼쪽 상체"
+                    comments["fat_img"]="LF_ulda.png"
                 elif IDetail.UpperRF=="이하":
                     comments["second_Fcomment"]="하체, 오른쪽 상체"
+                    comments["fat_img"]="LF_urda.png"
 
         elif lowfat_count==2:
             if IDetail.UpperLF==IDetail.UpperRF=="이하":
                 comments["second_Fcomment"]="상체"
+                comments["fat_img"]="LF_ua.png"
             elif IDetail.LowerLF==IDetail.LowerRF=="이하":
                 comments["second_Fcomment"]="하체"
+                comments["fat_img"]="LF_da.png"
             elif IDetail.UpperLF==IDetail.LowerRF=="이하":
                 comments["second_Fcomment"]="왼쪽 상체, 오른쪽 하체"
+                comments["fat_img"]="LF_uldr.png"
             elif IDetail.UpperLF==IDetail.LowerLF=="이하":
                 comments["second_Fcomment"]="왼쪽 상체, 왼쪽 하체" 
+                comments["fat_img"]="LF_uldl.png"
             elif IDetail.UpperRF==IDetail.LowerRF=="이하":
                 comments["second_Fcomment"]="오른쪽 상체, 오른쪽 하체"
+                comments["fat_img"]="LF_urdr.png"
             elif IDetail.UpperRF==IDetail.LowerLF=="이하":
-                comments["second_Fcomment"]="오른쪽 상체, 왼쪽 하체"     
+                comments["second_Fcomment"]="오른쪽 상체, 왼쪽 하체"   
+                comments["fat_img"]="LF_urdl.png"  
 
         elif lowfat_count==1:
             if IDetail.UpperLF=="이하":
                 comments["second_Fcomment"]="왼쪽 상체"
+                comments["fat_img"]="LF_ul.png"
             elif IDetail.LowerLF=="이하":
                 comments["second_Fcomment"]="왼쪽 하체"
+                comments["fat_img"]="LF_dl.png"
             elif IDetail.UpperRF=="이하":
                 comments["second_Fcomment"]="오른쪽 상체"
+                comments["fat_img"]="LF_ur.png"
             elif IDetail.LowerRF=="이하":
                 comments["second_Fcomment"]="오른쪽 하체" 
+                comments["fat_img"]="LF_dr.png"
 
     elif 1<=highfat_count:
         comments["first_Fcomment"]="체지방 집중감량"
 
         if highfat_count==4:
             comments["second_Fcomment"]="전신 체지방"
+            comments["fat_img"]="HF_all.png"
 
         elif highfat_count==3:
             if IDetail.UpperLF==IDetail.UpperRF=="이상":
                 if IDetail.LowerLF=="이상":
                     comments["second_Fcomment"]="상체, 왼쪽 하체"
+                    comments["fat_img"]="HF_uadl.png"
                 elif IDetail.LowerRF=="이상":
                     comments["second_Fcomment"]="상체, 오른쪽 하체"
+                    comments["fat_img"]="HF_uadr.png"
             elif IDetail.LowerLF==IDetail.LowerRF=="이상":
                 if IDetail.UpperLF=="이상":
                     comments["second_Fcomment"]="하체, 왼쪽 상체"
+                    comments["fat_img"]="HF_ulda.png"
                 elif IDetail.UpperRF=="이상":
                     comments["second_Fcomment"]="하체, 오른쪽 상체"
+                    comments["fat_img"]="HF_urda.png"
 
         elif highfat_count==2:
             if IDetail.UpperLF==IDetail.UpperRF=="이상":
                 comments["second_Fcomment"]="상체"
+                comments["fat_img"]="HF_ua.png"
             elif IDetail.LowerLF==IDetail.LowerRF=="이상":
                 comments["second_Fcomment"]="하체"
+                comments["fat_img"]="HF_da.png"
             elif IDetail.UpperLF==IDetail.LowerRF=="이상":
                 comments["second_Fcomment"]="왼쪽 상체, 오른쪽 하체"
+                comments["fat_img"]="HF_uldr.png"
             elif IDetail.UpperLF==IDetail.LowerLF=="이상":
                 comments["second_Fcomment"]="왼쪽 상체, 왼쪽 하체" 
+                comments["fat_img"]="HF_uldl.png"
             elif IDetail.UpperRF==IDetail.LowerRF=="이상":
                 comments["second_Fcomment"]="오른쪽 상체, 오른쪽 하체"
+                comments["fat_img"]="HF_urdr.png"
             elif IDetail.UpperRF==IDetail.LowerLF=="이상":
-                comments["second_Fcomment"]="오른쪽 상체, 왼쪽 하체"      
+                comments["second_Fcomment"]="오른쪽 상체, 왼쪽 하체"  
+                comments["fat_img"]="HF_urdl.png"    
 
         elif highfat_count==1:
             if IDetail.UpperLF=="이상":
                 comments["second_Fcomment"]="왼쪽 상체"
+                comments["fat_img"]="HF_ul.png"
             elif IDetail.LowerLF=="이상":
                 comments["second_Fcomment"]="왼쪽 하체"
+                comments["fat_img"]="HF_dl.png"
             elif IDetail.UpperRF=="이상":
                 comments["second_Fcomment"]="오른쪽 상체"
+                comments["fat_img"]="HF_ur.png"
             elif IDetail.LowerRF=="이상":
                 comments["second_Fcomment"]="오른쪽 하체" 
+                comments["fat_img"]="HF_dr.png"
 
     else: 
         comments["first_Fcomment"]="체지방 적정"
         comments["second_Fcomment"]="전신 체지방 적정" 
+        comments["fat_img"]="AF_good.png"
 
 
 
@@ -447,63 +478,110 @@ def set_comment(IDetail):
         comments["first_Scomment"]="근육량 유지"
 
         if 2<=highske_count:
-            comments["second_Scomment"]="상체/하체 밸런스"    
+            comments["second_Scomment"]="상체/하체 밸런스"   #추가로 구분필요
+
+            if highske_count==4:
+                comments["muscle_img"]="HM_all.png"
+            elif highske_count==3:
+                if IDetail.UpperLS==IDetail.UpperRS=="이상":
+                    if IDetail.LowerLS=="이상":
+                        comments["muscle_img"]="HM_uadl.png"
+                    elif IDetail.LowerRS=="이상":
+                        comments["muscle_img"]="HM_uadr.png"
+                elif IDetail.LowerLS==IDetail.LowerRS=="이상":
+                    if IDetail.UpperLS=="이상":
+                        comments["muscle_img"]="HM_ulda.png"
+                    elif IDetail.UpperRS=="이상":
+                        comments["muscle_img"]="HM_urda.png"
+            elif lowske_count==2:
+                if IDetail.UpperLS==IDetail.UpperRS=="이하":
+                    comments["muscle_img"]="HM_ua.png"
+                elif IDetail.LowerLS==IDetail.LowerRS=="이하":
+                    comments["muscle_img"]="HM_da.png"
+                elif IDetail.UpperLS==IDetail.LowerRS=="이하":
+                    comments["muscle_img"]="HM_uldr.png"
+                elif IDetail.UpperLS==IDetail.LowerLS=="이하":
+                    comments["muscle_img"]="HM_uldl.png"
+                elif IDetail.UpperRS==IDetail.LowerRS=="이하":
+                    comments["muscle_img"]="HM_urdr.png"
+                elif IDetail.UpperRS==IDetail.LowerLS=="이하":
+                    comments["muscle_img"]="HM_urdl.png"            
 
         elif highske_count==1:
             if IDetail.UpperLS=="이상":
                 comments["second_Scomment"]="상체 밸런스"
+                comments["muscle_img"]="HM_ul.png"
             elif IDetail.LowerLS=="이상":
                 comments["second_Scomment"]="하체 밸런스"
+                comments["muscle_img"]="HM_dl.png"
             elif IDetail.UpperRS=="이상":
                 comments["second_Scomment"]="상체 밸런스"
+                comments["muscle_img"]="HM_ur.png"
             elif IDetail.LowerRS=="이상":
                 comments["second_Scomment"]="하체 밸런스" 
+                comments["muscle_img"]="HM_dr.png"
 
     elif 1<=lowske_count:
         comments["first_Scomment"]="근육량 강화"
 
         if lowske_count==4:
             comments["second_Scomment"]="전신" 
+            comments["muscle_img"]="LM_all.png"
 
         elif lowske_count==3:
             if IDetail.UpperLS==IDetail.UpperRS=="이하":
                 if IDetail.LowerLS=="이하":
                     comments["second_Scomment"]="상체, 왼쪽 하체"
+                    comments["muscle_img"]="LM_uadl.png"
                 elif IDetail.LowerRS=="이하":
                     comments["second_Scomment"]="상체, 오른쪽 하체"
+                    comments["muscle_img"]="LM_uadr.png"
             elif IDetail.LowerLS==IDetail.LowerRS=="이하":
                 if IDetail.UpperLS=="이하":
                     comments["second_Scomment"]="하체, 왼쪽 상체"
+                    comments["muscle_img"]="LM_ulda.png"
                 elif IDetail.UpperRS=="이하":
                     comments["second_Scomment"]="하체, 오른쪽 상체"
+                    comments["muscle_img"]="LM_urda.png"
 
         elif lowske_count==2:
             if IDetail.UpperLS==IDetail.UpperRS=="이하":
                 comments["second_Scomment"]="상체"
+                comments["muscle_img"]="LM_ua.png"
             elif IDetail.LowerLS==IDetail.LowerRS=="이하":
                 comments["second_Scomment"]="하체"
+                comments["muscle_img"]="LM_da.png"
             elif IDetail.UpperLS==IDetail.LowerRS=="이하":
                 comments["second_Scomment"]="왼쪽 상체, 오른쪽 하체"
+                comments["muscle_img"]="LM_uldr.png"
             elif IDetail.UpperLS==IDetail.LowerLS=="이하":
                 comments["second_Scomment"]="왼쪽 상체, 왼쪽 하체" 
+                comments["muscle_img"]="LM_uldl.png"
             elif IDetail.UpperRS==IDetail.LowerRS=="이하":
                 comments["second_Scomment"]="오른쪽 상체, 오른쪽 하체"
+                comments["muscle_img"]="LM_urdr.png"
             elif IDetail.UpperRS==IDetail.LowerLS=="이하":
-                comments["second_Scomment"]="오른쪽 상체, 왼쪽 하체"     
+                comments["second_Scomment"]="오른쪽 상체, 왼쪽 하체"  
+                comments["muscle_img"]="LM_urdl.png"   
 
         elif lowske_count==1:
             if IDetail.UpperLS=="이하":
                 comments["second_Scomment"]="왼쪽 상체"
+                comments["muscle_img"]="LM_ul.png"
             elif IDetail.LowerLS=="이하":
                 comments["second_Scomment"]="왼쪽 하체"
+                comments["muscle_img"]="LM_dl.png"
             elif IDetail.UpperRS=="이하":
                 comments["second_Scomment"]="오른쪽 상체"
+                comments["muscle_img"]="LM_ur.png"
             elif IDetail.LowerRS=="이하":
                 comments["second_Scomment"]="오른쪽 하체"  
+                comments["muscle_img"]="LM_dr.png"
 
     else: 
         comments["first_Scomment"]="근육량 적정"
-        comments["second_Scomment"]="전신 근육량 적정"    
+        comments["second_Scomment"]="전신 근육량 적정" 
+        comments["muscle_img"]="AM_good.png"   
 
        
 
@@ -737,35 +815,36 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.setStrokeColorRGB(0.75,0.75,0.75)
     c.line(155,height-688,155,height-820)
 
-    #c.setFillColorRGB(1, 217/255,102/255)
+    
     c.setFillColorRGB(0.5,0.5,0.5)
     c.setFont(mainfontname, 8)
     c.drawString(35,height-695,comments["second_Fcomment"])
-    #text_width = pdfmetrics.stringWidth(comments["second_Fcomment"].split("체지방")[0], mainfontname, 6)
-    #if 150<=35+pdfmetrics.stringWidth(comments["second_Fcomment"],mainfontname,6):
-    #    c.setFillColorRGB(0,0,0)
-    #    c.drawString(30,height-708," 체지방"+comments["second_Fcomment"].split("체지방")[1]+'')
-    #else : 
-    #    c.setFillColorRGB(0,0,0)
-    #    c.drawString(30+text_width,height-695," 체지방"+comments["second_Fcomment"].split("체지방")[1])
+    """text_width = pdfmetrics.stringWidth(comments["second_Fcomment"].split("체지방")[0], mainfontname, 6)
+    if 150<=35+pdfmetrics.stringWidth(comments["second_Fcomment"],mainfontname,6):
+        c.setFillColorRGB(0,0,0)
+        c.drawString(30,height-708," 체지방"+comments["second_Fcomment"].split("체지방")[1]+'')
+    else : 
+        c.setFillColorRGB(0,0,0)
+        c.drawString(30+text_width,height-695," 체지방"+comments["second_Fcomment"].split("체지방")[1])"""
 
 
-    #c.setFillColorRGB(1, 155/255,155/255)
+    
     c.setFillColorRGB(0.5,0.5,0.5)
     c.setFont(mainfontname, 8)
     c.drawString(167,height-695,comments["second_Scomment"])
-    #text_width = pdfmetrics.stringWidth(comments["second_Scomment"].split("근육량")[0], mainfontname, 6)
-    #if 150<=35+pdfmetrics.stringWidth(comments["second_Scomment"],mainfontname,6):
-    #    c.setFillColorRGB(0,0,0)
-    #    c.drawString(162,height-708," 근육량"+comments["second_Scomment"].split("근육량")[1]+'')
-    #else : 
-    #    c.setFillColorRGB(0,0,0)
-    #    c.drawString(162+text_width,height-695," 근육량"+comments["second_Scomment"].split("근육량")[1])  
+    """text_width = pdfmetrics.stringWidth(comments["second_Scomment"].split("근육량")[0], mainfontname, 6)
+    if 150<=35+pdfmetrics.stringWidth(comments["second_Scomment"],mainfontname,6):
+        c.setFillColorRGB(0,0,0)
+        c.drawString(162,height-708," 근육량"+comments["second_Scomment"].split("근육량")[1]+'')
+    else : 
+        c.setFillColorRGB(0,0,0)
+        c.drawString(162+text_width,height-695," 근육량"+comments["second_Scomment"].split("근육량")[1])"""
 
-    #c.drawImage(filepath+comments['muscle_img'],65,height-820,47,110,mask='auto') 
-    #c.drawImage(filepath+comments['fat_img'],195,height-820,47,110,mask='auto') 
-    c.drawImage(filepath+'fat.png',65,height-820,47,110,mask='auto') 
-    c.drawImage(filepath+'muscle.png',195,height-820,47,110,mask='auto') 
+    # 이미지 파일 완성 후 변경 예정
+    c.drawImage(filepath+comments['muscle_img'],195,height-820,47,110,mask='auto') 
+    c.drawImage(filepath+comments['fat_img'],65,height-820,47,110,mask='auto') 
+    #c.drawImage(filepath+'fat.png',65,height-820,47,110,mask='auto') 
+    #c.drawImage(filepath+'muscle.png',195,height-820,47,110,mask='auto') 
 
 
                             

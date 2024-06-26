@@ -518,6 +518,39 @@ def Food_Image(c,Nutrition,height):
     
     return
 
+# 피드백 세팅하는 함수
+def set_feedback(Nutrition):
+    if Nutrition.Carb=="과다":
+        over_feedback+="탄수화물, "
+    elif Nutrition.Carb=="부족":
+        under_feedback+="탄수화물"
+
+    if Nutrition.Protein=="과다":
+        over_feedback+="단백질, "
+    elif Nutrition.Protein=="부족":
+        under_feedback+="단백질, "
+
+    if Nutrition.Fat=="과다":
+        over_feedback+="지방, "
+    elif Nutrition.Fat=="부족":
+        under_feedback+="지방, "
+
+    if Nutrition.Fiber=="부족":
+        under_feedback+="식이섬유, "    
+
+    if Nutrition.Sodium=="과다":
+        over_feedback+="나트륨, "
+
+    if Nutrition.Sugar=="과다":
+        over_feedback+="당류, "
+
+    if Nutrition.Satfat=="과다":
+        over_feedback+="포화지방, "    
+
+    if Nutrition.Cholesterol=="과다":
+        over_feedback+="콜레스테롤, "                
+
+    
 # 별 그리기
 def draw_star(c,Vitastiq,height):
     star_size=18
@@ -975,6 +1008,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
     c.drawString(539,height-138,'과다')
 
     # 한줄피드백 작성
+    feedbacks=set_feedback(Nutrition)
     c.setFont('AppleGothic', 10)
     c.setFillColorRGB(0.5, 0.5, 0.5)
     c.drawString(315,height-160,'✓ 지방, 나트륨은 과다해요.')
