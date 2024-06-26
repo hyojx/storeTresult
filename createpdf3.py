@@ -52,30 +52,30 @@ def set_skin_category(SkinState):
     else:
         skincat+="-"  
     # 민감도
-    if SkinState.TState=="최적" or SkinState.TState=="주의":
+    if SkinState.TState=="깨끗함" or SkinState.TState=="거의 깨끗함" or SkinState.TState=="보통":
         skincat+="R"
-    elif SkinState.TState=="관리 필요" or SkinState.TState=="집중 관리 필요":
+    elif SkinState.TState=="매우나쁨" or SkinState.TState=="매우 나쁨":
         skincat+="S"
     else:
         skincat+="-"    
     # 색소
-    if SkinState.CState=="최적" or SkinState.CState=="주의":
+    if SkinState.CState=="깨끗함" or SkinState.CState=="거의 깨끗함" or SkinState.CState=="보통":
         skincat+="N"
-    elif SkinState.CState=="관리 필요" or SkinState.CState=="집중 관리 필요":
+    elif SkinState.CState=="매우나쁨" or SkinState.CState=="매우 나쁨":
         skincat+="P"
     else:
         skincat+="-"  
     # 주름
-    if SkinState.WState=="최적" or SkinState.WState=="주의":
+    if SkinState.WState=="깨끗함" or SkinState.WState=="거의 깨끗함" or SkinState.WState=="보통":
         skincat+="T"
-    elif SkinState.WState=="관리 필요" or SkinState.WState=="집중 관리 필요":
+    elif SkinState.WState=="나쁨" or SkinState.WState=="매우 나쁨":
         skincat+="W"
     else:
         skincat+="-"    
     # 모공
-    if SkinState.HState=="최적" or SkinState.HState=="주의":
+    if SkinState.HState=="깨끗함" or SkinState.HState=="거의 깨끗함" or SkinState.HState=="보통":
         skincat+="S"
-    elif SkinState.HState=="관리 필요" or SkinState.HState=="집중 관리 필요":
+    elif SkinState.HState=="나쁨" or SkinState.HState=="매우 나쁨":
         skincat+="L"
     else:
         skincat+="-"      
@@ -487,10 +487,36 @@ def draw_panel(c,Agesensor,height):
 
     return
 
+def state_to_int(state):
+    state_mapping = {
+        "매우 나쁨": 5,
+        "나쁨": 4,
+        "보통": 3,
+        "거의 깨끗함": 2,
+        "깨끗함": 1
+    }
+    return state_mapping.get(state.lower(), 5)
+
 # 순위 정하기
-def set_rank(SkinState):
-    Glist=["색소","주름","여드름(민감)","보습"]
+def set_rank(skin_state: SkinState):
+    Glist=[]
+    elements = {
+        'C': (state_to_int(skin_state.CState), skin_state.CScore - skin_state.CAScore),
+        'W': (state_to_int(skin_state.WState), skin_state.WScore - skin_state.WAScore),
+        'T': (state_to_int(skin_state.TState), skin_state.TScore - skin_state.TAScore)
+    }
+    
+    sorted_elements = sorted(elements.items(), key=lambda x: (x[1][0], -x[1][1]))
+    if skin_state.Type=="D":
+        Glist.append("D")
+        Glist.extend(sorted_elements[0][0],sorted_elements[1][0],sorted_elements[2][0])
+    else :
+        Glist+=[sorted_elements[0][0],sorted_elements[1][0],sorted_elements[2][0]]
+        Glist.append("D")
+    print(Glist)
+
     return Glist
+
 
 
 def create_skin_pdf(Name,SkinState,Agesensor):
@@ -563,7 +589,7 @@ def create_skin_pdf(Name,SkinState,Agesensor):
         c.drawImage(filepath+'U.png',grid['Ux'],grid['Uy'],15,15,mask='auto')
     else :    
         c.drawImage(filepath+'T.png',grid['Tx'],grid['Ty'],20,20,mask='auto')
-        c.drawImage(filepath+'T.png',grid["Ux"],grid["Uy"],20,20,mask='auto')
+        c.drawImage(filepath+'U.png',grid["Ux"],grid["Uy"],20,20,mask='auto')
 
     #-------------- part3 피부 고민별 점수 --------------
     # 본문 채우기 
@@ -601,16 +627,16 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     Glist=set_rank(SkinState)
     setY=0
     for gradient in Glist:
-        if gradient =="색소":
+        if gradient =="C":
             c. drawImage(filepath+'Cgra.png',308,height-670-setY,257,45,mask='auto')
             setY+=50
-        elif gradient=="주름":
+        elif gradient=="W":
             c. drawImage(filepath+'Wgra.png',308,height-670-setY,257,45,mask='auto')
             setY+=50
-        elif gradient=="여드름(민감)":
+        elif gradient=="T":
             c. drawImage(filepath+'Tgra.png',308,height-670-setY,257,45,mask='auto')
             setY+=50
-        elif gradient=="보습":
+        elif gradient=="D":
             c. drawImage(filepath+'WOgra.png',308,height-670-setY,257,45,mask='auto')
             setY+=50
 
@@ -635,6 +661,6 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     return img_path 
 
 if __name__=="__main__":
-    SState=SkinState(Concern=["모공크기","잡티"],Type="복합성",TZWater="Normal",UZWater="Normal",TZOil="Sebum",UZOil="Sebum",CScore=70,CAScore=70,CState="최적",WScore=80,WAScore=80,WState="주의",TScore=60,TAScore=60,TState="관리 필요",HScore=40,HAScore=45,HState="집중 관리 필요")
+    SState=SkinState(Concern=["모공크기","잡티"],Type="복합성",TZWater="Normal",UZWater="Normal",TZOil="Sebum",UZOil="Sebum",CScore=70,CAScore=65,CState="보통",WScore=80,WAScore=80,WState="거의 깨끗함",TScore=60,TAScore=50,TState="보통",HScore=40,HAScore=45,HState="매우 나쁨")
     Age=Agesensor(Rating="B",Rank=30)
     create_skin_pdf("김건강",SState,Age)

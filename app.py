@@ -192,22 +192,22 @@ with gr.Blocks() as skin:
         with gr.Row():
             CScore=gr.Number(minimum=0, maximum=100, label="종합점수",min_width=80,scale=1)
             CAScore=gr.Number(minimum=0, maximum=100, label="연령대 평균점수",min_width=80,scale=1)
-            CState=gr.Radio(["최적", "주의","관리 필요","집중관리필요"], label="피부상태",min_width=80,scale=2)
+            CState=gr.Radio(["깨끗함", "거의 깨끗함","보통","나쁨","매우 나쁨"], label="피부상태",min_width=80,scale=2)
         gr.HTML("""<h5 style = 'text-indent: 10px; padding-top: 5px; padding-bottom: 5px; background-color: white;'>주름</h5>""") 
         with gr.Row():
             WScore=gr.Number(minimum=0, maximum=100, label="종합점수",min_width=80,scale=1)
             WAScore=gr.Number(minimum=0, maximum=100, label="연령대 평균점수",min_width=80,scale=1)
-            WState=gr.Radio(["최적", "주의","관리 필요","집중관리필요"], label="피부상태",min_width=80,scale=2)  
+            WState=gr.Radio(["깨끗함", "거의 깨끗함","보통","나쁨","매우 나쁨"], label="피부상태",min_width=80,scale=2)  
         gr.HTML("""<h5 style = 'text-indent: 10px; padding-top: 5px; padding-bottom: 5px; background-color: white;'>여드름(민감)</h5>""") 
         with gr.Row():
             TScore=gr.Number(minimum=0, maximum=100, label="종합점수",min_width=80,scale=1)
             TAScore=gr.Number(minimum=0, maximum=100, label="연령대 평균점수",min_width=80,scale=1)
-            TState=gr.Radio(["최적", "주의","관리 필요","집중관리필요"], label="피부상태",min_width=80,scale=2)       
+            TState=gr.Radio(["깨끗함", "거의 깨끗함","보통","나쁨","매우 나쁨"], label="피부상태",min_width=80,scale=2)       
         gr.HTML("""<h5 style = 'text-indent: 10px; padding-top: 5px; padding-bottom: 5px; background-color: white;'>모공</h5>""") 
         with gr.Row():
             HScore=gr.Number(minimum=0, maximum=100, label="종합점수",min_width=80,scale=1)
             HAScore=gr.Number(minimum=0, maximum=100, label="연령대 평균점수",min_width=80,scale=1)
-            HState=gr.Radio(["최적", "주의","관리 필요","집중관리필요"], label="피부상태",min_width=80,scale=2)       
+            HState=gr.Radio(["깨끗함", "거의 깨끗함","보통","나쁨","매우 나쁨"], label="피부상태",min_width=80,scale=2)       
         
     gr.HTML("""<h2 style = 'border-radius: 5px; text-indent: 10px; padding-top: 5px; padding-bottom: 5px;'>2. Age Sensor</h2>""")
     with gr.Row():

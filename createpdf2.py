@@ -819,32 +819,15 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.setFillColorRGB(0.5,0.5,0.5)
     c.setFont(mainfontname, 8)
     c.drawString(35,height-695,comments["second_Fcomment"])
-    """text_width = pdfmetrics.stringWidth(comments["second_Fcomment"].split("체지방")[0], mainfontname, 6)
-    if 150<=35+pdfmetrics.stringWidth(comments["second_Fcomment"],mainfontname,6):
-        c.setFillColorRGB(0,0,0)
-        c.drawString(30,height-708," 체지방"+comments["second_Fcomment"].split("체지방")[1]+'')
-    else : 
-        c.setFillColorRGB(0,0,0)
-        c.drawString(30+text_width,height-695," 체지방"+comments["second_Fcomment"].split("체지방")[1])"""
-
-
     
     c.setFillColorRGB(0.5,0.5,0.5)
     c.setFont(mainfontname, 8)
     c.drawString(167,height-695,comments["second_Scomment"])
-    """text_width = pdfmetrics.stringWidth(comments["second_Scomment"].split("근육량")[0], mainfontname, 6)
-    if 150<=35+pdfmetrics.stringWidth(comments["second_Scomment"],mainfontname,6):
-        c.setFillColorRGB(0,0,0)
-        c.drawString(162,height-708," 근육량"+comments["second_Scomment"].split("근육량")[1]+'')
-    else : 
-        c.setFillColorRGB(0,0,0)
-        c.drawString(162+text_width,height-695," 근육량"+comments["second_Scomment"].split("근육량")[1])"""
 
-    # 이미지 파일 완성 후 변경 예정
+    # 이미지 파일 넣기
     c.drawImage(filepath+comments['muscle_img'],195,height-820,47,110,mask='auto') 
     c.drawImage(filepath+comments['fat_img'],65,height-820,47,110,mask='auto') 
-    #c.drawImage(filepath+'fat.png',65,height-820,47,110,mask='auto') 
-    #c.drawImage(filepath+'muscle.png',195,height-820,47,110,mask='auto') 
+    
 
 
                             
