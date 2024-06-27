@@ -11,7 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle
 from dataclasses import fields
 
-filepath="static/image/basic"
+filepath="static/image/basic/"
 resultfilepath="static/result/"
 
 # 폰트 등록 함수
@@ -520,10 +520,12 @@ def Food_Image(c,Nutrition,height):
 
 # 피드백 세팅하는 함수
 def set_feedback(Nutrition):
+    over_feedback=""
+    under_feedback=""
     if Nutrition.Carb=="과다":
         over_feedback+="탄수화물, "
     elif Nutrition.Carb=="부족":
-        under_feedback+="탄수화물"
+        under_feedback+="탄수화물, "
 
     if Nutrition.Protein=="과다":
         over_feedback+="단백질, "
@@ -544,13 +546,108 @@ def set_feedback(Nutrition):
     if Nutrition.Sugar=="과다":
         over_feedback+="당류, "
 
-    if Nutrition.Satfat=="과다":
+    if Nutrition.SatFat=="과다":
         over_feedback+="포화지방, "    
 
     if Nutrition.Cholesterol=="과다":
-        over_feedback+="콜레스테롤, "                
+        over_feedback+="콜레스테롤, "   
 
+    over_feedback=over_feedback[:-2]  
+    under_feedback=under_feedback[:-2]
+
+    if 0<(ord(over_feedback[-1])-0xAC00)%28:
+        print((ord(over_feedback[-1])-0xAC00)%28)
+        over_feedback+="은"
+    else: 
+        over_feedback+="는" 
+
+    if 0<(ord(under_feedback[-1])-0xAC00)%28:
+        print((ord(under_feedback[-1])-0xAC00)%28)
+        under_feedback+="은"
+    else: 
+        under_feedback+="는"        
+
+    feedbacks=[over_feedback, under_feedback] 
+    return feedbacks                
     
+# 한눈에 보는 나의 식습관
+def draw_part2(c,Nutrition,height):
+    #색상안내
+    c.setFillColorRGB(1,208/255,20/255)
+    c.circle(468,height-135,5,fill=1,stroke=0)
+    c.setFillColorRGB(134/255,206/255,2/255)
+    c.circle(500,height-135,5,fill=1,stroke=0)
+    c.setFillColorRGB(1,111/255,111/255)
+    c.circle(532,height-135,5,fill=1,stroke=0)
+    c.setFillColorRGB(0.25,0.25,0.25)
+    c.setFont('AppleGothic', 8)
+    c.drawString(475,height-138,'부족')
+    c.drawString(507,height-138,'적정')
+    c.drawString(539,height-138,'과다')
+
+    # 한줄피드백 작성
+    feedbacks=set_feedback(Nutrition)
+    c.setFont('AppleGothic', 10)
+    c.setFillColorRGB(0.5, 0.5, 0.5)
+    if feedbacks[0]=="":
+        c.drawString(315,height-160,'✓ 과다하게 섭취하는 영양소는 없어요')
+    else: 
+        c.drawString(315,height-160,"✓ "+feedbacks[0]+" 과다해요.") 
+
+    if feedbacks[1]=="":
+        c.drawString(315,height-175,'✓ 부족하게 섭취하는 영양소는 없어요')
+    else: 
+        c.drawString(315,height-175,"✓ "+feedbacks[1]+" 부족해요.")    
+
+    # 표 그리기
+    BaseX2=315
+    BaseY2=height-205
+    c.setFillColorRGB(0, 0, 0)
+    c.setFont('AppleGothic', 8)
+    c.drawString(BaseX2,BaseY2,"탄수화물")
+    c.drawString(BaseX2,BaseY2-28,"단백질")
+    c.drawString(BaseX2,BaseY2-56,"지방")
+    c.drawString(BaseX2,BaseY2-84,"식이섬유")
+    c.drawString(BaseX2,BaseY2-112,"나트륨")
+    c.drawString(BaseX2,BaseY2-140,"당류")
+    c.drawString(BaseX2,BaseY2-168,"포화지방")
+    c.drawString(BaseX2,BaseY2-196,"콜레스테롤")
+
+    # Define table data (8 rows x 3 columns)
+    data = [[''] * 3 for _ in range(8)]
+
+    #파스텔 컬러지정
+    Wyellow=Color(1,246/255,208/255)
+    Wgreen=Color(222/255,236/255,194/255)
+    Wred=Color(1,226/255,226/255)
+    White=Color(1,1,1)
+
+    # 테이블 스타일 지정
+    style = TableStyle([
+        ('BACKGROUND', (0, 0), (0, -1), Wyellow),   # First column background color
+        ('BACKGROUND', (1, 0), (1, -1), Wgreen),    # Second column background color
+        ('BACKGROUND', (2, 0), (2, -1), Wred),      # Third column background color
+        ('LINEBEFORE', (0, 0), (-1, -1), 1, White), # White lines
+        ('LINEAFTER', (0, 0), (-1, -1), 1, White),
+        ('LINEABOVE', (0, 0), (-1, -1), 1, White),
+        ('LINEBELOW', (0, 0), (-1, -1), 1, White),
+        ('INNERGRID', (0, 0), (-1, -1), 1, White),
+    ])
+    
+    SL=CustomStyle(Nutrition)
+    addStyle=TableStyle(SL)
+
+    # 테이블 생성
+    table = Table(data, colWidths=[23*mm] * 3, rowHeights=[10*mm] * 8)
+    table.setStyle(style)
+    table.setStyle(addStyle)
+    
+    # 테이블 그리기
+    table.wrapOn(c, A4[0], A4[1])
+    table.drawOn(c, BaseX2+45, BaseY2-210)
+
+    Food_Image(c,Nutrition,height)
+
 # 별 그리기
 def draw_star(c,Vitastiq,height):
     star_size=18
@@ -957,14 +1054,36 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
         if field_value=="낮은":
             vitascore=vitascore-5
 
-    EatS=str(Nutrition.EatScore)+"점"
-    VitaS=str(vitascore)+"점"
-    InboS=str(Inbody.InbodyScore)+"점"
-    AgeS=str(100-Agesensor.Rank)+"점"
+    if Nutrition.EatScore==0:
+        EatS="   -"
+    else:
+        EatS=str(Nutrition.EatScore)+"점"
+        
+    if Vitastiq.Unused==True:
+        VitaS="   -"
+    else:    
+        VitaS=str(vitascore)+"점"
+
+    if Inbody.InbodyScore==0:
+        InboS="   -"
+    else:
+        InboS=str(Inbody.InbodyScore)+"점"
+
+    if Agesensor.Rank==0:
+        AgeS="   -"
+    else:
+        AgeS=str(100-Agesensor.Rank)+"점"
 
     TotalScore=float(Nutrition.EatScore+vitascore+Inbody.InbodyScore+100-Agesensor.Rank)/4
     
     print("Total Score : "+str(TotalScore))
+
+    # 점수표현
+    if Nutrition.EatScore==0 or Inbody.InbodyScore==0 or Agesensor.Rank==0 or Vitastiq.Unused==True:
+        c.drawImage(filepath+"TotalBlur.png", 30, height - 400, 144,230,mask='auto')
+    else:     
+        draw_score_string(c,height,TotalScore)
+        draw_part1_graph(c,height,TotalScore)
 
     c.setFont('AppleGothic', 10)
     c.setFillColorRGB(0, 0, 0)
@@ -984,130 +1103,71 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
     c.setDash([3, 2], 0)  # 대시 패턴 설정: 길이 3의 대시와 길이 2의 공백을 반복
     c.line(170, height - 195, 170, height - 405)  # (100, height-100)에서 시작하여 (400, height-100)까지 선 그리기
 
-    # 점수표현
-    draw_score_string(c,height,TotalScore)
-    draw_part1_graph(c,height,TotalScore)
 
     #-------------- part2 한 눈에 보는 나의 식습관 --------------
     # 본문 채우기 
-    c.setFillColorRGB(0, 0, 0)
-    c.setFont('AppleGothic', 12)
-    c.drawString(315,height-140,"한 눈에 보는 나의 식습관")
-
-    #색상안내
-    c.setFillColorRGB(1,208/255,20/255)
-    c.circle(468,height-135,5,fill=1,stroke=0)
-    c.setFillColorRGB(134/255,206/255,2/255)
-    c.circle(500,height-135,5,fill=1,stroke=0)
-    c.setFillColorRGB(1,111/255,111/255)
-    c.circle(532,height-135,5,fill=1,stroke=0)
-    c.setFillColorRGB(0.25,0.25,0.25)
-    c.setFont('AppleGothic', 8)
-    c.drawString(475,height-138,'부족')
-    c.drawString(507,height-138,'적정')
-    c.drawString(539,height-138,'과다')
-
-    # 한줄피드백 작성
-    feedbacks=set_feedback(Nutrition)
-    c.setFont('AppleGothic', 10)
-    c.setFillColorRGB(0.5, 0.5, 0.5)
-    c.drawString(315,height-160,'✓ 지방, 나트륨은 과다해요.')
-    c.drawString(315,height-175,'✓ 단백질 식이섬유는 부족해요.')
-
-    # 표 그리기
-    BaseX2=315
-    BaseY2=height-205
-    c.setFillColorRGB(0, 0, 0)
-    c.setFont('AppleGothic', 8)
-    c.drawString(BaseX2,BaseY2,"탄수화물")
-    c.drawString(BaseX2,BaseY2-28,"단백질")
-    c.drawString(BaseX2,BaseY2-56,"지방")
-    c.drawString(BaseX2,BaseY2-84,"식이섬유")
-    c.drawString(BaseX2,BaseY2-112,"나트륨")
-    c.drawString(BaseX2,BaseY2-140,"당류")
-    c.drawString(BaseX2,BaseY2-168,"포화지방")
-    c.drawString(BaseX2,BaseY2-196,"콜레스테롤")
-
-    # Define table data (8 rows x 3 columns)
-    data = [[''] * 3 for _ in range(8)]
-
-    #파스텔 컬러지정
-    Wyellow=Color(1,246/255,208/255)
-    Wgreen=Color(222/255,236/255,194/255)
-    Wred=Color(1,226/255,226/255)
-    White=Color(1,1,1)
-
-    # 테이블 스타일 지정
-    style = TableStyle([
-        ('BACKGROUND', (0, 0), (0, -1), Wyellow),   # First column background color
-        ('BACKGROUND', (1, 0), (1, -1), Wgreen),    # Second column background color
-        ('BACKGROUND', (2, 0), (2, -1), Wred),      # Third column background color
-        ('LINEBEFORE', (0, 0), (-1, -1), 1, White), # White lines
-        ('LINEAFTER', (0, 0), (-1, -1), 1, White),
-        ('LINEABOVE', (0, 0), (-1, -1), 1, White),
-        ('LINEBELOW', (0, 0), (-1, -1), 1, White),
-        ('INNERGRID', (0, 0), (-1, -1), 1, White),
-    ])
-    
-    SL=CustomStyle(Nutrition)
-    addStyle=TableStyle(SL)
-
-    # 테이블 생성
-    table = Table(data, colWidths=[23*mm] * 3, rowHeights=[10*mm] * 8)
-    table.setStyle(style)
-    table.setStyle(addStyle)
-    
-    # 테이블 그리기
-    table.wrapOn(c, A4[0], A4[1])
-    table.drawOn(c, BaseX2+45, BaseY2-210)
-
-    Food_Image(c,Nutrition,height)
+    if Nutrition.EatScore==0 :
+        c.drawImage(filepath+"NutriBlur.png", 310, height - 400, 250,232,mask='auto')
+    else:    
+        c.setFillColorRGB(0, 0, 0)
+        c.setFont('AppleGothic', 12)
+        c.drawString(315,height-140,"한 눈에 보는 나의 식습관")
+        draw_part2(c,Nutrition,height)
 
     #-------------- part3 비타민/무기질 --------------
     # 본문 채우기 
-    c.setFillColorRGB(0, 0, 0)
-    c.setFont('AppleGothic', 12)
-    c.drawString(35,height-460,"비타민/무기질")
-    c.drawImage(filepath+"Vit_Min.png",30,height-610,530,130,mask='auto')
+    if Vitastiq.Unused==True:
+        c.drawImage(filepath+"VitaBlur.png", 30, height - 615, 530,143,mask='auto')
+    else:    
+        c.setFillColorRGB(0, 0, 0)
+        c.setFont('AppleGothic', 12)
+        c.drawString(35,height-460,"비타민/무기질")
+        c.drawImage(filepath+"Vit_Min.png",30,height-610,530,130,mask='auto')
 
-    c.drawImage(filepath+"Star_red.png",160,height-468,20,20,mask='auto')
-    c.setFillColorRGB(0.5, 0.5, 0.5)
-    c.setFont('AppleGothic', 10)
-    c.drawString(183,height-462,"체내 영양소가 낮은 경향으로 보여요.")
+        c.drawImage(filepath+"Star_red.png",160,height-468,20,20,mask='auto')
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.setFont('AppleGothic', 10)
+        c.drawString(183,height-462,"체내 영양소가 낮은 경향으로 보여요.")
 
-    c.drawImage(filepath+"Star_blue.png",355,height-468,20,20,mask='auto')
-    c.setFillColorRGB(0.5, 0.5, 0.5)
-    c.setFont('AppleGothic', 10)
-    c.drawString(378,height-462,"체내 영양소가 적정한 경향으로 보여요.")
+        c.drawImage(filepath+"Star_blue.png",355,height-468,20,20,mask='auto')
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.setFont('AppleGothic', 10)
+        c.drawString(378,height-462,"체내 영양소가 적정한 경향으로 보여요.")
 
-    draw_star(c,Vitastiq,height)
+        draw_star(c,Vitastiq,height)
 
     #-------------- part4 인바디 --------------
     # 본문 채우기 
-    c.setFillColorRGB(0, 0, 0)
-    c.setFont('AppleGothic', 12)
-    c.drawString(35,height-655,"인바디")
+    if Inbody.InbodyScore==0:
+        c.drawImage(filepath+"InbodyBlur.png", 30, height - 810, 250,157,mask='auto')
+    else:    
+        c.setFillColorRGB(0, 0, 0)
+        c.setFont('AppleGothic', 12)
+        c.drawString(35,height-655,"인바디")
 
-    Inbody_cat=set_category(Inbody)
-    print("Inbody_cat"+Inbody_cat)
-    write_comment(c,Inbody_cat,height)
+        Inbody_cat=set_category(Inbody)
+        print("Inbody_cat"+Inbody_cat)
+        write_comment(c,Inbody_cat,height)
 
-    c.setFont('AppleGothic', 9)
-    c.setFillColorRGB(0.5, 0.5, 0.5)
-    c.drawString(37,height-705,'체중')
-    c.drawString(37,height-735,'골격근량')
-    c.drawString(37,height-765,'체지방량')
+        c.setFont('AppleGothic', 9)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(37,height-705,'체중')
+        c.drawString(37,height-735,'골격근량')
+        c.drawString(37,height-765,'체지방량')
 
-    draw_inbody(c,Inbody,height)
-    draw_alpha(c,Inbody_cat,height)
+        draw_inbody(c,Inbody,height)
+        draw_alpha(c,Inbody_cat,height)
 
     #-------------- part5 Age sensor --------------
     # 본문 채우기 
-    c.setFillColorRGB(0, 0, 0)
-    c.setFont('AppleGothic', 12)
-    c.drawString(315,height-655,"AGEs sensor")
+    if Agesensor.Rating=="" or Agesensor.Rank==0:
+        c.drawImage(filepath+"AGEsBlur.png", 310, height - 810, 250,157,mask='auto')
+    else:    
+        c.setFillColorRGB(0, 0, 0)
+        c.setFont('AppleGothic', 12)
+        c.drawString(315,height-655,"AGEs sensor")
     
-    draw_panel(c,Agesensor,height)
+        draw_panel(c,Agesensor,height)
     
     #-------------- 페이지 저장 및 이미지 변환 --------------
 
@@ -1126,8 +1186,8 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
 
 # PDF 생성 테스트용
 if __name__ == "__main__":
-    Nutri=Nutrition(EatScore=60, Carb="과다", Protein="적정", Fat="부족", Fiber="부족", Sodium="과다", Sugar="적정", SatFat="적정", Cholesterol="적정")
-    Vita=Vitastiq(Biotin="", VitC="", Mg="", VitB1="", VitB2="", Zn="", Se="경미", VitB6="낮은", VitE="경미", Folate="낮은")
-    Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=19.5,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9)
-    Age=Agesensor(Rating="B",Rank=30)
+    Nutri=Nutrition(EatScore=0, Carb="과다", Protein="적정", Fat="부족", Fiber="부족", Sodium="과다", Sugar="적정", SatFat="적정", Cholesterol="적정")
+    Vita=Vitastiq(Unused=True,Biotin="", VitC="", Mg="", VitB1="", VitB2="", Zn="", Se="경미", VitB6="낮은", VitE="경미", Folate="낮은")
+    Inbo=Inbody(InbodyScore=0,Weight=59.1,BodyFat=22.8,FatFree=19.5,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9)
+    Age=Agesensor(Rating="")
     create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강")

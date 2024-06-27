@@ -833,12 +833,15 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
                             
     #-------------- part6 Age sensor --------------
     # 본문 채우기 
-    c.setFillColorRGB(0, 0, 0)
-    c.setFont(mainfontname, 12)
-    c.drawString(315,height-655,"AGEs sensor")
-    c.setStrokeColorRGB(0.75,0.75,0.75)
-    c.setLineWidth(0.7)
-    draw_panel(c,Agesensor,height)
+    if Agesensor.Rating=="" or Agesensor.Rank==0:
+        c.drawImage(filepath+'AGEsBlur.png',310,height-820,250,164,mask='auto')
+    else:
+        c.setFillColorRGB(0, 0, 0)
+        c.setFont(mainfontname, 12)
+        c.drawString(315,height-655,"AGEs sensor")
+        c.setStrokeColorRGB(0.75,0.75,0.75)
+        c.setLineWidth(0.7)
+        draw_panel(c,Agesensor,height)
     
     #-------------- 페이지 저장 및 이미지 변환 --------------
 
@@ -856,7 +859,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
 
 if __name__=="__main__":
     Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=37,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9)
-    Age=Agesensor(Rating="B",Rank=30)
+    Age=Agesensor(Rating="",Rank=30)
     DGoal=DietGoal(Period="2주",Gweight=58,Rcal=2800,FoodR=5,WorkOutR=5)
     IDetail=InbodyDetail(UpperLF="표준",UpperRF="이상",LowerLF="표준",LowerRF="이상",UpperLS="표준",UpperRS="이하",LowerLS="표준",LowerRS="이상")
     create_diet_pdf("김건강",Inbo,Age,DGoal,IDetail)

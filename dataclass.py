@@ -15,6 +15,7 @@ class Nutrition:
 
 @dataclass
 class Vitastiq:
+    Unused: bool
     Mg: str =field(default="")
     Biotin: str =field(default="")
     Se: str =field(default="")

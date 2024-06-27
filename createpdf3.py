@@ -50,35 +50,35 @@ def set_skin_category(SkinState):
     elif SkinState.Type=="건성":
         skincat+="D"
     else:
-        skincat+="-"  
+        skincat+="_"  
     # 민감도
     if SkinState.TState=="깨끗함" or SkinState.TState=="거의 깨끗함" or SkinState.TState=="보통":
         skincat+="R"
-    elif SkinState.TState=="매우나쁨" or SkinState.TState=="매우 나쁨":
+    elif SkinState.TState=="나쁨" or SkinState.TState=="매우 나쁨":
         skincat+="S"
     else:
-        skincat+="-"    
+        skincat+="_"    
     # 색소
     if SkinState.CState=="깨끗함" or SkinState.CState=="거의 깨끗함" or SkinState.CState=="보통":
         skincat+="N"
-    elif SkinState.CState=="매우나쁨" or SkinState.CState=="매우 나쁨":
+    elif SkinState.CState=="나쁨" or SkinState.CState=="매우 나쁨":
         skincat+="P"
     else:
-        skincat+="-"  
+        skincat+="_"  
     # 주름
     if SkinState.WState=="깨끗함" or SkinState.WState=="거의 깨끗함" or SkinState.WState=="보통":
         skincat+="T"
     elif SkinState.WState=="나쁨" or SkinState.WState=="매우 나쁨":
         skincat+="W"
     else:
-        skincat+="-"    
+        skincat+="_"    
     # 모공
     if SkinState.HState=="깨끗함" or SkinState.HState=="거의 깨끗함" or SkinState.HState=="보통":
         skincat+="S"
     elif SkinState.HState=="나쁨" or SkinState.HState=="매우 나쁨":
         skincat+="L"
     else:
-        skincat+="-"      
+        skincat+="_"      
               
     return skincat
 
@@ -135,103 +135,128 @@ def skin_comment(c,skin_cat,height):
 
     return
 
-# 피부 알파벳 작성
+# 피부 알파벳 작성(리스트 위치를 명시하는걸로 바꾸고 _도 확인하기)
 def skin_alpha(c,skin_cat,height):
+    print(skin_cat)
     if "O" in skin_cat:
         c.setFont(mainfontname,30)
         c.setFillColor(pink1)
         c.drawString(233,height-211,"O")
 
-        if "R" in skin_cat:
+        if skin_cat[1]=="R":
             c.drawString(305,height-211,"R")
         elif skin_cat[1]=="S":
             c.drawString(305,height-287,"S")
         
-        if "N" in skin_cat:
+        if skin_cat[2]=="N":
             c.drawString(375,height-211,"N")
-        elif "P" in skin_cat:
+        elif skin_cat[2]=="P":
             c.drawString(376,height-287,"P")
 
-        if "T" in skin_cat:
+        if skin_cat[3]=="T":
             c.drawString(446,height-211,"T")
-        elif "W" in skin_cat:
+        elif skin_cat[3]=="W":
             c.drawString(442,height-287,"W")  
 
         if skin_cat[4]=="S":
             c.drawString(518,height-211,"S")
-        elif "L" in skin_cat:
+        elif skin_cat[4]=="L":
             c.drawString(520,height-287,"L")          
 
         c.setFillColorRGB(1,1,1)
         c.drawString(234,height-287,"D")
 
-        if "R" not in skin_cat:
+        if skin_cat[1]=="S":
             c.drawString(305,height-211,"R")
-        elif skin_cat[1]!="S":
+        elif skin_cat[1]=="R":
+            c.drawString(305,height-287,"S")
+        elif skin_cat[1]=="_":
+            c.drawString(305,height-211,"R")
             c.drawString(305,height-287,"S")
         
-        if "N" not in skin_cat:
+        if skin_cat[2]=="P":
             c.drawString(375,height-211,"N")
-        elif "P" not in skin_cat:
+        elif skin_cat[2]=="N":
+            c.drawString(376,height-287,"P")
+        elif skin_cat[2]=="_":
+            c.drawString(375,height-211,"N")
             c.drawString(376,height-287,"P")
 
-        if "T" not in skin_cat:
+        if skin_cat[3]=="W":
             c.drawString(446,height-211,"T")
-        elif "W" not in skin_cat:
+        elif skin_cat[3]=="T":
             c.drawString(442,height-287,"W")  
+        elif skin_cat[3]=="_":
+            c.drawString(446,height-211,"T") 
+            c.drawString(442,height-287,"W")   
 
-        if skin_cat[4]!="S":
+        if skin_cat[4]=="L":
             c.drawString(518,height-211,"S")
-        elif "L" not in skin_cat:
+        elif skin_cat[4]=="S":
             c.drawString(520,height-287,"L")
+        elif skin_cat[4]=="_":
+            c.drawString(518,height-211,"S") 
+            c.drawString(520,height-287,"L")       
 
     elif "D" in skin_cat:
         c.setFont(mainfontname,30)
         c.setFillColorRGB(1,1,1)
         c.drawString(233,height-211,"O")
 
-        if "R" not in skin_cat:
+        if skin_cat[1]=="S":
             c.drawString(305,height-211,"R")
-        elif skin_cat[1]!="S":
+        elif skin_cat[1]=="R":
+            c.drawString(305,height-287,"S")
+        elif skin_cat[1]=="_":
+            c.drawString(305,height-211,"R")
             c.drawString(305,height-287,"S")
         
-        if "N" not in skin_cat:
+        if skin_cat[2]=="P":
             c.drawString(375,height-211,"N")
-        elif "P" not in skin_cat:
+        elif skin_cat[2]=="N":
+            c.drawString(376,height-287,"P")
+        elif skin_cat[2]=="_":
+            c.drawString(375,height-211,"N")
             c.drawString(376,height-287,"P")
 
-        if "T" not in skin_cat:
+        if skin_cat[3]=="W":
             c.drawString(446,height-211,"T")
-        elif "W" not in skin_cat:
+        elif skin_cat[3]=="T":
             c.drawString(442,height-287,"W")  
+        elif skin_cat[3]=="_":
+            c.drawString(446,height-211,"T") 
+            c.drawString(442,height-287,"W")   
 
-        if skin_cat[4]!="S":
+        if skin_cat[4]=="L":
             c.drawString(518,height-211,"S")
-        elif "L" not in skin_cat:
+        elif skin_cat[4]=="S":
             c.drawString(520,height-287,"L")
+        elif skin_cat[4]=="_":
+            c.drawString(518,height-211,"S") 
+            c.drawString(520,height-287,"L") 
 
         c.setFillColor(green1)
         c.drawString(234,height-287,"D")   
         
-        if "R" in skin_cat:
+        if skin_cat[1]=="R":
             c.drawString(305,height-211,"R")
         elif skin_cat[1]=="S":
             c.drawString(305,height-287,"S")
         
-        if "N" in skin_cat:
+        if skin_cat[2]=="N":
             c.drawString(375,height-211,"N")
-        elif "P" in skin_cat:
+        elif skin_cat[2]=="P":
             c.drawString(376,height-287,"P")
 
-        if "T" in skin_cat:
+        if skin_cat[3]=="T":
             c.drawString(446,height-211,"T")
-        elif "W" in skin_cat:
+        elif skin_cat[3]=="W":
             c.drawString(442,height-287,"W")  
 
         if skin_cat[4]=="S":
             c.drawString(518,height-211,"S")
-        elif "L" in skin_cat:
-            c.drawString(520,height-287,"L") 
+        elif skin_cat[4]=="L":
+            c.drawString(520,height-287,"L")  
 
     elif "C" in skin_cat:
         c.setFont(mainfontname,30)
@@ -239,46 +264,58 @@ def skin_alpha(c,skin_cat,height):
         c.drawString(233,height-211,"O")
         c.drawString(234,height-287,"D")
 
-        if "R" in skin_cat:
+        if skin_cat[1]=="R":
             c.drawString(305,height-211,"R")
         elif skin_cat[1]=="S":
             c.drawString(305,height-287,"S")
         
-        if "N" in skin_cat:
+        if skin_cat[2]=="N":
             c.drawString(375,height-211,"N")
-        elif "P" in skin_cat:
+        elif skin_cat[2]=="P":
             c.drawString(376,height-287,"P")
 
-        if "T" in skin_cat:
+        if skin_cat[3]=="T":
             c.drawString(446,height-211,"T")
-        elif "W" in skin_cat:
+        elif skin_cat[3]=="W":
             c.drawString(442,height-287,"W")  
 
         if skin_cat[4]=="S":
             c.drawString(518,height-211,"S")
-        elif "L" in skin_cat:
-            c.drawString(520,height-287,"L")
+        elif skin_cat[4]=="L":
+            c.drawString(520,height-287,"L") 
 
         c.setFillColorRGB(1,1,1)
 
-        if "R" not in skin_cat:
+        if skin_cat[1]=="S":
             c.drawString(305,height-211,"R")
-        elif skin_cat[1]!="S":
+        elif skin_cat[1]=="R":
+            c.drawString(305,height-287,"S")
+        elif skin_cat[1]=="_":
+            c.drawString(305,height-211,"R")
             c.drawString(305,height-287,"S")
         
-        if "N" not in skin_cat:
+        if skin_cat[2]=="P":
             c.drawString(375,height-211,"N")
-        elif "P" not in skin_cat:
+        elif skin_cat[2]=="N":
+            c.drawString(376,height-287,"P")
+        elif skin_cat[2]=="_":
+            c.drawString(375,height-211,"N")
             c.drawString(376,height-287,"P")
 
-        if "T" not in skin_cat:
+        if skin_cat[3]=="W":
             c.drawString(446,height-211,"T")
-        elif "W" not in skin_cat:
+        elif skin_cat[3]=="T":
             c.drawString(442,height-287,"W")  
+        elif skin_cat[3]=="_":
+            c.drawString(446,height-211,"T") 
+            c.drawString(442,height-287,"W")   
 
-        if skin_cat[4]!="S":
+        if skin_cat[4]=="L":
             c.drawString(518,height-211,"S")
-        elif "L" not in skin_cat:
+        elif skin_cat[4]=="S":
+            c.drawString(520,height-287,"L")
+        elif skin_cat[4]=="_":
+            c.drawString(518,height-211,"S") 
             c.drawString(520,height-287,"L")
 
     return
@@ -362,7 +399,9 @@ def draw_skin_graph(c,SkinState,height):
     c.roundRect(baseX+70,baseY-135,170,20,10,fill=True)
 
     # 값에 따른 색 및 길이
-    if SkinState.TScore < SkinState.TAScore:
+    if SkinState.TScore == SkinState.TAScore==0:
+        pass
+    elif SkinState.TScore < SkinState.TAScore:
         c.setFillColorRGB(255/255,111/255,111/255)
         c.setStrokeColorRGB(255/255,111/255,111/255)
         c.roundRect(baseX+70,baseY,170*SkinState.TScore/100,20,10,fill=True)
@@ -371,7 +410,9 @@ def draw_skin_graph(c,SkinState,height):
         c.setStrokeColorRGB(139/255,199/255,0)
         c.roundRect(baseX+70,baseY,170*SkinState.TScore/100,20,10,fill=True)
 
-    if SkinState.CScore < SkinState.CAScore:
+    if SkinState.CScore == SkinState.CAScore==0:
+        pass
+    elif SkinState.CScore < SkinState.CAScore:
         c.setFillColorRGB(255/255,111/255,111/255)
         c.setStrokeColorRGB(255/255,111/255,111/255)
         c.roundRect(baseX+70,baseY-45,170*SkinState.CScore/100,20,10,fill=True)
@@ -380,7 +421,9 @@ def draw_skin_graph(c,SkinState,height):
         c.setStrokeColorRGB(139/255,199/255,0)
         c.roundRect(baseX+70,baseY-45,170*SkinState.CScore/100,20,10,fill=True)
 
-    if SkinState.WScore < SkinState.WAScore:
+    if SkinState.WScore == SkinState.WAScore==0:
+        pass
+    elif SkinState.WScore < SkinState.WAScore:
         c.setFillColorRGB(255/255,111/255,111/255)
         c.setStrokeColorRGB(255/255,111/255,111/255)
         c.roundRect(baseX+70,baseY-90,170*SkinState.WScore/100,20,10,fill=True)
@@ -389,7 +432,9 @@ def draw_skin_graph(c,SkinState,height):
         c.setStrokeColorRGB(139/255,199/255,0)
         c.roundRect(baseX+70,baseY-90,170*SkinState.WScore/100,20,10,fill=True) 
 
-    if SkinState.HScore < SkinState.HAScore:
+    if SkinState.HScore == SkinState.HAScore==0:
+        pass
+    elif SkinState.HScore < SkinState.HAScore:
         c.setFillColorRGB(255/255,111/255,111/255)
         c.setStrokeColorRGB(255/255,111/255,111/255)
         c.roundRect(baseX+70,baseY-135,170*SkinState.HScore/100,20,10,fill=True)
@@ -407,17 +452,29 @@ def draw_skin_graph(c,SkinState,height):
 
     c.setFont(mainfontname, 8)
     c.setFillColorRGB(0.7, 0.7, 0.7)
-    c.drawString(baseX+65+(170*SkinState.TAScore/100),baseY+22,"▼")
-    c.drawString(baseX+63+(170*SkinState.TAScore/100),baseY+30,str(SkinState.TAScore))
+    if SkinState.TAScore==0:
+        pass
+    else :
+        c.drawString(baseX+65+(170*SkinState.TAScore/100),baseY+22,"▼")
+        c.drawString(baseX+63+(170*SkinState.TAScore/100),baseY+30,str(SkinState.TAScore))
 
-    c.drawString(baseX+65+(170*SkinState.CAScore/100),baseY-23,"▼")
-    c.drawString(baseX+63+(170*SkinState.CAScore/100),baseY-15,str(SkinState.CAScore))
+    if SkinState.CAScore==0:
+        pass
+    else :
+        c.drawString(baseX+65+(170*SkinState.CAScore/100),baseY-23,"▼")
+        c.drawString(baseX+63+(170*SkinState.CAScore/100),baseY-15,str(SkinState.CAScore))
+    
+    if SkinState.WAScore==0:
+        pass
+    else :
+        c.drawString(baseX+65+(170*SkinState.WAScore/100),baseY-68,"▼")
+        c.drawString(baseX+63+(170*SkinState.WAScore/100),baseY-60,str(SkinState.WAScore))
 
-    c.drawString(baseX+65+(170*SkinState.WAScore/100),baseY-68,"▼")
-    c.drawString(baseX+63+(170*SkinState.WAScore/100),baseY-60,str(SkinState.WAScore))
-
-    c.drawString(baseX+65+(170*SkinState.HAScore/100),baseY-113,"▼")
-    c.drawString(baseX+63+(170*SkinState.HAScore/100),baseY-105,str(SkinState.HAScore))
+    if SkinState.HAScore==0:
+        pass
+    else :
+        c.drawString(baseX+65+(170*SkinState.HAScore/100),baseY-113,"▼")
+        c.drawString(baseX+63+(170*SkinState.HAScore/100),baseY-105,str(SkinState.HAScore))
 
 
 # 에이지 센서 패널
@@ -489,11 +546,12 @@ def draw_panel(c,Agesensor,height):
 
 def state_to_int(state):
     state_mapping = {
-        "매우 나쁨": 5,
-        "나쁨": 4,
+        "매우 나쁨": 1,
+        "나쁨": 2,
         "보통": 3,
-        "거의 깨끗함": 2,
-        "깨끗함": 1
+        "거의 깨끗함": 4,
+        "깨끗함": 5,
+        "":6
     }
     return state_mapping.get(state.lower(), 5)
 
@@ -511,8 +569,13 @@ def set_rank(skin_state: SkinState):
         Glist.append("D")
         Glist.extend(sorted_elements[0][0],sorted_elements[1][0],sorted_elements[2][0])
     else :
-        Glist+=[sorted_elements[0][0],sorted_elements[1][0],sorted_elements[2][0]]
+        Slist=[skin_state.CState,skin_state.WState,skin_state.TState]
+        num=Slist.count("")
+        for i in range(0,3-num):
+            Glist+=sorted_elements[i][0]
         Glist.append("D")
+        for i in range(3-num,3):
+            Glist+=sorted_elements[i][0]
     print(Glist)
 
     return Glist
@@ -604,10 +667,13 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     draw_skin_graph(c,SkinState,height)
 
     #-------------- part4 Age sensor --------------    
-    c.setFillColorRGB(0, 0, 0)
-    c.setFont(mainfontname, 12)
-    c.drawString(35,height-595,"AGEs sensor")
-    draw_panel(c,Agesensor,height)
+    if Agesensor.Rating=="" or Agesensor.Rank==0:
+        c.drawImage(filepath+'AGEsBlur2.png',25,height-820,270,237,mask='auto')
+    else:    
+        c.setFillColorRGB(0, 0, 0)
+        c.setFont(mainfontname, 12)
+        c.drawString(35,height-595,"AGEs sensor")
+        draw_panel(c,Agesensor,height)
     
     #-------------- part5 맞춤 성분 --------------
     # 본문 채우기 
@@ -623,7 +689,7 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     c.setFillColorRGB(0.7, 0.7, 0.7)
     c.drawString(485,height-592,"*영양/기능 정보 참고")
 
-    # 순위 정하기 함수 써서 순위 리스트 반환받기(기기 확인 후 작성필요)
+    # 순위 정하기 함수 써서 순위 리스트 반환받기
     Glist=set_rank(SkinState)
     setY=0
     for gradient in Glist:
@@ -661,6 +727,6 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     return img_path 
 
 if __name__=="__main__":
-    SState=SkinState(Concern=["모공크기","잡티"],Type="복합성",TZWater="Normal",UZWater="Normal",TZOil="Sebum",UZOil="Sebum",CScore=70,CAScore=65,CState="보통",WScore=80,WAScore=80,WState="거의 깨끗함",TScore=60,TAScore=50,TState="보통",HScore=40,HAScore=45,HState="매우 나쁨")
-    Age=Agesensor(Rating="B",Rank=30)
+    SState=SkinState(Concern=["모공크기","잡티"],Type="복합성",TZWater="Normal",UZWater="Normal",TZOil="Sebum",UZOil="Sebum",CScore=0,CAScore=0,CState="",WScore=80,WAScore=80,WState="거의 깨끗함",TScore=60,TAScore=50,TState="보통",HScore=40,HAScore=45,HState="매우 나쁨")
+    Age=Agesensor(Rating="",Rank=30)
     create_skin_pdf("김건강",SState,Age)

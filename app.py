@@ -9,9 +9,9 @@ from createpdf3 import create_skin_pdf
 def update_ratio(slider_value):
     return slider_value, 100 - slider_value
 
-def process_basic_inputs(Name,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Rating,Rank):
+def process_basic_inputs(Name,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,Unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Rating,Rank):
     Nutri=Nutrition(EatScore=EatScore, Carb=Carb, Protein=Protein, Fat=Fat, Fiber=Fiber, Sodium=Sodium, Sugar=Sugar, SatFat=SatFat, Cholesterol=Cholesterol)
-    Vita=Vitastiq(Biotin=Biotin, VitC=VitC, Mg=Mg, VitB1=VitB1, VitB2=VitB2, Zn=Zn, Se=Se, VitB6=VitB6, VitE=VitE, Folate=Folate)
+    Vita=Vitastiq(Unused=Unused,Biotin=Biotin, VitC=VitC, Mg=Mg, VitB1=VitB1, VitB2=VitB2, Zn=Zn, Se=Se, VitB6=VitB6, VitE=VitE, Folate=Folate)
     Inbo=Inbody(InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl)
     Age=Agesensor(Rating,Rank)
 
@@ -61,6 +61,8 @@ with gr.Blocks() as basic_health:
     with gr.Column():
         gr.HTML("""<h2 style = 'border-radius: 5px; text-indent: 10px; padding-top: 5px; padding-bottom: 5px;'>2. 비타스틱</h2>""")
         with gr.Column():
+            # 체크박스 추가
+            unused = gr.Checkbox(label="미사용", value=False, min_width=60)
             with gr.Row():
                 Biotin=gr.Radio(["낮은", "경미"], label="비오틴",min_width=60)                    
                 VitC=gr.Radio(["낮은", "경미"], label="비타민C",min_width=60)
@@ -97,7 +99,7 @@ with gr.Blocks() as basic_health:
 
     generate_btn.click(
         fn=process_basic_inputs,
-        inputs=[Name,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Rating,Rank],
+        inputs=[Name,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Rating,Rank],
         outputs=output_image
     )
 
