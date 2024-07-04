@@ -10,6 +10,7 @@ from reportlab.lib.units import mm
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle
 from dataclasses import fields
+import random
 
 filepath="static/image/diet/"
 resultfilepath="static/result/"
@@ -493,18 +494,19 @@ def set_comment(IDetail):
                         comments["muscle_img"]="HM_ulda.png"
                     elif IDetail.UpperRS=="이상":
                         comments["muscle_img"]="HM_urda.png"
-            elif lowske_count==2:
-                if IDetail.UpperLS==IDetail.UpperRS=="이하":
+            # 2024 .07.01 수정            
+            elif highske_count==2:
+                if IDetail.UpperLS==IDetail.UpperRS=="이상":
                     comments["muscle_img"]="HM_ua.png"
-                elif IDetail.LowerLS==IDetail.LowerRS=="이하":
+                elif IDetail.LowerLS==IDetail.LowerRS=="이상":
                     comments["muscle_img"]="HM_da.png"
-                elif IDetail.UpperLS==IDetail.LowerRS=="이하":
+                elif IDetail.UpperLS==IDetail.LowerRS=="이상":
                     comments["muscle_img"]="HM_uldr.png"
-                elif IDetail.UpperLS==IDetail.LowerLS=="이하":
+                elif IDetail.UpperLS==IDetail.LowerLS=="이상":
                     comments["muscle_img"]="HM_uldl.png"
-                elif IDetail.UpperRS==IDetail.LowerRS=="이하":
+                elif IDetail.UpperRS==IDetail.LowerRS=="이상":
                     comments["muscle_img"]="HM_urdr.png"
-                elif IDetail.UpperRS==IDetail.LowerLS=="이하":
+                elif IDetail.UpperRS==IDetail.LowerLS=="이상":
                     comments["muscle_img"]="HM_urdl.png"            
 
         elif highske_count==1:
@@ -668,6 +670,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     elif DGoal.Period=="5개월":
         period=140            
 
+    
     reducecal=(Inbody.Weight-DGoal.Gweight)*7000/period
     dayreduce=round(DGoal.Rcal-reducecal)
 
@@ -845,8 +848,106 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     
     #-------------- 페이지 저장 및 이미지 변환 --------------
 
-    # 페이지 저장
+    # 1페이지 저장
     c.showPage()
+
+    #---------------------------------------- 상품추천 페이지 제작 -------------------------------------------
+    # 선 그리기 (x1, y1, x2, y2)
+    c.setLineWidth(0.7)  # 라인의 굵기 설정
+    c.setStrokeColorRGB(0.7, 0.7, 0.7)  # 라인의 색상 설정
+    c.line(10, height - 265, 580, height - 265)
+    c.line(10, height - 540, 580, height - 540)
+    
+    c.setFont('AppleGothic', 18)
+    c.setFillColorRGB(0,0,0)
+    c.drawString(25,height-35,"맞춤 식재료")
+    c.drawString(25,height-295,"맞춤 샐러드")
+    c.drawString(25,height-570,"맞춤 주스")
+    c.drawString(310,height-570,"맞춤 상품")
+
+    # 샐러드 칼로리 구간 결정
+    if (DGoal.Rcal-foodcontrol)/3<=1000:
+        salad_cal=300
+    elif 1000<(DGoal.Rcal-foodcontrol)/3<=1300:
+        salad_cal=400
+    elif 1300<(DGoal.Rcal-foodcontrol)/3<=1700:
+        salad_cal=500 
+    elif 1700<(DGoal.Rcal-foodcontrol)/3:
+        salad_cal=600       
+
+    # 코멘트 작성
+    c.setFont('AppleGothic', 12)
+    c.setFillColorRGB(0.2,0.2,0.2)
+    c.drawString(25,height-58,'"다이어터를 위해 에너지 대사에 도움을 주는 식재료"')
+    c.drawString(25,height-318,'"하루 '+str(foodcontrol)+"kcal를 줄이기 위한 "+str(salad_cal)+'kcal 샐러드 토핑추천"')
+    c.drawString(25,height-593,'"신진대사를 활발하게 하는 영양소 가득"')
+    c.drawString(320,height-599,'가벼운 한끼를 위해 꿀조합 "간식"')
+    c.drawString(320,height-724,'지치지 않는 다이어트 서포트 "영양제"')
+
+
+    # 식재료 추천
+    c.drawImage(filepath+'I'+random.choice(['21','22'])+'.png',30,height-250,158,175,mask='auto')
+    c.drawImage(filepath+'I'+random.choice(['23','24'])+'.png',215,height-250,158,175,mask='auto')
+    c.drawImage(filepath+'I'+random.choice(['25','26'])+'.png',400,height-250,158,175,mask='auto')
+
+    c.setFillColorRGB(191/255,191/255,191/255)
+    c.setStrokeColorRGB(191/255,191/255,191/255)
+    c.roundRect(320,height-63,70,20,10,fill=True)
+    c.roundRect(400,height-63,70,20,10,fill=True)
+    c.roundRect(480,height-63,70,20,10,fill=True)
+
+    c.setFillColorRGB(1,1,1)
+    c.setFont('AppleGothic', 11)
+    c.drawString(328,height-57,"#비타민B1")
+    c.drawString(411,height-57,"#판토텐산")
+    c.drawString(495,height-57,"#비오틴")
+
+    # 샐러드 추천
+    if salad_cal==300:
+        c.drawImage(filepath+"DS1.png",20,height-530,551,180,mask='auto')
+    elif salad_cal==400:
+        c.drawImage(filepath+"DS2.png",20,height-530,551,180,mask='auto')
+    elif salad_cal==500:
+        c.drawImage(filepath+"DS3.png",20,height-530,551,180,mask='auto')    
+    elif salad_cal==600:
+        c.drawImage(filepath+"DS4.png",20,height-530,551,180,mask='auto')    
+
+    c.setStrokeColorRGB(0.6,0.6,0.6)
+    c.setLineWidth(0.2)
+    c.roundRect(22,height-530,160,180,10)
+    c.roundRect(215,height-530,160,180,10)
+    c.roundRect(410,height-530,160,180,10)
+
+    # 주스 추천
+    c.setStrokeColorRGB(0.6,0.6,0.6)
+    c.setLineWidth(0.2)
+    c.roundRect(22,height-820,270,190,10)
+    c.drawImage(filepath+"DJ1.png",22,height-820,270,190,mask='auto')
+
+    c.setFillColorRGB(191/255,191/255,191/255)
+    c.setStrokeColorRGB(191/255,191/255,191/255)
+    c.roundRect(30,height-623,70,20,10,fill=True)
+    c.roundRect(110,height-623,70,20,10,fill=True)
+    c.roundRect(190,height-623,70,20,10,fill=True)
+
+    c.setFillColorRGB(1,1,1)
+    c.setFont('AppleGothic', 11)
+    c.drawString(38,height-617,"#비타민B1")
+    c.drawString(121,height-617,"#판토텐산")
+    c.drawString(205,height-617,"#비오틴")
+
+    # 상품 추천
+    c.setStrokeColorRGB(0.6,0.6,0.6)
+    c.setLineWidth(0.2)
+    c.roundRect(310,height-820,270,115,10)
+    c.roundRect(310,height-695,270,115,10)
+    c.drawImage(filepath+"DP"+str(random.randint(1,5))+".png",310,height-695,270,115,mask='auto')
+    c.drawImage(filepath+"DF"+str(random.randint(1,3))+".png",310,height-820,270,115,mask='auto')
+
+
+    # 2페이지 저장
+    c.showPage()
+
     c.save()
 
     # PDF를 이미지로 변환

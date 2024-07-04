@@ -1,5 +1,5 @@
 import gradio as gr
-from dataclass import Nutrition,Vitastiq,Inbody,Agesensor,DietGoal,InbodyDetail,SkinState
+from dataclass import Nutrition,Vitastiq,Inbody,Agesensor,DietGoal,InbodyDetail,SkinState,NutritionDetail
 from createpdf import create_basic_pdf
 from createpdf2 import create_diet_pdf
 from createpdf3 import create_skin_pdf
@@ -9,13 +9,14 @@ from createpdf3 import create_skin_pdf
 def update_ratio(slider_value):
     return slider_value, 100 - slider_value
 
-def process_basic_inputs(Name,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,Unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Rating,Rank):
+def process_basic_inputs(Name,Gender,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,Unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Recomcal,Rating,Rank,CarbH,CarbV,ProteinL,ProteinV,FatH,FatV,FiberL,FiberV,SodiumH,SodiumV,SugarH,SatFatH,SatFatV,CholesterolH,CholesterolV):
     Nutri=Nutrition(EatScore=EatScore, Carb=Carb, Protein=Protein, Fat=Fat, Fiber=Fiber, Sodium=Sodium, Sugar=Sugar, SatFat=SatFat, Cholesterol=Cholesterol)
     Vita=Vitastiq(Unused=Unused,Biotin=Biotin, VitC=VitC, Mg=Mg, VitB1=VitB1, VitB2=VitB2, Zn=Zn, Se=Se, VitB6=VitB6, VitE=VitE, Folate=Folate)
-    Inbo=Inbody(InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl)
+    Inbo=Inbody(InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Recomcal)
     Age=Agesensor(Rating,Rank)
+    NutriD=NutritionDetail(CarbH=CarbH,CarbV=CarbV,ProteinL=ProteinL,ProteinV=ProteinV,FatH=FatH,FatV=FatV,FiberL=FiberL,FiberV=FiberV,SodiumH=SodiumH,SodiumV=SodiumV,SugarH=SugarH,SatFatH=SatFatH,SatFatV=SatFatV,CholesterolH=CholesterolH,CholesterolV=CholesterolV)
 
-    img_adress=create_basic_pdf(Nutri,Vita,Inbo,Age,Name)
+    img_adress=create_basic_pdf(Nutri,Vita,Inbo,Age,Name,Gender,NutriD)
 
     return img_adress
 
@@ -41,7 +42,7 @@ with gr.Blocks() as basic_health:
     gr.Markdown("""<h1 style = 'border-radius: 5px; padding-top: 10px; padding-bottom: 10px;'>기본건강 고객정보 입력</h1>""")
     with gr.Row():
         Name=gr.Textbox(label="이름",placeholder="내담자명을 입력해주세요",elem_id="name",scale=3)
-        gr.Radio(['남성','여성'],label="성별",scale=1)
+        Gender=gr.Radio(['남성','여성'],label="성별",scale=1)
     
     with gr.Column():
         gr.HTML("""<h2 style = 'border-radius: 5px; text-indent: 10px; padding-top: 5px; padding-bottom: 5px;'>1. 영양진단</h2>""")
@@ -53,10 +54,28 @@ with gr.Blocks() as basic_health:
                 Fat=gr.Radio(["과다", "적정", "부족"], label="지방",min_width=60)
                 Fiber=gr.Radio(["적정", "부족"], label="식이섬유",min_width=60)
             with gr.Row():
+                CarbH=gr.Number(minimum=0,maximum=1000, label="탄수화물 최대값",min_width=60)
+                CarbV=gr.Number(minimum=0,maximum=1000, label="탄수화물 섭취량",min_width=60)
+                ProteinL=gr.Number(minimum=0,maximum=1000,label="단백질 최소값",min_width=60)
+                ProteinV=gr.Number(minimum=0,maximum=1000,label="단백질 섭취량",min_width=60)
+                FatH=gr.Number(minimum=0,maximum=1000,label="지방 최소값",min_width=60)
+                FatV=gr.Number(minimum=0,maximum=1000,label="지방 섭취량",min_width=60)
+                FiberL=gr.Number(minimum=0,maximum=1000,label="식이섬유 최소값",min_width=60)
+                FiberV=gr.Number(minimum=0,maximum=1000,label="식이섬유 섭취량",min_width=60)    
+            with gr.Row():
                 Sodium=gr.Radio(["과다", "적정"], label="나트륨",min_width=60)
                 Sugar=gr.Radio(["과다", "적정"], label="당류",min_width=60)
                 SatFat=gr.Radio(["과다", "적정"], label="포화지방",min_width=60)
                 Cholesterol=gr.Radio(["과다", "적정"], label="콜레스테롤",min_width=60)
+            with gr.Row():
+                SodiumH=gr.Number(minimum=0,maximum=1000, label="나트륨 최대값",min_width=60)
+                SodiumV=gr.Number(minimum=0,maximum=1000, label="나트륨 섭취량",min_width=60)
+                SugarH=gr.Number(minimum=0,maximum=1000,label="당류 최대값",min_width=60)
+                SugarV=gr.Number(minimum=0,maximum=1000,label="당류 섭취량",min_width=60)
+                SatFatH=gr.Number(minimum=0,maximum=1000,label="포화지방 최대값",min_width=60)
+                SatFatV=gr.Number(minimum=0,maximum=1000,label="포화지방 섭취량",min_width=60)
+                CholesterolH=gr.Number(minimum=0,maximum=1000,label="콜레스테롤 최대값",min_width=60)
+                CholesterolV=gr.Number(minimum=0,maximum=1000,label="콜레스테롤 섭취량",min_width=60)     
 
     with gr.Column():
         gr.HTML("""<h2 style = 'border-radius: 5px; text-indent: 10px; padding-top: 5px; padding-bottom: 5px;'>2. 비타스틱</h2>""")
@@ -88,6 +107,7 @@ with gr.Blocks() as basic_health:
         WeightControl=gr.Number(minimum=-100, maximum=100, label="체중조절",min_width=80)
         MuscleControl=gr.Number(minimum=-100, maximum=100, label="근육조절",min_width=80)
         FatControl=gr.Number(minimum=-100, maximum=100, label="지방조절",min_width=80)
+        Recomcal=gr.Number(minimum=0, maximum=10000,label="권장열량",min_width=80)
 
     gr.HTML("""<h2 style = 'border-radius: 5px; text-indent: 10px; padding-top: 5px; padding-bottom: 5px;'>4. Age Sensor</h2>""")
     with gr.Row():
@@ -99,7 +119,12 @@ with gr.Blocks() as basic_health:
 
     generate_btn.click(
         fn=process_basic_inputs,
-        inputs=[Name,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Rating,Rank],
+        inputs=[Name,Gender,
+                EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,
+                unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,
+                InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Recomcal,
+                Rating,Rank,
+                CarbH,CarbV,ProteinL,ProteinV,FatH,FatV,FiberL,FiberV,SodiumH,SodiumV,SugarH,SatFatH,SatFatV,CholesterolH,CholesterolV],
         outputs=output_image
     )
 

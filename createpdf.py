@@ -2,7 +2,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
-from dataclass import Nutrition,Vitastiq,Inbody,Agesensor
+from dataclass import Nutrition,Vitastiq,Inbody,Agesensor,NutritionDetail
 from PIL import Image
 from pdf2image import convert_from_path
 from reportlab.lib.colors import Color
@@ -10,6 +10,7 @@ from reportlab.lib.units import mm
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle
 from dataclasses import fields
+import random
 
 filepath="static/image/basic/"
 resultfilepath="static/result/"
@@ -555,17 +556,19 @@ def set_feedback(Nutrition):
     over_feedback=over_feedback[:-2]  
     under_feedback=under_feedback[:-2]
 
-    if 0<(ord(over_feedback[-1])-0xAC00)%28:
-        print((ord(over_feedback[-1])-0xAC00)%28)
-        over_feedback+="은"
-    else: 
-        over_feedback+="는" 
-
-    if 0<(ord(under_feedback[-1])-0xAC00)%28:
-        print((ord(under_feedback[-1])-0xAC00)%28)
-        under_feedback+="은"
-    else: 
-        under_feedback+="는"        
+    if over_feedback:
+        if 0<(ord(over_feedback[-1])-0xAC00)%28:
+            print((ord(over_feedback[-1])-0xAC00)%28)
+            over_feedback+="은"
+        else: 
+            over_feedback+="는" 
+            
+    if under_feedback:
+        if 0<(ord(under_feedback[-1])-0xAC00)%28:
+            print((ord(under_feedback[-1])-0xAC00)%28)
+            under_feedback+="은"
+        else: 
+            under_feedback+="는"        
 
     feedbacks=[over_feedback, under_feedback] 
     return feedbacks                
@@ -993,9 +996,283 @@ def draw_panel(c,Agesensor,height):
     c.drawString(baseX+155,baseY-59,"뇌 기능 장애")
     return
 
+# 상품추천 유형구분 함수
+def set_product_cat(Gender,Vitastiq,Agesensor):
+    i=0
+    scorelist=[None]*10 # Mg,Biotin,Se,VitB2,Folate,Zn,VitC,VitE,VitB6,VitB1   
+    for field in fields(Vitastiq):
+        field_name = field.name
+        if field_name=="Unused":
+            pass  
+        else:
+            field_value = getattr(Vitastiq, field_name)
+            if field_value =="낮음":
+                scorelist[i]=90
+            elif field_value=="경미":
+                scorelist[i]=95
+            else : 
+                scorelist[i]=100
+            i+=1
+    print(scorelist)   
+    activeS = (scorelist[1]+scorelist[9]+scorelist[3])/3
+    antiageS = (scorelist[6]+scorelist[7]+scorelist[2])/3
+    immunS = (scorelist[4]+scorelist[5])/2
+    muscleS= (scorelist[0]+scorelist[8])/2
+
+    variables = [
+    ('활력', activeS),
+    ('항산화', antiageS),
+    ('면역력', immunS),
+    ('근력', muscleS)
+    ]
+    
+    if Agesensor.Rating=="A" or Agesensor.Rating=="B":
+        sorted_variables = sorted(variables, key=lambda x: x[1], reverse=True) # 내림차순 정렬
+        print(sorted_variables)
+        if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]==sorted_variables[3][1]:
+            if Gender=="남성":
+                Pcategory="근력"
+            elif Gender=="여성":
+                Pcategory="면역력"
+        elif sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]:
+            Pcategory=random.choice(sorted_variables[0:3])[0]   
+        elif sorted_variables[0][1]==sorted_variables[1][1]: 
+            Pcategory=random.choice(sorted_variables[0:2])[0]  
+        else:
+            Pcategory=sorted_variables[0][0] 
+
+    if Agesensor.Rating=="C" or Agesensor.Rating=="D" or Agesensor.Rating=="E":
+        if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]==sorted_variables[3][1]:
+            if Gender=="남성":
+                Pcategory="근력"
+            elif Gender=="여성":
+                Pcategory="면역력"
+        elif sorted_variables[1][1]==sorted_variables[2][1]==sorted_variables[3][1]:
+            Pcategory=sorted_variables[0][0]      
+        else:        
+            if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1] or sorted_variables[1][1]==sorted_variables[2][1]:
+                subset=[sorted_variables[0][0],sorted_variables[1][0],sorted_variables[2][0]]
+            else:     
+                subset=[sorted_variables[0][0],sorted_variables[1][0]]
+
+            if 'antiageS' in subset:
+                Pcategory="항산화"
+            else:
+                if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]:
+                    Pcategory=random.choice(sorted_variables[0:3])[0]
+                elif sorted_variables[0][1]==sorted_variables[1][1]: 
+                    Pcategory=random.choice(sorted_variables[0:2])[0]    
+                else: 
+                    Pcategory=sorted_variables[0][0]    
+    print (Pcategory)
+    return Pcategory
+
+# 식재료 이미지 세팅함수
+def set_ingre_image(Pcat):
+    img_list=[None]*3
+    if Pcat =="활력":
+        base=0
+        for i in range(0,3):
+            img_list[i]='I'+str(random.choice([1+base,2+base]))+'.png'
+            base=2*(i+1)
+
+    elif Pcat =="항산화":
+        base=0
+        for i in range(0,3):
+            img_list[i]='I'+str(random.choice([7+base,8+base]))+'.png'
+            base=2*(i+1)  
+
+    elif Pcat =="근력":
+        base=0
+        for i in range(0,2):
+            img_list[i]='I'+str(random.choice([13+base,14+base]))+'.png'
+            base=2*(i+1)  
+
+    elif Pcat =="면역력":
+        base=0
+        for i in range(0,2):
+            img_list[i]='I'+str(random.choice([17+base,18+base]))+'.png'
+            base=2*(i+1)
+
+    return img_list
+
+# 반찬 유형구분 함수
+def set_sidedish_cat(Nutri,NutriD):
+    Achecklist=[]
+    Bchecklist=[]
+    Cchecklist=[]
+    Dchecklist=[]
+
+    if Nutri.Carb=="과다":
+        Achecklist.append(100-(abs(NutriD.CarbV-NutriD.CarbH)/NutriD.CarbH*100))
+
+    if Nutri.Protein=="부족":
+        Bchecklist.append(100-(abs(NutriD.ProteinV-NutriD.ProteinL)/NutriD.ProteinL*100))
+
+    if Nutri.Fat=="과다":
+        Dchecklist.append(100-(abs(NutriD.FatV-NutriD.FatH)/NutriD.FatH*100))    
+
+    if Nutri.Fiber=="부족":
+        Achecklist.append(100-(abs(NutriD.FiberV-NutriD.FiberL)/NutriD.FiberL*100))    
+
+    if Nutri.Sodium=="과다":
+        Cchecklist.append(100-(abs(NutriD.SodiumV-NutriD.SodiumH)/NutriD.SodiumH*100)) 
+
+    if Nutri.Sugar=="과다":
+        Achecklist.append(100-(abs(NutriD.SugarV-NutriD.SugarH)/NutriD.SugarH*100))     
+
+    if Nutri.SatFat=="과다":
+        Dchecklist.append(100-(abs(NutriD.SatFatV-NutriD.SatFatH)/NutriD.SatFatH*100))  
+
+    if Nutri.Cholesterol=="과다":
+        Dchecklist.append(100-(abs(NutriD.CholesterolV-NutriD.CholesterolH)/NutriD.CholesterolH*100)) 
+
+    if not Achecklist: 
+        Ascore=100
+    else:
+        Asum=0
+        for Alist in Achecklist:
+            Asum+=Alist 
+        Ascore=Asum/len(Achecklist)
+
+    if not Bchecklist:
+        Bscore=100
+    else:
+        Bscore=Bchecklist[0]    
+
+    if not Cchecklist:
+        Cscore=100
+    else:
+        Cscore=Cchecklist[0]       
+
+    if not Dchecklist: 
+        Dscore=100
+    else:
+        Dsum=0
+        for Dlist in Dchecklist:
+            Dsum+=Dlist 
+        Dscore=Dsum/len(Dchecklist)   
+
+    scorelist=[('A',Ascore),('B',Bscore),('C',Cscore),('D',Dscore)]      
+    Scategory = min(scorelist, key=lambda x: x[1])[0]         
+    return Scategory    
+
+# 반찬 이미지 세팅 함수
+def set_sidedish_image(recomcal,Scat):
+    img_list=[None]*3
+
+    if Scat=="A":
+        if recomcal<=1500:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([1+base,2+base]))+'.png'
+                base=2*(i+1)
+        elif 1500<recomcal<=2000:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([7+base,8+base]))+'.png'
+                base=2*(i+1)
+        elif 2000<recomcal<=2500:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([13+base,14+base]))+'.png'
+                base=2*(i+1) 
+        elif 2500<recomcal<=3000:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([19+base,20+base]))+'.png'
+                base=2*(i+1)
+        elif 3000<recomcal:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([25+base,26+base]))+'.png'
+                base=2*(i+1)  
+
+    if Scat=="B":
+        if recomcal<=1500:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([31+base,32+base]))+'.png'
+                base=2*(i+1)
+        elif 1500<recomcal<=2000:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([37+base,38+base]))+'.png'
+                base=2*(i+1)
+        elif 2000<recomcal<=2500:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([43+base,44+base]))+'.png'
+                base=2*(i+1) 
+        elif 2500<recomcal<=3000:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([49+base,50+base]))+'.png'
+                base=2*(i+1)
+        elif 3000<recomcal:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([55+base,56+base]))+'.png'
+                base=2*(i+1)   
+
+    if Scat=="C":
+        if recomcal<=1500:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([61+base,62+base]))+'.png'
+                base=2*(i+1)
+        elif 1500<recomcal<=2000:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([67+base,68+base]))+'.png'
+                base=2*(i+1)
+        elif 2000<recomcal<=2500:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([73+base,74+base]))+'.png'
+                base=2*(i+1) 
+        elif 2500<recomcal<=3000:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([79+base,80+base]))+'.png'
+                base=2*(i+1)
+        elif 3000<recomcal:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([85+base,86+base]))+'.png'
+                base=2*(i+1) 
+
+    if Scat=="D":
+        if recomcal<=1500:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([91+base,92+base]))+'.png'
+                base=2*(i+1)
+        elif 1500<recomcal<=2000:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([97+base,98+base]))+'.png'
+                base=2*(i+1)
+        elif 2000<recomcal<=2500:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([103+base,104+base]))+'.png'
+                base=2*(i+1) 
+        elif 2500<recomcal<=3000:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([109+base,110+base]))+'.png'
+                base=2*(i+1)
+        elif 3000<recomcal:
+            base=0
+            for i in range (0,3):
+                img_list[i]='case'+str(random.choice([115+base,116+base]))+'.png'
+                base=2*(i+1)                                                     
+                        
+    return img_list
 
 # PDF 파일 생성
-def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
+def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD):
     filename=resultfilepath+'Basic_Health_Report.pdf'
     c = canvas.Canvas(filename, pagesize=A4)
     width, height = A4
@@ -1171,8 +1448,175 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
     
     #-------------- 페이지 저장 및 이미지 변환 --------------
 
-    # 페이지 저장
+    # 1페이지 저장
     c.showPage()
+    #---------------------------------------- 상품추천 페이지 제작 -------------------------------------------
+
+    # 선 그리기 (x1, y1, x2, y2)
+    c.setLineWidth(0.7)  # 라인의 굵기 설정
+    c.setStrokeColorRGB(0.7, 0.7, 0.7)  # 라인의 색상 설정
+    c.line(10, height - 265, 580, height - 265)
+    c.line(10, height - 525, 580, height - 525)
+
+    c.drawImage(filepath+'Rectangle 11.png',15,height-830,184,290,mask='auto')
+    
+    c.setFont('AppleGothic', 18)
+    c.setFillColorRGB(0,0,0)
+    c.drawString(25,height-35,"맞춤 식재료")
+    c.drawString(25,height-295,"건강 반찬")
+    c.drawString(55,height-570,"맞춤 영양제")
+    c.drawString(206,height-570,"착즙 주스")
+    c.drawString(360,height-570,"건강 상품")
+
+    # 유형결정 및 식재료 추천
+    Pcat=set_product_cat(Gender,Vitastiq,Agesensor)
+    Pimg_list=set_ingre_image(Pcat)
+    print(Pimg_list)
+    if Pimg_list[2]!=None:
+        c.drawImage(filepath+Pimg_list[0],30,height-250,158,175,mask='auto')
+        c.drawImage(filepath+Pimg_list[1],215,height-250,158,175,mask='auto')
+        c.drawImage(filepath+Pimg_list[2],400,height-250,158,175,mask='auto')
+
+        c.setFillColorRGB(191/255,191/255,191/255)
+        c.setStrokeColorRGB(191/255,191/255,191/255)
+        c.roundRect(300,height-63,70,20,10,fill=True)
+        c.roundRect(380,height-63,70,20,10,fill=True)
+        c.roundRect(460,height-63,70,20,10,fill=True)
+
+    elif Pimg_list[2]==None:
+        c.drawImage(filepath+Pimg_list[0],30,height-250,158,175,mask='auto')
+        c.drawImage(filepath+Pimg_list[1],215,height-250,158,175,mask='auto')
+
+        c.setFillColorRGB(191/255,191/255,191/255)
+        c.setStrokeColorRGB(191/255,191/255,191/255)
+        c.roundRect(300,height-63,70,20,10,fill=True)
+        c.roundRect(380,height-63,70,20,10,fill=True)
+
+    c.setFillColorRGB(1,1,1)
+    c.setFont('AppleGothic', 11)
+    if Pcat=="활력":
+        c.drawString(315,height-57,"#비오틴")
+        c.drawString(387,height-57,"#비타민B1")
+        c.drawString(467,height-57,"#비타민B2")
+
+    if Pcat=="항산화":
+        c.drawString(307,height-57,"#비타민C")
+        c.drawString(387,height-57,"#비타민E")
+        c.drawString(470,height-57,"#셀레늄")  
+
+    if Pcat=="면역력":
+        c.drawString(314,height-57," # 아연")
+        c.drawString(394,height-57," # 엽산")   
+
+    if Pcat=="근력":
+        c.drawString(308,height-57,"#마그네슘")
+        c.drawString(387,height-57,"#비타민B6")       
+
+
+    # 반찬 추천 유형결정 및 반찬 추천
+    Scat=set_sidedish_cat(Nutrition,NutriD)
+    Simg_list=set_sidedish_image(Inbody.Recomcal,Scat)
+    
+    c.drawImage(filepath+Simg_list[0],30,height-510,150,175,mask='auto')
+    c.drawImage(filepath+Simg_list[1],215,height-510,150,175,mask='auto')
+    c.drawImage(filepath+Simg_list[2],400,height-510,150,175,mask='auto')
+
+    c.setFillColorRGB(255/255,239/255,225/255)
+    c.setStrokeColorRGB(255/255,239/255,225/255)
+    c.roundRect(467,height-322,80,20,10,fill=True)
+
+    c.setFont('AppleGothic', 10)
+    c.setFillColorRGB(127/255,96/255,0/255)
+    c.drawString(480,height-316,"메인 식재료")
+
+    # 케이스에 따른 코멘트 작성
+    c.setFont('AppleGothic', 12)
+    c.setFillColorRGB(0.2,0.2,0.2)
+    c.drawString(25,height-58,'"나에게 부족한 영양소를 채워주는 맞춤 식재료"')
+
+    if Scat=="A":
+        c.drawString(25,height-318,'"저당/고식이섬유 맞춤 반찬으로 구성하는 집밥"')
+        c.drawString(360,height-595,"나에게 맞는 저당/고식이섬유 건강상품")
+    elif Scat=="B":
+        c.drawString(25,height-318,'"단백질이 풍부한 맞춤 반찬으로 구성하는 집밥"')
+        c.drawString(360,height-595,"나에게 부족한 단백질을 채워줄 건강상품")    
+    elif Scat=="C":
+        c.drawString(25,height-318,'"저나트륨 맞춤 반찬으로 구성하는 집밥"')
+        c.drawString(360,height-595,"나에게 맞는 저나트륨 건강상품")  
+    elif Scat=="D":
+        c.drawString(25,height-318,'"저지방/고식이섬유 맞춤 반찬으로 구성하는 집밥"')
+        c.drawString(360,height-595,"나에게 맞는 저지방/고식이섬유 건강상품")   
+         
+    c.drawString(206,height-595,Pcat+'에 좋은 영양소 가득') 
+
+    c.setStrokeColorRGB(0.6,0.6,0.6)
+    c.setLineWidth(0.2)
+    c.roundRect(206,height-820,138,210,10)
+    c.roundRect(360,height-820,223,210,10)
+
+
+    # 케이스별 주스 추천 및 해시태그
+    c.setFillColorRGB(191/255,191/255,191/255)
+    c.setStrokeColorRGB(191/255,191/255,191/255)
+    c.roundRect(290,height-573,55,16,8,fill=True)
+
+    c.setFillColorRGB(1,1,1)
+    c.setFont('AppleGothic', 10)
+
+    if Pcat=="활력":
+        c.drawImage(filepath+'BJ1.png',206,height-820,138,210,mask='auto')
+        c.drawString(304,height-569,"#"+Pcat)
+    if Pcat=="항산화":
+        c.drawImage(filepath+'BJ2.png',206,height-820,138,210,mask='auto')
+        c.drawString(299,height-569,"#"+Pcat)
+    if Pcat=="면역력":
+        c.drawImage(filepath+'BJ3.png',206,height-820,138,210,mask='auto')
+        c.drawString(299,height-569,"#"+Pcat)
+    if Pcat=="근력":
+        c.drawImage(filepath+'BJ4.png',206,height-820,138,210,mask='auto')  
+        c.drawString(304,height-569,"#"+Pcat)
+
+    # 케이스별 상품추천 및 해시태그
+    c.setFillColorRGB(191/255,191/255,191/255)
+    c.setStrokeColorRGB(191/255,191/255,191/255)
+    c.setFont('AppleGothic', 10)
+
+    if Scat=="A":
+        c.drawImage(filepath+'BP'+str(random.randint(1,5))+'.png',360,height-820,223,210,mask='auto')
+        c.roundRect(445,height-573,45,16,8,fill=True)
+        c.roundRect(495,height-573,70,16,8,fill=True)
+
+        c.setFillColorRGB(1,1,1)
+        c.drawString(453,height-569,"#저당")
+        c.drawString(502,height-569,"#고식이섬유")
+
+    elif Scat=="B":
+        c.drawImage(filepath+'BP'+str(random.randint(1,5))+'.png',360,height-820,223,210,mask='auto')
+        c.roundRect(445,height-573,60,16,8,fill=True)
+    
+        c.setFillColorRGB(1,1,1)
+        c.drawString(456,height-569,"#고단백")
+
+    elif Scat=="C":
+        c.drawImage(filepath+'BP'+str(random.randint(1,5))+'.png',360,height-820,223,210,mask='auto')
+        c.roundRect(445,height-573,60,16,8,fill=True)
+
+        c.setFillColorRGB(1,1,1)
+        c.drawString(452,height-569,"#저나트륨")
+
+    elif Scat=="D": 
+        c.drawImage(filepath+'BP'+str(random.randint(1,5))+'.png',360,height-820,223,210,mask='auto')   
+        c.roundRect(445,height-573,45,16,8,fill=True)
+        c.roundRect(495,height-573,70,16,8,fill=True)
+
+        c.setFillColorRGB(1,1,1)
+        c.drawString(450,height-569,"#저지방")
+        c.drawString(502,height-569,"#고식이섬유")                          
+
+    
+    # 2페이지 저장
+    c.showPage()
+
     c.save()
 
     # PDF를 이미지로 변환
@@ -1186,8 +1630,9 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name):
 
 # PDF 생성 테스트용
 if __name__ == "__main__":
-    Nutri=Nutrition(EatScore=0, Carb="과다", Protein="적정", Fat="부족", Fiber="부족", Sodium="과다", Sugar="적정", SatFat="적정", Cholesterol="적정")
-    Vita=Vitastiq(Unused=True,Biotin="", VitC="", Mg="", VitB1="", VitB2="", Zn="", Se="경미", VitB6="낮은", VitE="경미", Folate="낮은")
-    Inbo=Inbody(InbodyScore=0,Weight=59.1,BodyFat=22.8,FatFree=19.5,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9)
-    Age=Agesensor(Rating="")
-    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강")
+    Nutri=Nutrition(EatScore=70, Carb="부족", Protein="부족", Fat="부족", Fiber="부족", Sodium="적정", Sugar="적정", SatFat="적정", Cholesterol="적정")
+    Vita=Vitastiq(Unused=False,Biotin="", VitC="", Mg="", VitB1="", VitB2="", Zn="", Se="경미", VitB6="낮은", VitE="경미", Folate="낮은")
+    Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=19.5,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9,Recomcal=2800)
+    Age=Agesensor(Rating="A",Rank=4)
+    NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
+    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD)

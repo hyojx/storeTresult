@@ -7,6 +7,7 @@ from PIL import Image
 from pdf2image import convert_from_path
 from dataclasses import fields
 from reportlab.lib.colors import Color
+import random
 
 filepath="static/image/skin/"
 resultfilepath="static/result/"
@@ -323,15 +324,15 @@ def skin_alpha(c,skin_cat,height):
 # 피부 고민 표시
 def skin_concern(c,SkinState,height):
     if "유/수분 밸런스" in SkinState.Concern:
-        c.drawImage(filepath+'Pstar.png',218,height-233,10,10,mask='auto')
+        c.drawImage(filepath+'PStar.png',218,height-233,10,10,mask='auto')
     if "민감성(여드름)" in SkinState.Concern:
-        c.drawImage(filepath+'Pstar.png',289,height-233,10,10,mask='auto')
+        c.drawImage(filepath+'PStar.png',289,height-233,10,10,mask='auto')
     if "잡티" in SkinState.Concern:
-        c.drawImage(filepath+'Pstar.png',354,height-233,10,10,mask='auto')
+        c.drawImage(filepath+'PStar.png',354,height-233,10,10,mask='auto')
     if "주름" in SkinState.Concern:
-        c.drawImage(filepath+'Pstar.png',423,height-233,10,10,mask='auto')
+        c.drawImage(filepath+'PStar.png',423,height-233,10,10,mask='auto')
     if "모공크기" in SkinState.Concern:
-        c.drawImage(filepath+'Pstar.png',502,height-233,10,10,mask='auto')
+        c.drawImage(filepath+'PStar.png',502,height-233,10,10,mask='auto')
     return
 
 # T/U 좌표지정 
@@ -716,6 +717,65 @@ def create_skin_pdf(Name,SkinState,Agesensor):
 
     # 페이지 저장
     c.showPage()
+
+    #---------------------------------------- 상품추천 페이지 제작 -------------------------------------------
+    # 선 그리기 (x1, y1, x2, y2)
+    c.setLineWidth(0.7)  # 라인의 굵기 설정
+    c.setStrokeColorRGB(0.7, 0.7, 0.7)  # 라인의 색상 설정
+    c.line(10, height - 265, 580, height - 265)
+    c.line(10, height - 540, 580, height - 540)
+    
+    c.setFont('AppleGothic', 18)
+    c.setFillColorRGB(0,0,0)
+    c.drawString(25,height-35,"맞춤 식재료")
+    c.drawString(25,height-295,"맞춤 상품")
+    c.drawString(25,height-570,"맞춤 주스")
+    c.drawString(310,height-570,"건강기능식품")
+
+    c.setFont('AppleGothic', 12)
+    c.setFillColorRGB(0.2,0.2,0.2)
+    c.drawString(25,height-58,'"건강한 피부를 위한 맞춤 식재료"')
+    c.drawString(25,height-318,'"내면까지 예뻐지는 이너뷰티 상품"')
+    c.drawString(25,height-593,'"생기있는 나를 위한 뷰티 주스"')
+    c.drawString(310,height-593,'"나의 피부 고민을 해결해 줄 영양제"')
+
+
+    c.drawImage(filepath+'I'+random.choice(['7','8'])+'.png',30,height-250,158,175,mask='auto')
+    c.drawImage(filepath+'I'+random.choice(['9','10'])+'.png',215,height-250,158,175,mask='auto')
+    c.drawImage(filepath+'I'+random.choice(['11','12'])+'.png',400,height-250,158,175,mask='auto')
+
+    c.setFillColorRGB(191/255,191/255,191/255)
+    c.setStrokeColorRGB(191/255,191/255,191/255)
+    c.roundRect(220,height-63,70,20,10,fill=True)
+    c.roundRect(300,height-63,70,20,10,fill=True)
+    c.roundRect(380,height-63,70,20,10,fill=True)
+
+    c.setFillColorRGB(1,1,1)
+    c.setFont('AppleGothic', 11)
+    c.drawString(230,height-57,"#비타민C")
+    c.drawString(310,height-57,"#비타민E")
+    c.drawString(395,height-57,"#셀레늄")
+
+    # 맞춤 상품 추천
+    c.setStrokeColorRGB(0.6,0.6,0.6)
+    c.setLineWidth(0.2)
+    c.roundRect(22,height-530,270,195,10)
+    c.drawImage(filepath+"SS1.png",32,height-530,257,195,mask='auto')
+    c.roundRect(300,height-530,270,195,10)
+    c.drawImage(filepath+"SP"+str(random.randint(1,5))+".png",310,height-530,257,195,mask='auto')
+
+    # 주스 추천
+    c.setStrokeColorRGB(0.6,0.6,0.6)
+    c.setLineWidth(0.2)
+    c.roundRect(22,height-820,270,210,10)
+    c.drawImage(filepath+"SJ1.png",22,height-820,270,210,mask='auto')
+
+    # 건기식 추천
+    c.drawImage(filepath+"SF1.png",310,height-790,270,167,mask='auto')
+
+    # 2페이지 저장
+    c.showPage()
+
     c.save()
 
     # PDF를 이미지로 변환

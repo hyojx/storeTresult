@@ -14,6 +14,25 @@ class Nutrition:
     Cholesterol: str =field(default="")
 
 @dataclass
+class NutritionDetail:    
+    CarbH: float = field(default=0)
+    CarbV: float = field(default=0)
+    ProteinL: float =field(default=0)
+    ProteinV: float =field(default=0)
+    FatH: float =field(default=0)
+    FatV: float =field(default=0)
+    FiberL: float =field(default=0)
+    FiberV: float =field(default=0)
+    SodiumH: float =field(default=0)
+    SodiumV: float =field(default=0)
+    SugarH: float =field(default=0)
+    SugarV: float =field(default=0)
+    SatFatH: float =field(default=0)
+    SatFatV: float =field(default=0)
+    CholesterolH: float =field(default=0)
+    CholesterolV: float =field(default=0)
+
+@dataclass
 class Vitastiq:
     Unused: bool
     Mg: str =field(default="")
@@ -38,6 +57,7 @@ class Inbody:
     WeightControl: float = field(default=0.0)
     MuscleControl: float = field(default=0.0)
     FatControl: float = field(default=0.0)
+    Recomcal: float = field(default=0.0)
 
 @dataclass
 class Agesensor:
