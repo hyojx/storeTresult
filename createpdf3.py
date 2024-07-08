@@ -829,8 +829,8 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     c.setLineWidth(0.2)
     c.roundRect(22,height-530,270,195,10)
     c.drawImage(filepath+"SS1.png",32,height-530,257,195,mask='auto')
-    c.roundRect(300,height-530,270,195,10)
     c.drawImage(filepath+"SP"+str(random.randint(1,5))+".png",310,height-530,257,195,mask='auto')
+    c.roundRect(300,height-530,270,195,10)
 
     # 주스 추천
     c.setStrokeColorRGB(0.6,0.6,0.6)

@@ -903,8 +903,9 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.drawString(25,height-58,'"다이어터를 위해 에너지 대사에 도움을 주는 식재료"')
     c.drawString(25,height-318,'"하루 '+str(foodcontrol)+"kcal를 줄이기 위한 "+str(salad_cal)+'kcal 샐러드 토핑추천"')
     c.drawString(25,height-593,'"신진대사를 활발하게 하는 영양소 가득"')
-    c.drawString(320,height-599,'가벼운 한끼를 위해 꿀조합 "간식"')
-    c.drawString(320,height-724,'지치지 않는 다이어트 서포트 "영양제"')
+    c.setFont(mainfont, 10)
+    c.setFillColorRGB(0.5,0.5,0.5)
+    c.drawString(30,height-335,"저칼로리 드레싱과 함께 했을 때 "+str(salad_cal)+"kcal에요.")
 
 
     # 식재료 추천
@@ -923,6 +924,8 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.drawString(330,height-57,"#비타민B1")
     c.drawString(411,height-57,"#판토텐산")
     c.drawString(495,height-57,"#비오틴")
+     
+    c.drawImage(filepath+"DS0.png",470,height-335,100,50) 
 
     # 샐러드 추천
     if salad_cal==300:
@@ -936,9 +939,9 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
 
     c.setStrokeColorRGB(0.6,0.6,0.6)
     c.setLineWidth(0.2)
-    c.roundRect(22,height-530,160,180,10)
-    c.roundRect(215,height-530,160,180,10)
-    c.roundRect(410,height-530,160,180,10)
+    c.roundRect(22,height-530,180,180,10)
+    c.roundRect(206,height-530,180,180,10)
+    c.roundRect(390,height-530,180,180,10)
 
     # 주스 추천
     c.setStrokeColorRGB(0.6,0.6,0.6)
@@ -961,23 +964,27 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     # 상품 추천
     c.setStrokeColorRGB(0.6,0.6,0.6)
     c.setLineWidth(0.2)
-    c.roundRect(310,height-820,270,115,10)
-    c.roundRect(310,height-695,270,115,10)
     c.drawImage(filepath+"DP"+str(random.randint(1,5))+".png",310,height-695,270,115,mask='auto')
     c.drawImage(filepath+"DF"+str(random.randint(1,3))+".png",310,height-820,270,115,mask='auto')
+    c.roundRect(310,height-820,270,115,10)
+    c.roundRect(310,height-695,270,115,10)
+    c.setFont(mainfont, 12)
+    c.setFillColorRGB(0.2,0.2,0.2)
+    c.drawString(320,height-599,'가벼운 한끼를 위해 꿀조합 "간식"')
+    c.drawString(320,height-724,'지치지 않는 다이어트 서포트 "영양제"')
 
 
     # 2페이지 저장
     c.showPage()
 
     print(salad_cal)
-    if salad_cal=="300":
+    if salad_cal==300:
         c.drawImage(filepath+"300.png",0,0,width,height)
-    elif salad_cal=="400":
+    elif salad_cal==400:
         c.drawImage(filepath+"400.png",0,0,width,height)    
-    elif salad_cal=="500":
+    elif salad_cal==500:
         c.drawImage(filepath+"500.png",0,0,width,height)
-    elif salad_cal=="600":
+    elif salad_cal==600:
         c.drawImage(filepath+"600.png",0,0,width,height)    
 
     c.showPage()

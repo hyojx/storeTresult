@@ -988,73 +988,76 @@ def draw_panel(c,Agesensor,height):
 
 # 상품추천 유형구분 함수
 def set_product_cat(Gender,Vitastiq,Agesensor):
-    i=0
-    scorelist=[None]*10 # Mg,Biotin,Se,VitB2,Folate,Zn,VitC,VitE,VitB6,VitB1   
-    for field in fields(Vitastiq):
-        field_name = field.name
-        if field_name=="Unused":
-            pass  
-        else:
-            field_value = getattr(Vitastiq, field_name)
-            if field_value =="낮음":
-                scorelist[i]=90
-            elif field_value=="경미":
-                scorelist[i]=95
-            else : 
-                scorelist[i]=100
-            i+=1
-    print(scorelist)   
-    activeS = (scorelist[1]+scorelist[9]+scorelist[3])/3
-    antiageS = (scorelist[6]+scorelist[7]+scorelist[2])/3
-    immunS = (scorelist[4]+scorelist[5])/2
-    muscleS= (scorelist[0]+scorelist[8])/2
-
-    variables = [
-    ('활력', activeS),
-    ('항산화', antiageS),
-    ('면역력', immunS),
-    ('근력', muscleS)
-    ]
-    
-    if Agesensor.Rating=="A" or Agesensor.Rating=="B":
-        sorted_variables = sorted(variables, key=lambda x: x[1], reverse=True) # 내림차순 정렬
-        print(sorted_variables)
-        if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]==sorted_variables[3][1]:
-            if Gender=="남성":
-                Pcategory="근력"
-            elif Gender=="여성":
-                Pcategory="면역력"
-        elif sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]:
-            Pcategory=random.choice(sorted_variables[0:3])[0]   
-        elif sorted_variables[0][1]==sorted_variables[1][1]: 
-            Pcategory=random.choice(sorted_variables[0:2])[0]  
-        else:
-            Pcategory=sorted_variables[0][0] 
-
-    if Agesensor.Rating=="C" or Agesensor.Rating=="D" or Agesensor.Rating=="E":
-        if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]==sorted_variables[3][1]:
-            if Gender=="남성":
-                Pcategory="근력"
-            elif Gender=="여성":
-                Pcategory="면역력"
-        elif sorted_variables[1][1]==sorted_variables[2][1]==sorted_variables[3][1]:
-            Pcategory=sorted_variables[0][0]      
-        else:        
-            if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1] or sorted_variables[1][1]==sorted_variables[2][1]:
-                subset=[sorted_variables[0][0],sorted_variables[1][0],sorted_variables[2][0]]
-            else:     
-                subset=[sorted_variables[0][0],sorted_variables[1][0]]
-
-            if 'antiageS' in subset:
-                Pcategory="항산화"
+    if Vitastiq.Unused==True or Agesensor.Rating=="":
+        Pcategory="항산화"
+    else:
+        i=0
+        scorelist=[None]*10 # Mg,Biotin,Se,VitB2,Folate,Zn,VitC,VitE,VitB6,VitB1   
+        for field in fields(Vitastiq):
+            field_name = field.name
+            if field_name=="Unused":
+                pass  
             else:
-                if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]:
-                    Pcategory=random.choice(sorted_variables[0:3])[0]
-                elif sorted_variables[0][1]==sorted_variables[1][1]: 
-                    Pcategory=random.choice(sorted_variables[0:2])[0]    
-                else: 
-                    Pcategory=sorted_variables[0][0]    
-    print (Pcategory)
+                field_value = getattr(Vitastiq, field_name)
+                if field_value =="낮음":
+                    scorelist[i]=90
+                elif field_value=="경미":
+                    scorelist[i]=95
+                else : 
+                    scorelist[i]=100
+                i+=1
+        print(scorelist)   
+        activeS = (scorelist[1]+scorelist[9]+scorelist[3])/3
+        antiageS = (scorelist[6]+scorelist[7]+scorelist[2])/3
+        immunS = (scorelist[4]+scorelist[5])/2
+        muscleS= (scorelist[0]+scorelist[8])/2
+
+        variables = [
+        ('활력', activeS),
+        ('항산화', antiageS),
+        ('면역력', immunS),
+        ('근력', muscleS)
+        ]
+        
+        if Agesensor.Rating=="A" or Agesensor.Rating=="B":
+            sorted_variables = sorted(variables, key=lambda x: x[1], reverse=True) # 내림차순 정렬
+            print(sorted_variables)
+            if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]==sorted_variables[3][1]:
+                if Gender=="남성":
+                    Pcategory="근력"
+                elif Gender=="여성":
+                    Pcategory="면역력"
+            elif sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]:
+                Pcategory=random.choice(sorted_variables[0:3])[0]   
+            elif sorted_variables[0][1]==sorted_variables[1][1]: 
+                Pcategory=random.choice(sorted_variables[0:2])[0]  
+            else:
+                Pcategory=sorted_variables[0][0] 
+
+        if Agesensor.Rating=="C" or Agesensor.Rating=="D" or Agesensor.Rating=="E":
+            if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]==sorted_variables[3][1]:
+                if Gender=="남성":
+                    Pcategory="근력"
+                elif Gender=="여성":
+                    Pcategory="면역력"
+            elif sorted_variables[1][1]==sorted_variables[2][1]==sorted_variables[3][1]:
+                Pcategory=sorted_variables[0][0]      
+            else:        
+                if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1] or sorted_variables[1][1]==sorted_variables[2][1]:
+                    subset=[sorted_variables[0][0],sorted_variables[1][0],sorted_variables[2][0]]
+                else:     
+                    subset=[sorted_variables[0][0],sorted_variables[1][0]]
+
+                if 'antiageS' in subset:
+                    Pcategory="항산화"
+                else:
+                    if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]:
+                        Pcategory=random.choice(sorted_variables[0:3])[0]
+                    elif sorted_variables[0][1]==sorted_variables[1][1]: 
+                        Pcategory=random.choice(sorted_variables[0:2])[0]    
+                    else: 
+                        Pcategory=sorted_variables[0][0]    
+        print (Pcategory)
     return Pcategory
 
 # 식재료 이미지 세팅함수
@@ -1088,63 +1091,66 @@ def set_ingre_image(Pcat):
 
 # 반찬 유형구분 함수
 def set_sidedish_cat(Nutri,NutriD):
-    Achecklist=[]
-    Bchecklist=[]
-    Cchecklist=[]
-    Dchecklist=[]
+    if Nutri.EatScore==0:
+        Scategory='A'
+    else:    
+        Achecklist=[]
+        Bchecklist=[]
+        Cchecklist=[]
+        Dchecklist=[]
 
-    if Nutri.Carb=="과다":
-        Achecklist.append(100-(abs(NutriD.CarbV-NutriD.CarbH)/NutriD.CarbH*100))
+        if Nutri.Carb=="과다":
+            Achecklist.append(100-(abs(NutriD.CarbV-NutriD.CarbH)/NutriD.CarbH*100))
 
-    if Nutri.Protein=="부족":
-        Bchecklist.append(100-(abs(NutriD.ProteinV-NutriD.ProteinL)/NutriD.ProteinL*100))
+        if Nutri.Protein=="부족":
+            Bchecklist.append(100-(abs(NutriD.ProteinV-NutriD.ProteinL)/NutriD.ProteinL*100))
 
-    if Nutri.Fat=="과다":
-        Dchecklist.append(100-(abs(NutriD.FatV-NutriD.FatH)/NutriD.FatH*100))    
+        if Nutri.Fat=="과다":
+            Dchecklist.append(100-(abs(NutriD.FatV-NutriD.FatH)/NutriD.FatH*100))    
 
-    if Nutri.Fiber=="부족":
-        Achecklist.append(100-(abs(NutriD.FiberV-NutriD.FiberL)/NutriD.FiberL*100))    
+        if Nutri.Fiber=="부족":
+            Achecklist.append(100-(abs(NutriD.FiberV-NutriD.FiberL)/NutriD.FiberL*100))    
 
-    if Nutri.Sodium=="과다":
-        Cchecklist.append(100-(abs(NutriD.SodiumV-NutriD.SodiumH)/NutriD.SodiumH*100)) 
+        if Nutri.Sodium=="과다":
+            Cchecklist.append(100-(abs(NutriD.SodiumV-NutriD.SodiumH)/NutriD.SodiumH*100)) 
 
-    if Nutri.Sugar=="과다":
-        Achecklist.append(100-(abs(NutriD.SugarV-NutriD.SugarH)/NutriD.SugarH*100))     
+        if Nutri.Sugar=="과다":
+            Achecklist.append(100-(abs(NutriD.SugarV-NutriD.SugarH)/NutriD.SugarH*100))     
 
-    if Nutri.SatFat=="과다":
-        Dchecklist.append(100-(abs(NutriD.SatFatV-NutriD.SatFatH)/NutriD.SatFatH*100))  
+        if Nutri.SatFat=="과다":
+            Dchecklist.append(100-(abs(NutriD.SatFatV-NutriD.SatFatH)/NutriD.SatFatH*100))  
 
-    if Nutri.Cholesterol=="과다":
-        Dchecklist.append(100-(abs(NutriD.CholesterolV-NutriD.CholesterolH)/NutriD.CholesterolH*100)) 
+        if Nutri.Cholesterol=="과다":
+            Dchecklist.append(100-(abs(NutriD.CholesterolV-NutriD.CholesterolH)/NutriD.CholesterolH*100)) 
 
-    if not Achecklist: 
-        Ascore=100
-    else:
-        Asum=0
-        for Alist in Achecklist:
-            Asum+=Alist 
-        Ascore=Asum/len(Achecklist)
+        if not Achecklist: 
+            Ascore=100
+        else:
+            Asum=0
+            for Alist in Achecklist:
+                Asum+=Alist 
+            Ascore=Asum/len(Achecklist)
 
-    if not Bchecklist:
-        Bscore=100
-    else:
-        Bscore=Bchecklist[0]    
+        if not Bchecklist:
+            Bscore=100
+        else:
+            Bscore=Bchecklist[0]    
 
-    if not Cchecklist:
-        Cscore=100
-    else:
-        Cscore=Cchecklist[0]       
+        if not Cchecklist:
+            Cscore=100
+        else:
+            Cscore=Cchecklist[0]       
 
-    if not Dchecklist: 
-        Dscore=100
-    else:
-        Dsum=0
-        for Dlist in Dchecklist:
-            Dsum+=Dlist 
-        Dscore=Dsum/len(Dchecklist)   
+        if not Dchecklist: 
+            Dscore=100
+        else:
+            Dsum=0
+            for Dlist in Dchecklist:
+                Dsum+=Dlist 
+            Dscore=Dsum/len(Dchecklist)   
 
-    scorelist=[('A',Ascore),('B',Bscore),('C',Cscore),('D',Dscore)]      
-    Scategory = min(scorelist, key=lambda x: x[1])[0]         
+        scorelist=[('A',Ascore),('B',Bscore),('C',Cscore),('D',Dscore)]      
+        Scategory = min(scorelist, key=lambda x: x[1])[0]         
     return Scategory    
 
 # 반찬 이미지 세팅 함수
@@ -1538,46 +1544,48 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
          
     c.drawString(206,height-595,Pcat+'에 좋은 영양소 가득') 
 
-    c.setStrokeColorRGB(0.6,0.6,0.6)
-    c.setLineWidth(0.2)
-    c.roundRect(206,height-820,138,210,10)
-    c.roundRect(360,height-820,223,210,10)
 
     # 맞춤 영양제 내용
     c.setFont(mainfont,8)
     c.setFillColorRGB(0,0,0)
     c.drawString(27,height-632,"▷ 건강 관심사 영양제 추천")
 
-    c.drawString(27,height-630-20,Supple.sup1)
-    c.drawString(27,height-630-40,Supple.sup2)
-    c.drawString(27,height-630-60,Supple.sup3)
-    c.drawString(27,height-630-80,Supple.sup4)
+    c.drawString(27,height-630-20,"영양제 1")
+    c.drawString(27,height-630-40,"영양제 2")
+    c.drawString(27,height-630-60,"영양제 3")
+    c.drawString(27,height-630-80,"영양제 4")
 
     c.drawString(27,height-732,"▷ 나에게 부족한 영양제 추천")
 
     if Pcat=="활력":
-        c.drawString(27,height-730-20,"﹒활력 1번 영양제")
-        c.drawString(27,height-730-40,"﹒활력 2번 영양제")
-        c.drawString(27,height-730-60,"﹒활력 3번 영양제")
-        c.drawString(27,height-730-80,"﹒활력 4번 영양제")
+        biotinlist=["닥터트루 프리미엄 유기농 비오틴","프롬바이오 비오틴","바이너랩 마이 비오틴"]
+        totallist=["비타바움 비타민 B12 플러스 브이-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
+        c.drawString(27,height-730-20,"﹒"+random.choice(biotinlist))
+        c.drawString(27,height-730-40,"﹒"+"프롬바이오 비타민B")
+        c.drawString(27,height-730-60,"﹒"+"모비타 리버칸 릴렉스")
+        c.drawString(27,height-730-80,"﹒"+random.choice(totallist))
 
     elif Pcat=="근력":
-        c.drawString(27,height-730-20,"﹒근력 1번 영양제")
-        c.drawString(27,height-730-40,"﹒근력 2번 영양제")
-        c.drawString(27,height-730-60,"﹒근력 3번 영양제")
-        c.drawString(27,height-730-80,"﹒근력 4번 영양제") 
+        mglist=["오리진 칼슘 마그네슘 비타민 D","닥터라인 마그네슘","삼진제약 쿨멜팅 마그네슘 400","닥터트루 프리미엄 마그네슘","차일드라이프 액상 칼슘 마그네슘"]
+        totallist=["비타바움 비타민 B12 플러스 브이-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
+        c.drawString(27,height-730-20,"﹒"+random.choice(mglist))
+        c.drawString(27,height-730-40,"﹒"+"엔바이탈 마그네슘 비타민 B6 Ease")
+        c.drawString(27,height-730-60,"﹒"+random.choice(totallist)) 
         
     elif Pcat=="면역력":
-        c.drawString(27,height-730-20,"﹒면역력 1번 영양제")
-        c.drawString(27,height-730-40,"﹒면역력 2번 영양제")
-        c.drawString(27,height-730-60,"﹒면역력 3번 영양제")
-        c.drawString(27,height-730-80,"﹒면역력 4번 영양제") 
+        folatelist=["닥터트루 프리미엄 유기농 엽산 800","프롬바이오 활성 엽산"]
+        totallist=["비타바움 비타민 B12 플러스 브이-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
+        c.drawString(27,height-730-20,"﹒"+random.choice(folatelist))
+        c.drawString(27,height-730-40,"﹒"+"삼진제약 비타민 D 4000 IU 아연맥스")
+        c.drawString(27,height-730-60,"﹒"+random.choice(totallist)) 
 
     elif Pcat=="항산화":
-        c.drawString(27,height-730-20,"﹒항산화 1번 영양제")
-        c.drawString(27,height-730-40,"﹒항산화 2번 영양제")
-        c.drawString(27,height-730-60,"﹒항산화 3번 영양제")
-        c.drawString(27,height-730-80,"﹒항산화 4번 영양제")           
+        totallist=["비타바움 비타민 B12 플러스 브이-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
+        clist=["프롬바이오 비타민C 1000","비타바움 퓨어비타민C250","탑헬스 리포조미아 비타민C"]
+        c.drawString(27,height-730-20,"﹒"+random.choice(clist))
+        c.drawString(27,height-730-40,"﹒"+"닥터라인 셀렌 징크")
+        c.drawString(27,height-730-60,"﹒오리진 프리미엄 비타민 E 400IU")
+        c.drawString(27,height-730-80,"﹒"+random.choice(totallist))           
 
     c.line(25, height - 620, 183, height - 620)
     c.line(25, height - 720, 183, height - 720)
@@ -1591,9 +1599,9 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 
     c.setFont(boldfont,8)
     c.setFillColorRGB(1,1,1)
-    c.drawString(35,height-590,"#"+Supple.inter1)
-    c.drawString(115,height-590,"#"+Supple.inter2)
-    c.drawString(35,height-610,"#"+Supple.inter3)
+    c.drawString(35,height-590,"#관심사1")
+    c.drawString(115,height-590,"#관심사2")
+    c.drawString(35,height-610,"#관심사3")
     c.drawString(115,height-610,"#"+Pcat)
 
 
@@ -1633,27 +1641,32 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         c.drawString(503,height-568.7,"#고식이섬유")
 
     elif Scat=="B":
-        c.drawImage(filepath+'BP'+str(random.randint(1,5))+'.png',360,height-820,223,210,mask='auto')
+        c.drawImage(filepath+'BP'+str(random.randint(6,10))+'.png',360,height-820,223,210,mask='auto')
         c.roundRect(445,height-573,60,16,8,fill=True)
     
         c.setFillColorRGB(1,1,1)
         c.drawString(456,height-568.7,"#고단백")
 
     elif Scat=="C":
-        c.drawImage(filepath+'BP'+str(random.randint(1,5))+'.png',360,height-820,223,210,mask='auto')
+        c.drawImage(filepath+'BP'+str(random.randint(10,15))+'.png',360,height-820,223,210,mask='auto')
         c.roundRect(445,height-573,60,16,8,fill=True)
 
         c.setFillColorRGB(1,1,1)
         c.drawString(452,height-568.7,"#저나트륨")
 
     elif Scat=="D": 
-        c.drawImage(filepath+'BP'+str(random.randint(1,5))+'.png',360,height-820,223,210,mask='auto')   
+        c.drawImage(filepath+'BP'+str(random.randint(16,20))+'.png',360,height-820,223,210,mask='auto')   
         c.roundRect(445,height-573,45,16,8,fill=True)
         c.roundRect(495,height-573,70,16,8,fill=True)
 
         c.setFillColorRGB(1,1,1)
         c.drawString(450,height-568.7,"#저지방")
-        c.drawString(503,height-568.7,"#고식이섬유")                              
+        c.drawString(503,height-568.7,"#고식이섬유")       
+
+    c.setStrokeColorRGB(0.6,0.6,0.6)
+    c.setLineWidth(0.2)
+    c.roundRect(206,height-820,138,210,10)
+    c.roundRect(360,height-820,223,210,10)                           
 
     
     # 2페이지 저장
