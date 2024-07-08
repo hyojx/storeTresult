@@ -14,19 +14,36 @@ import random
 
 filepath="static/image/diet/"
 resultfilepath="static/result/"
-mainfontname='AppleGothic'
+#mainfontname='AppleGothic'
+mainfont='NanumGothic'
+boldfont='NanumGothicBold'
+Eboldfont='NanumGothicExtraBold'
+lightfont='NanumGothicLight'
+
 
 # 폰트 등록 함수
 def register_fonts():
     # macOS의 산돌고딕 네오 폰트 경로
-    font_path = "/System/Library/Fonts/Supplemental/AppleGothic.ttf"
-    pdfmetrics.registerFont(TTFont(mainfontname, font_path))
+    #font_path = "/System/Library/Fonts/Supplemental/AppleGothic.ttf"
+    #pdfmetrics.registerFont(TTFont(mainfontname, font_path))
+    font_path="static/fonts/"
+    pdfmetrics.registerFont(TTFont(mainfont,font_path+"NanumGothic.ttf"))
+    pdfmetrics.registerFont(TTFont(boldfont,font_path+"NanumGothicBold.ttf"))
+    pdfmetrics.registerFont(TTFont(Eboldfont,font_path+"NanumGothicExtraBold.ttf"))
+    pdfmetrics.registerFont(TTFont(lightfont,font_path+"NanumGothicLight.ttf"))
 
 # 문자열 중앙배치 함수
 def draw_centered_string(c, text, y, font_name, font_size, page_width):
     c.setFont(font_name, font_size)
     text_width = pdfmetrics.stringWidth(text, font_name, font_size)
     x = (page_width - text_width) / 2
+    c.drawString(x, y, text)
+
+# 문자열 공간중앙배치 함수
+def draw_centered_string_in(c, text, startp,y, font_name, font_size, width):
+    c.setFont(font_name, font_size)
+    text_width = pdfmetrics.stringWidth(text, font_name, font_size)
+    x = ((width - text_width) / 2)+startp
     c.drawString(x, y, text)
 
 # 인바디 유형결정
@@ -75,20 +92,20 @@ def write_comment(c,Inbody_cat,height):
     height4=height-580
 
     if Inbody_cat=="C_sw":
-        c.setFont(mainfontname, 11)
+        c.setFont(mainfont, 11)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height1,'"표준체중 허약형 (C자)"')
-        c.setFont(mainfontname, 9)
+        c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 체중, 체지방량으로는 정상이지만 근육량이 부족한 상태')
         c.drawString(32,height3,'• 부족한 단백질 섭취와 근력운동이 원인')
         c.drawString(32,height4,'• 주 2-3회 근력운동을 진행하여 근육량 늘리기')
 
     elif Inbody_cat=="C_so":
-        c.setFont(mainfontname, 11)
+        c.setFont(mainfont, 11)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height1,'"표준체중 비만형 (C자)"')
-        c.setFont(mainfontname, 9)
+        c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 체중, 근육량은 정상이지만 체지방이 과다한 상태')
         c.drawString(32,height3,'• 탄수화물, 지방 위주의 과도한 칼로리 섭취가 원인') 
@@ -98,10 +115,10 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(32,height4-15,'    진행하여 체지방량은 줄이고, 근육량은 늘리기')
 
     elif Inbody_cat=="C_ow":
-        c.setFont(mainfontname, 11)
+        c.setFont(mainfont, 11)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height1,'"과체중 허약형 (C자)"')
-        c.setFont(mainfontname, 9)
+        c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 근육량과 비교하여 체중과 체지방량이 과다한 상태')
         c.drawString(32,height3,'• 탄수화물, 지방 위주의 과도한 칼로리 섭취 및 부족한 근력운동이 원인')
@@ -109,10 +126,10 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(32,height4-15,'    진행하여 체지방량은 줄이고, 근육량은 늘리기')
 
     elif Inbody_cat=="D_ss":
-        c.setFont(mainfontname, 11)
+        c.setFont(mainfont, 11)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height1,'"표준체중 강인형 (D자)"')
-        c.setFont(mainfontname, 9)
+        c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 날씬하면서 근육이 탄탄하게 잘 다듬어져 있는 유형')
         c.drawString(32,height3,'• 현재와 같이 균형잡힌 식습관과 유산소 운동, 근력운동의 병행을 통해')
@@ -121,39 +138,39 @@ def write_comment(c,Inbody_cat,height):
 
     elif Inbody_cat=="D_ls":
     #elif Inbody_cat=="C_so":    
-        c.setFont(mainfontname, 11)
+        c.setFont(mainfont, 11)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height1,'"저체중 강인형 (D자)"')
-        c.setFont(mainfontname, 9)
+        c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 근육량 대비 체중과 체지방이 부족한 유형')
         c.drawString(32,height3,'• 과도한 체지방 감량이 원인으로 체지방을 감량하는 유산소 운동 보다는') 
         c.drawString(32,height3-15,'    근력운동을 통해 현재 골격근 유지하기')
 
     elif Inbody_cat=="D_os":
-        c.setFont(mainfontname, 11)
+        c.setFont(mainfont, 11)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height1,'"과체중 강인형 (D자)"')
-        c.setFont(mainfontname, 9)
+        c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 체중이 표준이상이지만 체지방량에 비해 골격근이 발달한 운동선수 유형')
         c.drawString(32,height3,'• 체지방량이 과다해지지 않도록 유산소운동을 통해 체지방량 관리하기')
 
     elif Inbody_cat=="I_sh":
-        c.setFont(mainfontname, 11)
+        c.setFont(mainfont, 11)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height1,'"표준체중 건강형 (I자)"')
-        c.setFont(mainfontname, 9)
+        c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 체중, 근육량 체지방량이 모두 표준으로 밸런스가 잘 맞는 건강한 유형')
         c.drawString(32,height3,'• 주 3회, 30분 이상의 유산소 운동과 주 2-3회 근력 운동을 진행하여')
         c.drawString(32,height3-15,'    체지방량이 표준이상으로 넘어가지 않는것을 목표로 하기')
 
     elif Inbody_cat=="I_lw":
-        c.setFont(mainfontname, 11)
+        c.setFont(mainfont, 11)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height1,'"저체중 허약형 (I자)"')
-        c.setFont(mainfontname, 9)
+        c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 체중, 근육량, 체지방량이 모두 부족한 마른몸매 유형')
         c.drawString(32,height3,'• 음식 섭취량이 부족한 것이 원인')    
@@ -162,16 +179,16 @@ def write_comment(c,Inbody_cat,height):
 
     elif Inbody_cat=="I_oo":
     #elif Inbody_cat=="C_so":    
-        c.setFont(mainfontname, 11)
+        c.setFont(mainfont, 11)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height1,'"과체중 비만형 (I자)"')
-        c.setFont(mainfontname, 9)
+        c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 체중, 근육량, 체지방량이 모두 표준 이상인 유형')
         c.drawString(32,height3,'• 주 3일 30분 이상 유산소 운동을 통해 체지방 감량하기')      
 
     elif Inbody_cat=="N":
-        c.setFont(mainfontname, 11)
+        c.setFont(mainfont, 11)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height1,'"유형을 분류할 수 없습니다. 인바디 값을 확인해주세요."')
     return
@@ -288,20 +305,20 @@ def draw_panel(c,Agesensor,height):
     elif Agesensor.Rating =="E":
         c.drawImage(filepath+'E.png',baseX,baseY,130,69,mask='auto')    
 
-    c.setFont(mainfontname, 40)
+    c.setFont(boldfont, 40)
     c.setFillColorRGB(1,208/255,20/255)
     rating=str(Agesensor.Rating)
     c.drawString(baseX+165+3,baseY+35,rating)
 
-    c.setFont(mainfontname, 15)
+    c.setFont(boldfont, 15)
     c.setFillColorRGB(0.5,0.5,0.5)
     c.drawString(baseX+195+3,baseY+40,"등급")  
 
-    c.setFont(mainfontname, 12)
+    c.setFont(boldfont, 12)
     rank=str(Agesensor.Rank)+"등 / 100명"
     c.drawString(baseX+155+3,baseY+10,rank)  
 
-    c.setFont(mainfontname, 8)
+    c.setFont(mainfont, 8)
     c.setFillColorRGB(0.2,0.2,0.2)
     c.drawString(baseX-10,baseY+28,"2%")
     c.drawString(baseX+8,baseY+60,"14%")
@@ -312,19 +329,19 @@ def draw_panel(c,Agesensor,height):
     c.roundRect(baseX-5,baseY-70, 140, 65,10)
     c.roundRect(baseX+145,baseY-70, 95, 65,10)
 
-    c.setFont(mainfontname, 10)
+    c.setFont(boldfont, 10)
     c.setFillColorRGB(0.1,0.1,0.1)
     c.drawString(baseX+5,baseY-20,"AGEs(당독소)란?")
-    c.setFont(mainfontname, 8.5)
+    c.setFont(mainfont, 8.5)
     c.setFillColorRGB(0.5,0.5,0.5)
     c.drawString(baseX+5,baseY-35,"포도당, 과당과 같은 당이 단백질")
     c.drawString(baseX+5,baseY-47,"또는 지방에 결합하여 당화된")
     c.drawString(baseX+5,baseY-59,"물질로 노화 시 증가")
 
-    c.setFont(mainfontname, 10)
+    c.setFont(boldfont, 10)
     c.setFillColorRGB(0.1,0.1,0.1)
     c.drawString(baseX+155,baseY-20,"당독소 과다증")
-    c.setFont(mainfontname, 8.5)
+    c.setFont(mainfont, 8.5)
     c.setFillColorRGB(0.5,0.5,0.5)
     c.drawString(baseX+155,baseY-35,"노화,비만,당뇨,")
     c.drawString(baseX+155,baseY-47,"노안,간염")
@@ -599,8 +616,8 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     register_fonts()
     
     # 제목1 추가 (한글) - 페이지 가운데에 배치
-    draw_centered_string(c, "Greating store healthcare", height - 40, mainfontname, 12, width)
-    draw_centered_string(c, "다이어트 프로그램 결과차트", height - 70, mainfontname, 20, width)
+    draw_centered_string(c, "Greating store healthcare", height - 40, mainfont, 12, width)
+    draw_centered_string(c, "다이어트 프로그램 결과차트", height - 70, boldfont, 20, width)
     
     # 선 그리기 (x1, y1, x2, y2)
     c.setLineWidth(0.7)  # 라인의 굵기 설정
@@ -611,7 +628,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.drawImage(filepath+'user.png',455,height-100,20,20,mask='auto')
 
     username= Name+"님"
-    c.setFont(mainfontname, 13)
+    c.setFont(boldfont, 13)
     c.setFillColorRGB(0.5, 0.5, 0.5)
     c.drawString(485,height-95,username)
     
@@ -627,7 +644,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     #-------------- part1 다이어트 플랜 --------------
 
     # 본문 채우기 
-    c.setFont(mainfontname, 12)
+    c.setFont(boldfont, 12)
     c.setFillColorRGB(0, 0, 0)
     c.drawString(35,height-140,"한눈에 보는 나의 다이어트 플랜")
 
@@ -645,7 +662,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.setStrokeColorRGB(252/255, 184/255, 92/255)
     c.roundRect(38,height-305,190,40,20,fill=True)
 
-    c.setFont(mainfontname, 10)
+    c.setFont(mainfont, 10)
     c.setFillColorRGB(0, 0, 0)
     c.drawString(48,height-189,DGoal.Period)
     c.drawString(66,height-189,"동안 하루 총")
@@ -661,18 +678,18 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
         period=21
     elif DGoal.Period=="4주":
         period=28 
-    elif DGoal.Period=="2개월":
+    elif DGoal.Period=="2달":
         period=56 
-    elif DGoal.Period=="3개월":
+    elif DGoal.Period=="3달":
         period=84
-    elif DGoal.Period=="4개월":
+    elif DGoal.Period=="4달":
         period=112
-    elif DGoal.Period=="5개월":
+    elif DGoal.Period=="5달":
         period=140            
 
     
     reducecal=(Inbody.Weight-DGoal.Gweight)*7000/period
-    dayreduce=round(DGoal.Rcal-reducecal)
+    dayreduce=round(reducecal)
 
     foodcontrol=round(dayreduce*DGoal.FoodR/10)
     
@@ -685,15 +702,15 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.roundRect(117,height-245,45,20,10,fill=True)
     c.roundRect(125,height-295,45,20,10,fill=True)
 
-    c.setFont(mainfontname, 8)
+    c.setFont(mainfont, 8)
     c.setFillColorRGB(0, 0, 0)
     c.drawString(133,height-188,str(dayreduce)+"kcal")
 
-    c.setFont(mainfontname, 8)
+    c.setFont(mainfont, 8)
     c.setFillColorRGB(0, 0, 0)
     c.drawString(123,height-238,str(foodcontrol)+"kcal")
 
-    c.setFont(mainfontname, 8)
+    c.setFont(mainfont, 8)
     c.setFillColorRGB(0, 0, 0)
     c.drawString(131,height-288,str(workcontrol)+"kcal")
 
@@ -701,11 +718,11 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     #-------------- part2 나의 체형 알아보기 --------------
     # 본문 채우기 
     c.setFillColorRGB(0, 0, 0)
-    c.setFont(mainfontname, 12)
+    c.setFont(boldfont, 12)
     c.drawString(265,height-140,"나의 체형 알아보기")
 
     # 한줄피드백 작성
-    c.setFont(mainfontname, 10)
+    c.setFont(mainfont, 10)
     c.setFillColorRGB(0.5, 0.5, 0.5)
     if Inbody.BMI<18.5:
         c.drawString(265,height-160,'" BMI '+str(Inbody.BMI)+', 저체중 "')
@@ -726,14 +743,14 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     #-------------- part3 인바디 --------------
     # 본문 채우기 
     c.setFillColorRGB(0, 0, 0)
-    c.setFont(mainfontname, 12)
+    c.setFont(boldfont, 12)
     c.drawString(35,height-360,"인바디")
 
     Inbody_cat=set_category(Inbody)
     print("Inbody_cat"+Inbody_cat)
     write_comment(c,Inbody_cat,height)
 
-    c.setFont(mainfontname, 9)
+    c.setFont(boldfont, 9)
     c.setFillColorRGB(0.5, 0.5, 0.5)
     c.drawString(37,height-415,'체중')
     c.drawString(37,height-445,'골격근량')
@@ -744,12 +761,13 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
 
     #-------------- part4 체중관리 계획 --------------
     # 본문 채우기 
-    comment="지방은 "+str(Inbody.FatControl)+"kg 줄이고, 근육은 "+str(Inbody.MuscleControl)+"kg 늘리기"
+    user_fat_control=round(Inbody.Weight+Inbody.MuscleControl-DGoal.Gweight,1)
+    comment="지방은 "+str(user_fat_control)+"kg 줄이고, 근육은 "+str(Inbody.MuscleControl)+"kg 늘리기"
     c.setFillColorRGB(0, 0, 0)
-    c.setFont(mainfontname, 12)
+    c.setFont(boldfont, 12)
     c.drawString(315,height-360,"체중관리 계획")
 
-    c.setFont(mainfontname, 10)
+    c.setFont(mainfont, 10)
     c.setFillColorRGB(0.5, 0.5, 0.5)
     c.drawString(315,height-380,comment)
 
@@ -757,14 +775,14 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.setStrokeColorRGB(1,227/255,163/255)
     c.roundRect(315,height-420, 60, 20,10,fill=True)
     c.setFillColorRGB(0,0,0)
-    c.setFont(mainfontname, 12)
+    c.setFont(mainfont, 12)
     c.drawString(333,height-415,"지방")
 
     c.setFillColorRGB(223/255,183/255,187/255)
     c.setStrokeColorRGB(223/255,183/255,187/255)
     c.roundRect(315,height-545, 60, 20,10,fill=True)
     c.setFillColorRGB(0,0,0)
-    c.setFont(mainfontname, 12)
+    c.setFont(mainfont, 12)
     c.drawString(333,height-540,"근육")
 
     c.drawImage(filepath+'fat_img.png',320,height-490,60,61,mask='auto')
@@ -780,38 +798,42 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.roundRect(485,height-475, 70, 30,15)
     c.roundRect(485,height-600, 70, 30,15)
 
-    c.setFont(mainfontname, 12)
+    c.setFont(boldfont, 12)
     c.setFillColorRGB(1, 0, 0)
-    if 0<Inbody.FatControl:
-        c.drawString(495,height-465,"+ "+str(Inbody.FatControl)+"kg")
+    if 0<user_fat_control:
+        draw_centered_string_in(c,"+ "+str(user_fat_control)+"kg",485,height-464,boldfont,12,70)
+        #c.drawString(495,height-465,"+ "+str(user_fat_control)+"kg")
     else:     
-        c.drawString(495,height-465,str(Inbody.FatControl)+"kg")
+        draw_centered_string_in(c,str(user_fat_control)+"kg",485,height-464,boldfont,12,70)
+        #c.drawString(495,height-465,str(user_fat_control)+"kg")
 
     c.setFillColorRGB(0, 0, 1)
     if 0<Inbody.MuscleControl:
-        c.drawString(495,height-590,"+ "+str(Inbody.MuscleControl)+"kg")
+        draw_centered_string_in(c,"+ "+str(user_fat_control)+"kg",485,height-588,boldfont,12,70)
+        #c.drawString(495,height-590,"+ "+str(Inbody.MuscleControl)+"kg")
     else:
-        c.drawString(495,height-590,str(Inbody.MuscleControl)+"kg")
+        draw_centered_string_in(c,"+ "+str(user_fat_control)+"kg",485,height-588,boldfont,12,70)
+        #c.drawString(495,height-590,str(Inbody.MuscleControl)+"kg")
 
     #-------------- part5 집중관리 부위 --------------    
     c.setFillColorRGB(0, 0, 0)
-    c.setFont(mainfontname, 12)
+    c.setFont(boldfont, 12)
     c.drawString(35,height-655,"집중 관리 부위")
 
     comments=set_comment(IDetail)
     
     c.setFillColorRGB(1, 217/255,102/255)
     c.setStrokeColorRGB(1, 217/255,102/255)
-    c.roundRect(30,height-680, 12+pdfmetrics.stringWidth(comments["first_Fcomment"],mainfontname,8), 12,6,fill=True)
+    c.roundRect(30,height-680, 12+pdfmetrics.stringWidth(comments["first_Fcomment"],mainfont,8), 12,6,fill=True)
     c.setFillColorRGB(0,0,0)
-    c.setFont(mainfontname, 8)
+    c.setFont(mainfont, 8)
     c.drawString(36,height-677,comments['first_Fcomment'])
 
     c.setFillColorRGB(1, 155/255,155/255)
     c.setStrokeColorRGB(1, 155/255,155/255)
-    c.roundRect(160,height-680, 12+pdfmetrics.stringWidth(comments["first_Scomment"],mainfontname,8), 12,6,fill=True)
+    c.roundRect(160,height-680, 12+pdfmetrics.stringWidth(comments["first_Scomment"],mainfont,8), 12,6,fill=True)
     c.setFillColorRGB(0,0,0)
-    c.setFont(mainfontname, 8)
+    c.setFont(mainfont, 8)
     c.drawString(166,height-677,comments['first_Scomment'])
 
     c.setLineWidth(0.5)
@@ -820,11 +842,11 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
 
     
     c.setFillColorRGB(0.5,0.5,0.5)
-    c.setFont(mainfontname, 8)
+    c.setFont(mainfont, 8)
     c.drawString(35,height-695,comments["second_Fcomment"])
     
     c.setFillColorRGB(0.5,0.5,0.5)
-    c.setFont(mainfontname, 8)
+    c.setFont(mainfont, 8)
     c.drawString(167,height-695,comments["second_Scomment"])
 
     # 이미지 파일 넣기
@@ -840,7 +862,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
         c.drawImage(filepath+'AGEsBlur.png',310,height-820,250,164,mask='auto')
     else:
         c.setFillColorRGB(0, 0, 0)
-        c.setFont(mainfontname, 12)
+        c.setFont(boldfont, 12)
         c.drawString(315,height-655,"AGEs sensor")
         c.setStrokeColorRGB(0.75,0.75,0.75)
         c.setLineWidth(0.7)
@@ -858,7 +880,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.line(10, height - 265, 580, height - 265)
     c.line(10, height - 540, 580, height - 540)
     
-    c.setFont('AppleGothic', 18)
+    c.setFont(boldfont, 18)
     c.setFillColorRGB(0,0,0)
     c.drawString(25,height-35,"맞춤 식재료")
     c.drawString(25,height-295,"맞춤 샐러드")
@@ -876,7 +898,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
         salad_cal=600       
 
     # 코멘트 작성
-    c.setFont('AppleGothic', 12)
+    c.setFont(mainfont, 12)
     c.setFillColorRGB(0.2,0.2,0.2)
     c.drawString(25,height-58,'"다이어터를 위해 에너지 대사에 도움을 주는 식재료"')
     c.drawString(25,height-318,'"하루 '+str(foodcontrol)+"kcal를 줄이기 위한 "+str(salad_cal)+'kcal 샐러드 토핑추천"')
@@ -897,8 +919,8 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.roundRect(480,height-63,70,20,10,fill=True)
 
     c.setFillColorRGB(1,1,1)
-    c.setFont('AppleGothic', 11)
-    c.drawString(328,height-57,"#비타민B1")
+    c.setFont(boldfont, 11)
+    c.drawString(330,height-57,"#비타민B1")
     c.drawString(411,height-57,"#판토텐산")
     c.drawString(495,height-57,"#비오틴")
 
@@ -931,10 +953,10 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.roundRect(190,height-623,70,20,10,fill=True)
 
     c.setFillColorRGB(1,1,1)
-    c.setFont('AppleGothic', 11)
-    c.drawString(38,height-617,"#비타민B1")
-    c.drawString(121,height-617,"#판토텐산")
-    c.drawString(205,height-617,"#비오틴")
+    c.setFont(boldfont, 11)
+    c.drawString(40,height-616.5,"#비타민B1")
+    c.drawString(121,height-616.5,"#판토텐산")
+    c.drawString(205,height-616.5,"#비오틴")
 
     # 상품 추천
     c.setStrokeColorRGB(0.6,0.6,0.6)

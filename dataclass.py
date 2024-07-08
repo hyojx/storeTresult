@@ -33,6 +33,17 @@ class NutritionDetail:
     CholesterolV: float =field(default=0)
 
 @dataclass
+class Supplements:
+    sup1: str =field(default="")
+    sup2: str =field(default="")
+    sup3: str =field(default="")
+    sup4: str =field(default="")
+    inter1: str =field(default="")
+    inter2: str =field(default="")
+    inter3: str =field(default="")
+
+
+@dataclass
 class Vitastiq:
     Unused: bool
     Mg: str =field(default="")

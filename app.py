@@ -1,5 +1,5 @@
 import gradio as gr
-from dataclass import Nutrition,Vitastiq,Inbody,Agesensor,DietGoal,InbodyDetail,SkinState,NutritionDetail
+from dataclass import Nutrition,Vitastiq,Inbody,Agesensor,DietGoal,InbodyDetail,SkinState,NutritionDetail,Supplements
 from createpdf import create_basic_pdf
 from createpdf2 import create_diet_pdf
 from createpdf3 import create_skin_pdf
@@ -15,8 +15,8 @@ def process_basic_inputs(Name,Gender,EatScore,Carb,Protein,Fat,Fiber,Sodium,Suga
     Inbo=Inbody(InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Recomcal)
     Age=Agesensor(Rating,Rank)
     NutriD=NutritionDetail(CarbH=CarbH,CarbV=CarbV,ProteinL=ProteinL,ProteinV=ProteinV,FatH=FatH,FatV=FatV,FiberL=FiberL,FiberV=FiberV,SodiumH=SodiumH,SodiumV=SodiumV,SugarH=SugarH,SatFatH=SatFatH,SatFatV=SatFatV,CholesterolH=CholesterolH,CholesterolV=CholesterolV)
-
-    img_adress=create_basic_pdf(Nutri,Vita,Inbo,Age,Name,Gender,NutriD)
+    Supple=Supplements(sup1="영양진단 영양제1",sup2="영양진단 영양제2",sup3="영양진단 영양제3",sup4="영양진단 영양제4",inter1="근력",inter2="소화기/장건강",inter3="면역력")
+    img_adress=create_basic_pdf(Nutri,Vita,Inbo,Age,Name,Gender,NutriD,Supple)
 
     return img_adress
 
@@ -137,7 +137,7 @@ with gr.Blocks() as diet:
         GWeight=gr.Number(minimum=0, maximum=300, label="목표체중",min_width=80)
         NMeal=gr.Number(minimum=0, maximum=5, label="섭취 끼니",min_width=80)
         RCal=gr.Number(minimum=0, maximum=4000, label="권장칼로리",min_width=80)
-        Period=gr.Dropdown(["2주","3주","4주","2개월","3개월","4개월","5개월"], label="감량기간")
+        Period=gr.Dropdown(["2주","3주","4주","2달","3달","4달","5달"], label="감량기간")
 
     with gr.Row():
         slider = gr.Slider(minimum=0, maximum=10,step=1, value=5, label="식사 : 운동 비율")
