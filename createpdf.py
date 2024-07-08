@@ -1658,6 +1658,32 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     
     # 2페이지 저장
     c.showPage()
+    img_name=""
+    if Scat=="A":
+        img_name+="A"
+    elif Scat=="B":
+        img_name+="B"    
+    elif Scat=="C":
+        img_name+=""
+    elif Scat=="D":
+        img_name+="D"
+
+    if Inbody.Recomcal<1500:
+        img_name+="1"
+    elif 1500<Inbody.Recomcal<=2000:
+        img_name+="2"
+    elif 2000<Inbody.Recomcal<=2500:
+        img_name+="3"  
+    elif 2500<Inbody.Recomcal<=3000:
+        img_name+="4"
+    elif 3000<Inbody.Recomcal:
+        img_name+="5"    
+
+    img_name+=".png"      
+
+    c.drawImage(filepath+img_name,0,0,width,height)    
+
+    c.showPage        
 
     c.save()
 
