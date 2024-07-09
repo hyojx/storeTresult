@@ -764,9 +764,16 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     draw_alpha(c,Inbody_cat,height)
 
     #-------------- part4 체중관리 계획 --------------
-    # 본문 채우기 
-    user_fat_control=round(Inbody.Weight+Inbody.MuscleControl-DGoal.Gweight,1)
-    comment="지방은 "+str(user_fat_control)+"kg 줄이고, 근육은 "+str(Inbody.MuscleControl)+"kg 늘리기"
+    # 본문 채우기 (07.09 5시 수정)
+    user_fat_control=-round(Inbody.Weight+Inbody.MuscleControl-DGoal.Gweight,1)
+    if 0<user_fat_control and 0<Inbody.MuscleControl:
+        comment="지방은 "+str(user_fat_control)+"kg 늘리고, 근육은 "+str(Inbody.MuscleControl)+"kg 늘리기"
+    elif user_fat_control<0 and Inbody.MuscleControl<0:
+        comment="지방은 "+str(user_fat_control)+"kg 줄이고, 근육은 "+str(Inbody.MuscleControl)+"kg 줄이기"
+    elif user_fat_control<0 and 0<Inbody.MuscleControl:
+        comment="지방은 "+str(user_fat_control)+"kg 줄이고, 근육은 "+str(Inbody.MuscleControl)+"kg 늘리기"
+    elif 0<user_fat_control and Inbody.MuscleControl<0:
+        comment="지방은 "+str(user_fat_control)+"kg 늘리고, 근육은 "+str(Inbody.MuscleControl)+"kg 줄이기"        
     c.setFillColorRGB(0, 0, 0)
     c.setFont(boldfont, 12)
     c.drawString(315,height-360,"체중관리 계획")

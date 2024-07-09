@@ -1082,13 +1082,13 @@ def set_ingre_image(Pcat):
             img_list[i]='I'+str(random.choice([7+base,8+base]))+'.png'
             base=2*(i+1)  
 
-    elif Pcat =="근력":
+    elif Pcat =="면역력":    #07.09 5시 수정
         base=0
         for i in range(0,2):
             img_list[i]='I'+str(random.choice([13+base,14+base]))+'.png'
             base=2*(i+1)  
 
-    elif Pcat =="면역력":
+    elif Pcat =="근력":     #07.09 5시 수정
         base=0
         for i in range(0,2):
             img_list[i]='I'+str(random.choice([17+base,18+base]))+'.png'
@@ -1285,7 +1285,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     
     # 제목1 추가 (한글) - 페이지 가운데에 배치
     draw_centered_string(c, "Greating store healthcare", height - 40, mainfont, 12, width)
-    draw_centered_string(c, "맞춤영양 프로그램 결과차트", height - 70, boldfont, 20, width)
+    draw_centered_string(c, "맞춤영양 프로그램 결과차트", height - 70, boldfont, 20, width) #07.09 5시 수정
     
     # 선 그리기 (x1, y1, x2, y2)
     c.setLineWidth(0.7)  # 라인의 굵기 설정
@@ -1749,7 +1749,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 # PDF 생성 테스트용
 if __name__ == "__main__":
     Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다")
-    Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="", VitB2="", Zn="", Se="", VitB6="", VitE="", Folate="")
+    Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="낮음", VitB2="", Zn="낮음", Se="", VitB6="", VitE="", Folate="")
     Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=19.5,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9,Recomcal=2800)
     Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
