@@ -725,19 +725,19 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.setFont(boldfont, 12)
     c.drawString(265,height-140,"나의 체형 알아보기")
 
-    # 한줄피드백 작성
+    # 한줄피드백 작성 (07.09 4시 수정)
     c.setFont(mainfont, 10)
     c.setFillColorRGB(0.5, 0.5, 0.5)
     if Inbody.BMI<18.5:
         c.drawString(265,height-160,'" BMI '+str(Inbody.BMI)+', 저체중 "')
         c.drawImage(filepath+'Low.png',265,height-312,290,136,mask='auto')
-    elif 18.5<=Inbody.BMI<24.9:
+    elif 18.5<=Inbody.BMI<25:
         c.drawString(265,height-160,'" BMI '+str(Inbody.BMI)+', 정상체중 "')
         c.drawImage(filepath+'Normal.png',265,height-312,290,136,mask='auto') 
-    elif 25<=Inbody.BMI<29.9:
+    elif 25<=Inbody.BMI<30:
         c.drawString(265,height-160,'" BMI '+str(Inbody.BMI)+', 과체중 "')
         c.drawImage(filepath+'Over.png',265,height-312,290,136,mask='auto')   
-    elif 30<=Inbody.BMI<39.9:
+    elif 30<=Inbody.BMI<40:
         c.drawString(265,height-160,'" BMI '+str(Inbody.BMI)+', 비만 "')
         c.drawImage(filepath+'Obes.png',265,height-312,290,136,mask='auto')  
     elif 40<=Inbody.BMI:

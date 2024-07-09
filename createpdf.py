@@ -598,19 +598,23 @@ def draw_part2(c,Nutrition,height):
     c.drawString(507,height-138,'적정')
     c.drawString(539,height-138,'과다')
 
-    # 한줄피드백 작성
+    # 한줄피드백 작성 (07.09 4시 수정)
     feedbacks=set_feedback(Nutrition)
     c.setFont(mainfont, 10)
     c.setFillColorRGB(0.5, 0.5, 0.5)
     if feedbacks[0]=="":
-        c.drawString(315,height-160,'✓ 과다하게 섭취하는 영양소는 없어요')
+        c.drawString(315,height-160,'과다하게 섭취하는 영양소는 없어요')
     else: 
-        c.drawString(315,height-160,"✓ "+feedbacks[0]+" 과다해요.") 
+        if 250<pdfmetrics.stringWidth(feedbacks[0]+" 과다해요.",mainfont,10):
+            c.setFont(mainfont, 8)
+            c.drawString(315,height-160,feedbacks[0]+" 과다해요.")
+        else:    
+            c.drawString(315,height-160,feedbacks[0]+" 과다해요.")
 
     if feedbacks[1]=="":
-        c.drawString(315,height-175,'✓ 부족하게 섭취하는 영양소는 없어요')
+        c.drawString(315,height-175,'부족하게 섭취하는 영양소는 없어요')
     else: 
-        c.drawString(315,height-175,"✓ "+feedbacks[1]+" 부족해요.")    
+        c.drawString(315,height-175,feedbacks[1]+" 부족해요.")    
 
     # 표 그리기
     BaseX2=315
@@ -717,7 +721,7 @@ def set_category(Inbody):
             C_id="I_sh"
         else:
             C_id="N"    
-    elif 115<=weightP:
+    elif 115<=weightP:                    #(07.09 4시 수정)
         if skeletalP<=110 and 160<=fatP:
             C_id="C_ow"
         if 110<=skeletalP and 80<fatP<160:
@@ -726,7 +730,7 @@ def set_category(Inbody):
             C_id="I_oo"
         else:
             C_id="N"     
-    elif weightP<=85:
+    elif weightP<=85:                     #(07.09 4시 수정)
         if 90<skeletalP and fatP<=80:
             C_id="D_ls"
         if skeletalP<90 and fatP<=80:
@@ -1020,7 +1024,7 @@ def set_product_cat(Gender,Vitastiq,Agesensor):
         ]
         
         if Agesensor.Rating=="A" or Agesensor.Rating=="B":
-            sorted_variables = sorted(variables, key=lambda x: x[1], reverse=True) # 내림차순 정렬
+            sorted_variables = sorted(variables, key=lambda x: x[1]) # 오름차순 정렬 (07.09 4시 수정)
             print(sorted_variables)
             if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]==sorted_variables[3][1]:
                 if Gender=="남성":
@@ -1036,7 +1040,7 @@ def set_product_cat(Gender,Vitastiq,Agesensor):
 
 # 07.09 오후 급하게 수정필요-----------------------------------------------------------------
         if Agesensor.Rating=="C" or Agesensor.Rating=="D" or Agesensor.Rating=="E":
-            sorted_variables = sorted(variables, key=lambda x: x[1], reverse=True) # 내림차순 정렬
+            sorted_variables = sorted(variables, key=lambda x: x[1]) # 오름차순 정렬 (07.09 4시 수정)
             print(sorted_variables)
             if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]==sorted_variables[3][1]:
                 if Gender=="남성":
@@ -1744,10 +1748,10 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 
 # PDF 생성 테스트용
 if __name__ == "__main__":
-    Nutri=Nutrition(EatScore=70, Carb="부족", Protein="부족", Fat="부족", Fiber="부족", Sodium="적정", Sugar="적정", SatFat="적정", Cholesterol="적정")
-    Vita=Vitastiq(Unused=False,Biotin="", VitC="", Mg="", VitB1="", VitB2="", Zn="", Se="경미", VitB6="낮은", VitE="경미", Folate="낮은")
+    Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다")
+    Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="", VitB2="", Zn="", Se="", VitB6="", VitE="", Folate="")
     Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=19.5,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9,Recomcal=2800)
-    Age=Agesensor(Rating="E",Rank=94)
+    Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
     Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
     create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple)
