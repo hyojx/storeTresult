@@ -1544,48 +1544,77 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
          
     c.drawString(206,height-595,Pcat+'에 좋은 영양소 가득') 
 
-
+#07.09 수정--------------------------------------------------------------------------------------------
     # 맞춤 영양제 내용
-    c.setFont(mainfont,8)
+    c.setFont(boldfont,8)
     c.setFillColorRGB(0,0,0)
     c.drawString(27,height-632,"▷ 건강 관심사 영양제 추천")
 
+    c.setFont(mainfont,8)
+    c.setFillColorRGB(0,0,0)
     c.drawString(27,height-630-20,"영양제 1")
     c.drawString(27,height-630-40,"영양제 2")
     c.drawString(27,height-630-60,"영양제 3")
     c.drawString(27,height-630-80,"영양제 4")
+    c.setFillColorRGB(0.5,0.5,0.5)
+    c.drawRightString(189,height-730-20,"#기능성 1")
+    c.drawRightString(189,height-730-40,"#기능성 2")
+    c.drawRightString(189,height-730-60,"#기능성 3")
+    c.drawRightString(189,height-730-80,"#종합")
 
+    c.setFont(boldfont,8)
+    c.setFillColorRGB(0,0,0)
     c.drawString(27,height-732,"▷ 나에게 부족한 영양제 추천")
 
+    c.setFont(mainfont,8)
+    c.setFillColorRGB(0,0,0)
     if Pcat=="활력":
         biotinlist=["닥터트루 프리미엄 유기농 비오틴","프롬바이오 비오틴","바이너랩 마이 비오틴"]
-        totallist=["비타바움 비타민 B12 플러스 브이-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
+        totallist=["비타바움 비타민 B12+ V-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
         c.drawString(27,height-730-20,"﹒"+random.choice(biotinlist))
         c.drawString(27,height-730-40,"﹒"+"프롬바이오 비타민B")
         c.drawString(27,height-730-60,"﹒"+"모비타 리버칸 릴렉스")
         c.drawString(27,height-730-80,"﹒"+random.choice(totallist))
+        c.setFillColorRGB(0.5,0.5,0.5)
+        c.drawRightString(189,height-730-20,"#비오틴")
+        c.drawRightString(189,height-730-40,"#비타민 B1")
+        c.drawRightString(189,height-730-60,"#비타민 B2")
+        c.drawRightString(189,height-730-80,"#종합")
 
     elif Pcat=="근력":
         mglist=["오리진 칼슘 마그네슘 비타민 D","닥터라인 마그네슘","삼진제약 쿨멜팅 마그네슘 400","닥터트루 프리미엄 마그네슘","차일드라이프 액상 칼슘 마그네슘"]
-        totallist=["비타바움 비타민 B12 플러스 브이-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
+        totallist=["비타바움 비타민 B12+ V-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
         c.drawString(27,height-730-20,"﹒"+random.choice(mglist))
-        c.drawString(27,height-730-40,"﹒"+"엔바이탈 마그네슘 비타민 B6 Ease")
+        c.drawString(27,height-730-40,"﹒"+"엔바이탈 마그네슘 Vit B6 Ease")
         c.drawString(27,height-730-60,"﹒"+random.choice(totallist)) 
+        c.setFillColorRGB(0.5,0.5,0.5)
+        c.drawRightString(189,height-730-20,"#마그네슘")
+        c.drawRightString(189,height-730-40,"#비타민 B6")
+        c.drawRightString(189,height-730-60,"#종합")
         
     elif Pcat=="면역력":
         folatelist=["닥터트루 프리미엄 유기농 엽산 800","프롬바이오 활성 엽산"]
-        totallist=["비타바움 비타민 B12 플러스 브이-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
+        totallist=["비타바움 비타민 B12+ V-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
         c.drawString(27,height-730-20,"﹒"+random.choice(folatelist))
         c.drawString(27,height-730-40,"﹒"+"삼진제약 비타민 D 4000 IU 아연맥스")
         c.drawString(27,height-730-60,"﹒"+random.choice(totallist)) 
+        c.setFillColorRGB(0.5,0.5,0.5)
+        c.drawRightString(189,height-730-20,"#엽산")
+        c.drawRightString(189,height-730-40,"#아연")
+        c.drawRightString(189,height-730-60,"#종합")
 
     elif Pcat=="항산화":
-        totallist=["비타바움 비타민 B12 플러스 브이-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
+        totallist=["비타바움 비타민 B12+ V-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
         clist=["프롬바이오 비타민C 1000","비타바움 퓨어비타민C250","탑헬스 리포조미아 비타민C"]
         c.drawString(27,height-730-20,"﹒"+random.choice(clist))
         c.drawString(27,height-730-40,"﹒"+"닥터라인 셀렌 징크")
         c.drawString(27,height-730-60,"﹒오리진 프리미엄 비타민 E 400IU")
-        c.drawString(27,height-730-80,"﹒"+random.choice(totallist))           
+        c.drawString(27,height-730-80,"﹒"+random.choice(totallist)) 
+        c.setFillColorRGB(0.5,0.5,0.5)
+        c.drawRightString(189,height-730-20,"#비타민C")
+        c.drawRightString(189,height-730-40,"#셀레늄")
+        c.drawRightString(189,height-730-60,"#비타민E")
+        c.drawRightString(189,height-730-80,"#종합")          
 
     c.line(25, height - 620, 183, height - 620)
     c.line(25, height - 720, 183, height - 720)
@@ -1603,6 +1632,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     c.drawString(115,height-590,"#관심사2")
     c.drawString(35,height-610,"#관심사3")
     c.drawString(115,height-610,"#"+Pcat)
+#07.09 수정--------------------------------------------------------------------------------------------    
 
 
     # 케이스별 주스 추천 및 해시태그

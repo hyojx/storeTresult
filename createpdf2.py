@@ -84,13 +84,14 @@ def set_category(Inbody):
             C_id="N"             
     return C_id
 
-#인바디 유형별 코멘트 작성
+#07.09 수정---------------------------------------------------------------------
+#인바디 유형별 코멘트 작성 
 def write_comment(c,Inbody_cat,height):
     height1=height-385
     height2=height-520
     height3=height-550
     height4=height-580
-
+    
     if Inbody_cat=="C_sw":
         c.setFont(mainfont, 11)
         c.setFillColorRGB(0.5, 0.5, 0.5)
@@ -109,8 +110,6 @@ def write_comment(c,Inbody_cat,height):
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 체중, 근육량은 정상이지만 체지방이 과다한 상태')
         c.drawString(32,height3,'• 탄수화물, 지방 위주의 과도한 칼로리 섭취가 원인') 
-        #c.drawString(32,height4,'• 주 3일 30분 이상 유산소 운동을 통해 페지방 감량하기')
-        # 길이 테스트
         c.drawString(32,height4,'• 주 3회 30분 이상의 유산소 운동과 주 2-3회 근력 운동을')
         c.drawString(32,height4-15,'    진행하여 체지방량은 줄이고, 근육량은 늘리기')
 
@@ -121,9 +120,10 @@ def write_comment(c,Inbody_cat,height):
         c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 근육량과 비교하여 체중과 체지방량이 과다한 상태')
-        c.drawString(32,height3,'• 탄수화물, 지방 위주의 과도한 칼로리 섭취 및 부족한 근력운동이 원인')
-        c.drawString(32,height4,'• 주 3회 30분 이상의 유산소 운동과 주 2-3회 근력 운동을')
-        c.drawString(32,height4-15,'    진행하여 체지방량은 줄이고, 근육량은 늘리기')
+        c.drawString(32,height3,'• 탄수화물, 지방 위주의 과도한 칼로리 섭취 및 부족한')
+        c.drawString(32,height3-15,'    근력운동이 원인')
+        c.drawString(32,height4-10,'• 주 3회 30분 이상의 유산소 운동과 주 2-3회 근력 운동을')
+        c.drawString(32,height4-25,'    진행하여 체지방량은 줄이고, 근육량은 늘리기')
 
     elif Inbody_cat=="D_ss":
         c.setFont(mainfont, 11)
@@ -132,20 +132,19 @@ def write_comment(c,Inbody_cat,height):
         c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 날씬하면서 근육이 탄탄하게 잘 다듬어져 있는 유형')
-        c.drawString(32,height3,'• 현재와 같이 균형잡힌 식습관과 유산소 운동, 근력운동의 병행을 통해')
-        c.drawString(32,height3-15,'    현재 상태 유지하기')
+        c.drawString(32,height3,'• 현재와 같이 균형잡힌 식습관과 유산소 운동, 근력운동의')
+        c.drawString(32,height3-15,'    병행을 통해 현재 상태 유지하기')
 
 
-    elif Inbody_cat=="D_ls":
-    #elif Inbody_cat=="C_so":    
+    elif Inbody_cat=="D_ls": 
         c.setFont(mainfont, 11)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height1,'"저체중 강인형 (D자)"')
         c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
         c.drawString(32,height2,'• 근육량 대비 체중과 체지방이 부족한 유형')
-        c.drawString(32,height3,'• 과도한 체지방 감량이 원인으로 체지방을 감량하는 유산소 운동 보다는') 
-        c.drawString(32,height3-15,'    근력운동을 통해 현재 골격근 유지하기')
+        c.drawString(32,height3,'• 과도한 체지방 감량이 원인으로 체지방을 감량하는') 
+        c.drawString(32,height3-15,'    유산소 운동 보다는 근력운동을 통해 현재 골격근 유지하기')
 
     elif Inbody_cat=="D_os":
         c.setFont(mainfont, 11)
@@ -153,8 +152,10 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(35,height1,'"과체중 강인형 (D자)"')
         c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
-        c.drawString(32,height2,'• 체중이 표준이상이지만 체지방량에 비해 골격근이 발달한 운동선수 유형')
-        c.drawString(32,height3,'• 체지방량이 과다해지지 않도록 유산소운동을 통해 체지방량 관리하기')
+        c.drawString(32,height2,'• 체중이 표준이상이지만 체지방량에 비해 골격근이 발달한')
+        c.drawString(32,height2-15,'    운동선수 유형')
+        c.drawString(32,height3-10,'• 체지방량이 과다해지지 않도록 유산소운동을 통해')
+        c.drawString(32,height3-25,'    체지방량 관리하기')
 
     elif Inbody_cat=="I_sh":
         c.setFont(mainfont, 11)
@@ -162,9 +163,11 @@ def write_comment(c,Inbody_cat,height):
         c.drawString(35,height1,'"표준체중 건강형 (I자)"')
         c.setFont(mainfont, 9)
         c.setFillColorRGB(0.2, 0.2, 0.2)
-        c.drawString(32,height2,'• 체중, 근육량 체지방량이 모두 표준으로 밸런스가 잘 맞는 건강한 유형')
-        c.drawString(32,height3,'• 주 3회, 30분 이상의 유산소 운동과 주 2-3회 근력 운동을 진행하여')
-        c.drawString(32,height3-15,'    체지방량이 표준이상으로 넘어가지 않는것을 목표로 하기')
+        c.drawString(32,height2,'• 체중, 근육량 체지방량이 모두 표준으로 밸런스가 잘 맞는')
+        c.drawString(32,height2-15,'    건강한 유형')
+        c.drawString(32,height3-10,'• 주 3회, 30분 이상의 유산소 운동과 주 2-3회 근력 운동을')
+        c.drawString(32,height3-25,'    진행하여 체지방량이 표준이상으로 넘어가지 않는것을')
+        c.drawString(32,height3-25-15,'    목표로 하기')
 
     elif Inbody_cat=="I_lw":
         c.setFont(mainfont, 11)
@@ -192,6 +195,7 @@ def write_comment(c,Inbody_cat,height):
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height1,'"유형을 분류할 수 없습니다. 인바디 값을 확인해주세요."')
     return
+#07.09 수정-----------------------------------------------------------------------
 
 #인바디 그래프 그리기
 def draw_inbody(c,Inbody,height):
@@ -806,14 +810,15 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     else:     
         draw_centered_string_in(c,str(user_fat_control)+"kg",485,height-464,boldfont,12,70)
         #c.drawString(495,height-465,str(user_fat_control)+"kg")
-
+#07.09 수정--------------------------------------------------------------------------------------------
     c.setFillColorRGB(0, 0, 1)
     if 0<Inbody.MuscleControl:
-        draw_centered_string_in(c,"+ "+str(user_fat_control)+"kg",485,height-588,boldfont,12,70)
+        draw_centered_string_in(c,"+ "+str(Inbody.MuscleControl)+"kg",485,height-588,boldfont,12,70)
         #c.drawString(495,height-590,"+ "+str(Inbody.MuscleControl)+"kg")
     else:
-        draw_centered_string_in(c,"+ "+str(user_fat_control)+"kg",485,height-588,boldfont,12,70)
+        draw_centered_string_in(c,str(Inbody.MuscleControl)+"kg",485,height-588,boldfont,12,70)
         #c.drawString(495,height-590,str(Inbody.MuscleControl)+"kg")
+#07.09 수정--------------------------------------------------------------------------------------------        
 
     #-------------- part5 집중관리 부위 --------------    
     c.setFillColorRGB(0, 0, 0)
