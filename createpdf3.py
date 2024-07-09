@@ -613,14 +613,15 @@ def draw_panel(c,Agesensor,height):
 
     return
 
+# 07.09 6시 수정
 def state_to_int(state):
     state_mapping = {
-        "매우 나쁨": 1,
-        "나쁨": 2,
-        "보통": 3,
-        "거의 깨끗함": 4,
-        "깨끗함": 5,
-        "":6
+        "매우 나쁨": 6,
+        "나쁨": 5,
+        "보통": 4,
+        "거의 깨끗함": 3,
+        "깨끗함": 2,
+        "":1
     }
     return state_mapping.get(state.lower(), 5)
 
@@ -632,8 +633,10 @@ def set_rank(skin_state: SkinState):
         'W': (state_to_int(skin_state.WState), skin_state.WScore - skin_state.WAScore),
         'T': (state_to_int(skin_state.TState), skin_state.TScore - skin_state.TAScore)
     }
-    
-    sorted_elements = sorted(elements.items(), key=lambda x: (x[1][0], -x[1][1]))
+    print(skin_state.CState+"/"+str(skin_state.CScore - skin_state.CAScore))
+    print(skin_state.WState+"/"+str(skin_state.WScore - skin_state.WAScore))
+    print(skin_state.TState+"/"+str(skin_state.TScore - skin_state.TAScore))
+    sorted_elements = sorted(elements.items(), key=lambda x: (x[1][0], -x[1][1]),reverse=True) # 07.09 6시 수정
     if skin_state.Type=="D":
         Glist.append("D")
         Glist.extend(sorted_elements[0][0],sorted_elements[1][0],sorted_elements[2][0])
@@ -855,6 +858,6 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     return img_path 
 
 if __name__=="__main__":
-    SState=SkinState(Concern=["모공크기","잡티"],Type="복합성",TZWater="Normal",UZWater="Normal",TZOil="Sebum",UZOil="Sebum",CScore=0,CAScore=0,CState="",WScore=80,WAScore=80,WState="거의 깨끗함",TScore=10,TAScore=15,TState="보통",HScore=40,HAScore=45,HState="매우 나쁨")
+    SState=SkinState(Concern=["모공크기","잡티"],Type="복합성",TZWater="Normal",UZWater="Normal",TZOil="Sebum",UZOil="Sebum",CScore=20,CAScore=40,CState="거의 깨끗함",WScore=80,WAScore=80,WState="거의 깨끗함",TScore=10,TAScore=15,TState="보통",HScore=40,HAScore=45,HState="매우 나쁨")
     Age=Agesensor(Rating="",Rank=30)
     create_skin_pdf("김건강",SState,Age)
