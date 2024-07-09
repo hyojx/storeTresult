@@ -1278,7 +1278,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     
     # 제목1 추가 (한글) - 페이지 가운데에 배치
     draw_centered_string(c, "Greating store healthcare", height - 40, mainfont, 12, width)
-    draw_centered_string(c, "기본건강 프로그램 결과차트", height - 70, boldfont, 20, width)
+    draw_centered_string(c, "맞춤영양 프로그램 결과차트", height - 70, boldfont, 20, width)
     
     # 선 그리기 (x1, y1, x2, y2)
     c.setLineWidth(0.7)  # 라인의 굵기 설정
