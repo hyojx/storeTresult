@@ -665,41 +665,41 @@ def draw_part2(c,Nutrition,height):
 
     Food_Image(c,Nutrition,height)
 
-# 별 그리기
+# 별 그리기 (07.09 7시 수정)
 def draw_star(c,Vitastiq,height):
     star_size=18
     baseX=105
     baseY=height-502
     bet=107
 
-    if Vitastiq.Mg=="낮은"or Vitastiq.Mg=="경미":
+    if Vitastiq.Mg=="낮음"or Vitastiq.Mg=="경미":
         c.drawImage(filepath+"Star_red.png", baseX, baseY, star_size,star_size,mask='auto')
 
-    if Vitastiq.Biotin=="낮은" or Vitastiq.Biotin=="경미":
+    if Vitastiq.Biotin=="낮음" or Vitastiq.Biotin=="경미":
         c.drawImage(filepath+"Star_red.png", baseX+(bet*1), baseY, star_size,star_size,mask='auto')
 
-    if Vitastiq.Se=="낮은" or Vitastiq.Se=="경미":
+    if Vitastiq.Se=="낮음" or Vitastiq.Se=="경미":
         c.drawImage(filepath+"Star_red.png", baseX+(bet*2), baseY, star_size,star_size,mask='auto')
 
-    if Vitastiq.VitB2=="낮은" or Vitastiq.VitB2=="경미":
+    if Vitastiq.VitB2=="낮음" or Vitastiq.VitB2=="경미":
         c.drawImage(filepath+"Star_red.png", baseX+(bet*3), baseY, star_size,star_size,mask='auto')
 
-    if Vitastiq.Folate=="낮은" or Vitastiq.Folate=="경미":
+    if Vitastiq.Folate=="낮음" or Vitastiq.Folate=="경미":
         c.drawImage(filepath+"Star_red.png", baseX+(bet*4), baseY, star_size,star_size,mask='auto')
 
-    if Vitastiq.Zn=="낮은" or Vitastiq.Zn=="경미":
+    if Vitastiq.Zn=="낮음" or Vitastiq.Zn=="경미":
         c.drawImage(filepath+"Star_red.png", baseX, baseY-68, star_size,star_size,mask='auto')
 
-    if Vitastiq.VitC=="낮은" or Vitastiq.VitC=="경미":
+    if Vitastiq.VitC=="낮음" or Vitastiq.VitC=="경미":
         c.drawImage(filepath+"Star_red.png", baseX+(bet*1), baseY-68, star_size,star_size,mask='auto')
 
-    if Vitastiq.VitB1=="낮은" or Vitastiq.VitB1=="경미":
+    if Vitastiq.VitB1=="낮음" or Vitastiq.VitB1=="경미":
         c.drawImage(filepath+"Star_red.png", baseX+(bet*2), baseY-68, star_size,star_size,mask='auto')
 
-    if Vitastiq.VitE=="낮은" or Vitastiq.VitE=="경미":
+    if Vitastiq.VitE=="낮음" or Vitastiq.VitE=="경미":
         c.drawImage(filepath+"Star_red.png", baseX+(bet*3), baseY-68, star_size,star_size,mask='auto')
 
-    if Vitastiq.VitB6=="낮은" or Vitastiq.VitB6=="경미":
+    if Vitastiq.VitB6=="낮음" or Vitastiq.VitB6=="경미":
         c.drawImage(filepath+"Star_red.png", baseX+(bet*4), baseY-68, star_size,star_size,mask='auto')        
              
     return
@@ -1003,7 +1003,7 @@ def set_product_cat(Gender,Vitastiq,Agesensor):
                 pass  
             else:
                 field_value = getattr(Vitastiq, field_name)
-                if field_value =="낮음":
+                if field_value =="낮음":      #07.09 7시 수정
                     scorelist[i]=90
                 elif field_value=="경미":
                     scorelist[i]=95
@@ -1331,7 +1331,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         field_value = getattr(Vitastiq, field_name)
         if field_value=="경미":
             vitascore=vitascore-10
-        if field_value=="낮은":
+        if field_value=="낮음":         #07.09 7시 수정
             vitascore=vitascore-5
 
     if Nutrition.EatScore==0:
@@ -1589,7 +1589,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         c.drawRightString(189,height-730-80,"#종합")
 
     elif Pcat=="근력":
-        mglist=["오리진 칼슘 마그네슘 비타민 D","닥터라인 마그네슘","삼진제약 쿨멜팅 마그네슘 400","닥터트루 프리미엄 마그네슘","차일드라이프 액상 칼슘 마그네슘"]
+        mglist=["오리진 칼슘 마그네슘 비타민 D","닥터라인 마그네슘","삼진제약 쿨멜팅 마그네슘 400","닥터트루 프리미엄 마그네슘"]   #07.09 7시 수정
         totallist=["비타바움 비타민 B12+ V-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
         c.drawString(27,height-730-20,"﹒"+random.choice(mglist))
         c.drawString(27,height-730-40,"﹒"+"엔바이탈 마그네슘 Vit B6 Ease")
@@ -1603,7 +1603,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         folatelist=["닥터트루 프리미엄 유기농 엽산 800","프롬바이오 활성 엽산"]
         totallist=["비타바움 비타민 B12+ V-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
         c.drawString(27,height-730-20,"﹒"+random.choice(folatelist))
-        c.drawString(27,height-730-40,"﹒"+"삼진제약 비타민 D 4000 IU 아연맥스")
+        c.drawString(27,height-730-40,"﹒"+"닥터라인 셀렌 징크")       #07.09 7시 수정
         c.drawString(27,height-730-60,"﹒"+random.choice(totallist)) 
         c.setFillColorRGB(0.5,0.5,0.5)
         c.drawRightString(189,height-730-20,"#엽산")
@@ -1612,7 +1612,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 
     elif Pcat=="항산화":
         totallist=["비타바움 비타민 B12+ V-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
-        clist=["프롬바이오 비타민C 1000","비타바움 퓨어비타민C250","탑헬스 리포조미아 비타민C"]
+        clist=["프롬바이오 비타민C 1000","비타바움 퓨어비타민C250","탑헬스 리포조미아 비타민C","오리진 활력 비타민C 1000"]     #07.09 7시 수정
         c.drawString(27,height-730-20,"﹒"+random.choice(clist))
         c.drawString(27,height-730-40,"﹒"+"닥터라인 셀렌 징크")
         c.drawString(27,height-730-60,"﹒오리진 프리미엄 비타민 E 400IU")

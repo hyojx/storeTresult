@@ -953,7 +953,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.setLineWidth(0.2)
     c.roundRect(22,height-530,180,180,10)
     c.roundRect(206,height-530,180,180,10)
-    c.roundRect(390,height-530,180,180,10)
+    c.roundRect(395,height-530,180,180,10)     #07.09 7시 수정
 
     # 주스 추천
     c.setStrokeColorRGB(0.6,0.6,0.6)

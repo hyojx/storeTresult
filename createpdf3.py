@@ -23,7 +23,7 @@ pink1=Color(243/255,181/255,168/255)
 pink2=Color(248/255,215/255,208/255)
 orange1=Color(244/255,180/255,93/255)
 orange2=Color(250/255,220/255,180/255)
-green1=Color(198/255,220/255,155/255)
+green1=Color(152/255,191/255,73/255) #07.09 7시 수정
 green2=Color(229/255,239/255,209/255)
 
 # 폰트 등록 함수
@@ -417,10 +417,10 @@ def draw_skin_graph(c,SkinState,height):
     # 값에 따른 색 및 길이
     if SkinState.TScore == SkinState.TAScore==0:
         pass
-    elif SkinState.TScore < SkinState.TAScore:
+    elif SkinState.TAScore < SkinState.TScore:     #07.09 7시 수정
         c.setFillColorRGB(255/255,111/255,111/255)
         c.setStrokeColorRGB(255/255,111/255,111/255) 
-    elif SkinState.TAScore <= SkinState.TScore:
+    elif SkinState.TScore <= SkinState.TAScore:    #07.09 7시 수정
         c.setFillColorRGB(139/255,199/255,0)
         c.setStrokeColorRGB(139/255,199/255,0)
 
@@ -435,10 +435,10 @@ def draw_skin_graph(c,SkinState,height):
 
     if SkinState.CScore == SkinState.CAScore==0:
         pass
-    elif SkinState.CScore < SkinState.CAScore:
+    elif SkinState.CAScore < SkinState.CScore:     #07.09 7시 수정
         c.setFillColorRGB(255/255,111/255,111/255)
         c.setStrokeColorRGB(255/255,111/255,111/255)
-    elif SkinState.CAScore <= SkinState.CScore:
+    elif SkinState.CScore <= SkinState.CAScore:    #07.09 7시 수정
         c.setFillColorRGB(139/255,199/255,0)
         c.setStrokeColorRGB(139/255,199/255,0)
 
@@ -453,10 +453,10 @@ def draw_skin_graph(c,SkinState,height):
 
     if SkinState.WScore == SkinState.WAScore==0:
         pass
-    elif SkinState.WScore < SkinState.WAScore:
+    elif SkinState.WAScore < SkinState.WScore:      #07.09 7시 수정
         c.setFillColorRGB(255/255,111/255,111/255)
         c.setStrokeColorRGB(255/255,111/255,111/255)
-    elif SkinState.WAScore <= SkinState.WScore:
+    elif SkinState.WScore <= SkinState.WAScore:     #07.09 7시 수정
         c.setFillColorRGB(139/255,199/255,0)
         c.setStrokeColorRGB(139/255,199/255,0) 
 
@@ -471,10 +471,10 @@ def draw_skin_graph(c,SkinState,height):
 
     if SkinState.HScore == SkinState.HAScore==0:
         pass
-    elif SkinState.HScore < SkinState.HAScore:
+    elif SkinState.HAScore < SkinState.HScore:     #07.09 7시 수정
         c.setFillColorRGB(255/255,111/255,111/255)
         c.setStrokeColorRGB(255/255,111/255,111/255)
-    elif SkinState.HAScore <= SkinState.HScore:
+    elif SkinState.HScore <= SkinState.HAScore:    #07.09 7시 수정
         c.setFillColorRGB(139/255,199/255,0)
         c.setStrokeColorRGB(139/255,199/255,0)
 
@@ -613,15 +613,14 @@ def draw_panel(c,Agesensor,height):
 
     return
 
-# 07.09 6시 수정
 def state_to_int(state):
     state_mapping = {
-        "매우 나쁨": 6,
-        "나쁨": 5,
-        "보통": 4,
-        "거의 깨끗함": 3,
-        "깨끗함": 2,
-        "":1
+        "매우 나쁨": 1,
+        "나쁨": 2,
+        "보통": 3,
+        "거의 깨끗함": 4,
+        "깨끗함": 5,
+        "":6
     }
     return state_mapping.get(state.lower(), 5)
 
@@ -636,7 +635,7 @@ def set_rank(skin_state: SkinState):
     print(skin_state.CState+"/"+str(skin_state.CScore - skin_state.CAScore))
     print(skin_state.WState+"/"+str(skin_state.WScore - skin_state.WAScore))
     print(skin_state.TState+"/"+str(skin_state.TScore - skin_state.TAScore))
-    sorted_elements = sorted(elements.items(), key=lambda x: (x[1][0], -x[1][1]),reverse=True) # 07.09 6시 수정
+    sorted_elements = sorted(elements.items(), key=lambda x: (x[1][0], -x[1][1]))
     if skin_state.Type=="D":
         Glist.append("D")
         Glist.extend(sorted_elements[0][0],sorted_elements[1][0],sorted_elements[2][0])
@@ -830,8 +829,8 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     # 맞춤 상품 추천
     c.setStrokeColorRGB(0.6,0.6,0.6)
     c.setLineWidth(0.2)
-    c.roundRect(22,height-530,270,195,10)
     c.drawImage(filepath+"SS1.png",32,height-530,257,195,mask='auto')
+    c.roundRect(22,height-530,270,195,10)    #07.09 7시 수정
     c.drawImage(filepath+"SP"+str(random.randint(1,5))+".png",310,height-530,257,195,mask='auto')
     c.roundRect(300,height-530,270,195,10)
 
