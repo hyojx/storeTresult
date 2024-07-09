@@ -717,7 +717,7 @@ def set_category(Inbody):
             C_id="I_sh"
         else:
             C_id="N"    
-    if 115<=weightP:
+    elif 115<=weightP:
         if skeletalP<=110 and 160<=fatP:
             C_id="C_ow"
         if 110<=skeletalP and 80<fatP<160:
@@ -726,7 +726,7 @@ def set_category(Inbody):
             C_id="I_oo"
         else:
             C_id="N"     
-    if weightP<=85:
+    elif weightP<=85:
         if 90<skeletalP and fatP<=80:
             C_id="D_ls"
         if skeletalP<90 and fatP<=80:
