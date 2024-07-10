@@ -710,6 +710,9 @@ def set_category(Inbody):
     weightP=Inbody.Weight/(Inbody.Weight+Inbody.WeightControl)*100
     skeletalP=Inbody.FatFree/(Inbody.FatFree+Inbody.MuscleControl)*100
     fatP=Inbody.BodyFat/(Inbody.BodyFat+Inbody.FatControl)*100
+    print(weightP)
+    print(skeletalP)
+    print(fatP)
     if 85 < weightP <115:
         if skeletalP <= 90 and 80<fatP <160:
             C_id="C_sw"
@@ -724,16 +727,16 @@ def set_category(Inbody):
     elif 115<=weightP:                    #(07.09 4시 수정)
         if skeletalP<=110 and 160<=fatP:
             C_id="C_ow"
-        if 110<=skeletalP and 80<fatP<160:
+        elif 110<=skeletalP and 80<fatP<160:
             C_id="D_os"
-        if 110<=skeletalP and 160<=fatP:
+        elif 110<=skeletalP and 160<=fatP:
             C_id="I_oo"
         else:
             C_id="N"     
     elif weightP<=85:                     #(07.09 4시 수정)
         if 90<skeletalP and fatP<=80:
             C_id="D_ls"
-        if skeletalP<90 and fatP<=80:
+        elif skeletalP<90 and fatP<=80:
             C_id="I_lw"    
         else:
             C_id="N"             
@@ -1750,7 +1753,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 if __name__ == "__main__":
     Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다")
     Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="낮음", VitB2="", Zn="낮음", Se="", VitB6="", VitE="", Folate="")
-    Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=19.5,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9,Recomcal=2800)
+    Inbo=Inbody(InbodyScore=65,Weight=93.4,BodyFat=27.2,FatFree=66.2,ApproWeight=77.9,WeightControl=-15.5,MuscleControl=0,FatControl=-15.5,Recomcal=2800)
     Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
     Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
