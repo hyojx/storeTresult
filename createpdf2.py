@@ -764,16 +764,20 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     draw_alpha(c,Inbody_cat,height)
 
     #-------------- part4 체중관리 계획 --------------
-    # 본문 채우기 (07.09 5시 수정)
+    # 본문 채우기 (07.10 수정)
     user_fat_control=-round(Inbody.Weight+Inbody.MuscleControl-DGoal.Gweight,1)
-    if 0<user_fat_control and 0<Inbody.MuscleControl:
+    print(user_fat_control)
+    print(Inbody.MuscleControl)
+    if 0<=user_fat_control and 0<Inbody.MuscleControl:
         comment="지방은 "+str(user_fat_control)+"kg 늘리고, 근육은 "+str(Inbody.MuscleControl)+"kg 늘리기"
     elif user_fat_control<0 and Inbody.MuscleControl<0:
         comment="지방은 "+str(user_fat_control)+"kg 줄이고, 근육은 "+str(Inbody.MuscleControl)+"kg 줄이기"
-    elif user_fat_control<0 and 0<Inbody.MuscleControl:
+    elif user_fat_control<0 and 0<=Inbody.MuscleControl:
         comment="지방은 "+str(user_fat_control)+"kg 줄이고, 근육은 "+str(Inbody.MuscleControl)+"kg 늘리기"
-    elif 0<user_fat_control and Inbody.MuscleControl<0:
-        comment="지방은 "+str(user_fat_control)+"kg 늘리고, 근육은 "+str(Inbody.MuscleControl)+"kg 줄이기"        
+    elif 0<=user_fat_control and Inbody.MuscleControl<0:
+        comment="지방은 "+str(user_fat_control)+"kg 늘리고, 근육은 "+str(Inbody.MuscleControl)+"kg 줄이기"    
+
+    print(comment+"여기")        
     c.setFillColorRGB(0, 0, 0)
     c.setFont(boldfont, 12)
     c.drawString(315,height-360,"체중관리 계획")
@@ -1012,8 +1016,8 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     return img_path 
 
 if __name__=="__main__":
-    Inbo=Inbody(InbodyScore=66,Weight=59.1,BodyFat=22.8,FatFree=37,ApproWeight=52.9,WeightControl=-7.4,MuscleControl=3.5,FatControl=-10.9)
+    Inbo=Inbody(InbodyScore=83,Weight=77.5,BodyFat=12.1,FatFree=65.4,ApproWeight=77,WeightControl=-0.5,MuscleControl=0,FatControl=-0.5)
     Age=Agesensor(Rating="",Rank=30)
-    DGoal=DietGoal(Period="2주",Gweight=58,Rcal=2800,FoodR=5,WorkOutR=5)
+    DGoal=DietGoal(Period="2주",Gweight=77,Rcal=2800,FoodR=5,WorkOutR=5)
     IDetail=InbodyDetail(UpperLF="표준",UpperRF="이상",LowerLF="표준",LowerRF="이상",UpperLS="표준",UpperRS="이하",LowerLS="표준",LowerRS="이상")
     create_diet_pdf("김건강",Inbo,Age,DGoal,IDetail)
