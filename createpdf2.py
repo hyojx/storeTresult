@@ -11,6 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle
 from dataclasses import fields
 import random
+from datetime import date # 모듈추가
 
 filepath="static/image/diet/"
 resultfilepath="static/result/"
@@ -627,6 +628,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.setLineWidth(0.7)  # 라인의 굵기 설정
     c.setStrokeColorRGB(0.75, 0.75, 0.75)  # 라인의 색상 설정
     c.line(450, height - 100, 550, height - 100)
+    c.line(33, height - 98, 97, height - 98)
     
     # 내담자명
     c.drawImage(filepath+'user.png',455,height-100,20,20,mask='auto')
@@ -635,6 +637,8 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.setFont(boldfont, 13)
     c.setFillColorRGB(0.5, 0.5, 0.5)
     c.drawString(485,height-95,username)
+    c.setFont(boldfont, 11)
+    c.drawString(35,height-95,str(date.today().strftime("%Y.%m.%d")))
     
     # 사각형 그리기 (x, y, width, height)
     c.roundRect(20,height-325, 220, 210,15)
@@ -993,18 +997,6 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     # 2페이지 저장
     c.showPage()
 
-    print(salad_cal)
-    if salad_cal==300:
-        c.drawImage(filepath+"300.png",0,0,width,height)
-    elif salad_cal==400:
-        c.drawImage(filepath+"400.png",0,0,width,height)    
-    elif salad_cal==500:
-        c.drawImage(filepath+"500.png",0,0,width,height)
-    elif salad_cal==600:
-        c.drawImage(filepath+"600.png",0,0,width,height)    
-
-    c.showPage()
-
     c.save()
 
     # PDF를 이미지로 변환
@@ -1016,8 +1008,8 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     return img_path 
 
 if __name__=="__main__":
-    Inbo=Inbody(InbodyScore=83,Weight=77.5,BodyFat=12.1,FatFree=65.4,ApproWeight=77,WeightControl=-0.5,MuscleControl=0,FatControl=-0.5)
+    Inbo=Inbody(InbodyScore=83,Weight=83.7,BodyFat=16.1,FatFree=67.6,ApproWeight=79.5,WeightControl=-4.2,MuscleControl=0,FatControl=-4.2)
     Age=Agesensor(Rating="",Rank=30)
-    DGoal=DietGoal(Period="2주",Gweight=77,Rcal=2800,FoodR=5,WorkOutR=5)
+    DGoal=DietGoal(Period="2주",Gweight=80,Rcal=2800,FoodR=5,WorkOutR=5)
     IDetail=InbodyDetail(UpperLF="표준",UpperRF="이상",LowerLF="표준",LowerRF="이상",UpperLS="표준",UpperRS="이하",LowerLS="표준",LowerRS="이상")
     create_diet_pdf("김건강",Inbo,Age,DGoal,IDetail)

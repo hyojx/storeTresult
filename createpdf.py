@@ -11,6 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Table, TableStyle
 from dataclasses import fields
 import random
+from datetime import date # 모듈추가
 
 filepath="static/image/basic/"
 resultfilepath="static/result/"
@@ -1294,6 +1295,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     c.setLineWidth(0.7)  # 라인의 굵기 설정
     c.setStrokeColorRGB(0.75, 0.75, 0.75)  # 라인의 색상 설정
     c.line(450, height - 100, 550, height - 100)
+    c.line(33, height - 98, 97, height - 98)
     
     # 내담자명
     c.drawImage(filepath+'user.png',455,height-100,20,20,mask='auto')
@@ -1302,6 +1304,8 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     c.setFont(boldfont, 13)
     c.setFillColorRGB(0.5, 0.5, 0.5)
     c.drawString(485,height-95,username)
+    c.setFont(boldfont, 11)
+    c.drawString(35,height-95,str(date.today().strftime("%Y.%m.%d")))
     
     # 사각형 그리기 (x, y, width, height)
     c.roundRect(20,height-430, 265+5, 310,15)
@@ -1332,9 +1336,9 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     for field in fields(Vitastiq):
         field_name = field.name
         field_value = getattr(Vitastiq, field_name)
-        if field_value=="경미":
+        if field_value=="낮음":
             vitascore=vitascore-10
-        if field_value=="낮음":         #07.09 7시 수정
+        if field_value=="경미":         #07.09 7시 수정
             vitascore=vitascore-5
 
     if Nutrition.EatScore==0:
@@ -1672,7 +1676,8 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     c.setFont(boldfont, 10)
 
     if Scat=="A":
-        c.drawImage(filepath+'BP'+str(random.randint(1,5))+'.png',360,height-820,223,210,mask='auto')
+        c.drawImage(filepath+'BPS'+str(random.randint(1,5))+'.png',360,height-715,223,106,mask='auto')
+        c.drawImage(filepath+'BPD'+str(random.randint(1,5))+'.png',360,height-820,223,106,mask='auto')
         c.roundRect(445,height-573,45,16,8,fill=True)
         c.roundRect(495,height-573,70,16,8,fill=True)
 
@@ -1681,21 +1686,24 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         c.drawString(503,height-568.7,"#고식이섬유")
 
     elif Scat=="B":
-        c.drawImage(filepath+'BP'+str(random.randint(6,10))+'.png',360,height-820,223,210,mask='auto')
+        c.drawImage(filepath+'BPS'+str(random.randint(6,10))+'.png',360,height-715,223,106,mask='auto')
+        c.drawImage(filepath+'BPD'+str(random.randint(6,10))+'.png',360,height-820,223,106,mask='auto')
         c.roundRect(445,height-573,60,16,8,fill=True)
     
         c.setFillColorRGB(1,1,1)
         c.drawString(456,height-568.7,"#고단백")
 
     elif Scat=="C":
-        c.drawImage(filepath+'BP'+str(random.randint(10,15))+'.png',360,height-820,223,210,mask='auto')
+        c.drawImage(filepath+'BPS'+str(random.randint(10,15))+'.png',360,height-715,223,106,mask='auto')
+        c.drawImage(filepath+'BPD'+str(random.randint(10,15))+'.png',360,height-820,223,106,mask='auto')
         c.roundRect(445,height-573,60,16,8,fill=True)
 
         c.setFillColorRGB(1,1,1)
         c.drawString(452,height-568.7,"#저나트륨")
 
     elif Scat=="D": 
-        c.drawImage(filepath+'BP'+str(random.randint(16,20))+'.png',360,height-820,223,210,mask='auto')   
+        c.drawImage(filepath+'BPS'+str(random.randint(16,20))+'.png',360,height-715,223,106,mask='auto')   
+        c.drawImage(filepath+'BPD'+str(random.randint(16,20))+'.png',360,height-820,223,106,mask='auto')
         c.roundRect(445,height-573,45,16,8,fill=True)
         c.roundRect(495,height-573,70,16,8,fill=True)
 
@@ -1710,33 +1718,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 
     
     # 2페이지 저장
-    c.showPage()
-    img_name=""
-    if Scat=="A":
-        img_name+="A"
-    elif Scat=="B":
-        img_name+="B"    
-    elif Scat=="C":
-        img_name+=""
-    elif Scat=="D":
-        img_name+="D"
-
-    if Inbody.Recomcal<1500:
-        img_name+="1"
-    elif 1500<Inbody.Recomcal<=2000:
-        img_name+="2"
-    elif 2000<Inbody.Recomcal<=2500:
-        img_name+="3"  
-    elif 2500<Inbody.Recomcal<=3000:
-        img_name+="4"
-    elif 3000<Inbody.Recomcal:
-        img_name+="5"    
-
-    img_name+=".png"      
-
-    c.drawImage(filepath+img_name,0,0,width,height)    
-
-    c.showPage        
+    c.showPage()        
 
     c.save()
 

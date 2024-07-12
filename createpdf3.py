@@ -9,6 +9,7 @@ from dataclasses import fields
 from reportlab.lib.colors import Color
 import random
 from reportlab.lib.pagesizes import letter
+from datetime import date # 모듈추가
 
 
 filepath="static/image/skin/"
@@ -667,6 +668,7 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     c.setLineWidth(0.7)  # 라인의 굵기 설정
     c.setStrokeColorRGB(0.75, 0.75, 0.75)  # 라인의 색상 설정
     c.line(450, height - 100, 550, height - 100)
+    c.line(33, height - 98, 97, height - 98)
     
     # 내담자명
     c.drawImage(filepath+'user.png',455,height-100,20,20,mask='auto')
@@ -675,6 +677,8 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     c.setFont(boldfont, 13)
     c.setFillColorRGB(0.5, 0.5, 0.5)
     c.drawString(485,height-95,username)
+    c.setFont(boldfont, 11)
+    c.drawString(35,height-95,str(date.today().strftime("%Y.%m.%d")))
     
     # 사각형 그리기 (x, y, width, height)
     c.roundRect(200,height-325,370, 210,15)
@@ -798,16 +802,18 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     c.setFont(boldfont, 18)
     c.setFillColorRGB(0,0,0)
     c.drawString(25,height-35,"맞춤 식재료")
-    c.drawString(25,height-295,"맞춤 상품")
+    c.drawString(25,height-295,"맞춤 샐러드")
+    c.drawString(310,height-295,"건강기능식품")
     c.drawString(25,height-570,"맞춤 주스")
-    c.drawString(310,height-570,"건강기능식품")
+    c.drawString(310,height-570,"건강한 피부 식습관")
 
     c.setFont(mainfont, 12)
     c.setFillColorRGB(0.2,0.2,0.2)
     c.drawString(25,height-58,'"건강한 피부를 위한 맞춤 식재료"')
     c.drawString(25,height-319,'"내면까지 예뻐지는 이너뷰티 상품"')
+    c.drawString(310,height-319,'"나의 피부고민을 해결해줄 영양제"')
     c.drawString(25,height-593,'"생기있는 나를 위한 뷰티 주스"')
-    c.drawString(310,height-593,'"나의 피부 고민을 해결해 줄 영양제"')
+    c.drawString(310,height-593,'"피부 건강에 좋지않은 음식 tip"')
 
 
     c.drawImage(filepath+'I'+random.choice(['7','8'])+'.png',30,height-250,158,175,mask='auto')
@@ -831,8 +837,7 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     c.setLineWidth(0.2)
     c.drawImage(filepath+"SS1.png",32,height-530,257,195,mask='auto')
     c.roundRect(22,height-530,270,195,10)    #07.09 7시 수정
-    c.drawImage(filepath+"SP"+str(random.randint(1,5))+".png",310,height-530,257,195,mask='auto')
-    c.roundRect(300,height-530,270,195,10)
+    c.drawImage(filepath+"SF"+str(random.randint(1,5))+".png",310,height-515,270,167,mask='auto')
 
     # 주스 추천
     c.setStrokeColorRGB(0.6,0.6,0.6)
@@ -841,7 +846,10 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     c.drawImage(filepath+"SJ1.png",22,height-820,270,210,mask='auto')
 
     # 건기식 추천
-    c.drawImage(filepath+"SF1.png",310,height-790,270,167,mask='auto')
+    c.setStrokeColorRGB(0.6,0.6,0.6)
+    c.setLineWidth(0.2)
+    c.roundRect(310,height-820,270,210,10)
+    c.drawImage(filepath+"SC1.png",316,height-805,260,180,mask='auto')
 
     # 2페이지 저장
     c.showPage()
