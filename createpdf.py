@@ -1465,95 +1465,99 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     # 선 그리기 (x1, y1, x2, y2)
     c.setLineWidth(0.7)  # 라인의 굵기 설정
     c.setStrokeColorRGB(0.7, 0.7, 0.7)  # 라인의 색상 설정
-    c.line(10, height - 265, 580, height - 265)
-    c.line(10, height - 525, 580, height - 525)
+    c.line(10, height - 40, 580, height - 40)
+    c.line(10, height - 265-25, 580, height - 265-25)
+    c.line(10, height - 530, 580, height - 525)
 
     c.drawImage(filepath+'Rectangle 11.png',15,height-830,184,290,mask='auto')
     
+    c.setFillColorRGB(0,0,0)
+    draw_centered_string(c,Name+"님 맞춤상품 솔루션",height-30,boldfont,18,width)
+
     c.setFont(boldfont, 18)
     c.setFillColorRGB(0,0,0)
-    c.drawString(25,height-35,"맞춤 식재료")
-    c.drawString(25,height-295,"건강 반찬")
-    c.drawString(55,height-565,"맞춤 영양제")
+    c.drawString(25,height-35-30,"식재료")
+    c.drawString(25,height-295-25,"반찬")
+    c.drawString(55,height-565,"영양제")
     c.drawString(206,height-570,"착즙 주스")
-    c.drawString(360,height-570,"건강 상품")
+    c.drawString(360,height-570,"상품")
 
     # 유형결정 및 식재료 추천
     Pcat=set_product_cat(Gender,Vitastiq,Agesensor)
     Pimg_list=set_ingre_image(Pcat)
     print(Pimg_list)
     if Pimg_list[2]!=None:
-        c.drawImage(filepath+Pimg_list[0],30,height-250,158,175,mask='auto')
-        c.drawImage(filepath+Pimg_list[1],215,height-250,158,175,mask='auto')
-        c.drawImage(filepath+Pimg_list[2],400,height-250,158,175,mask='auto')
+        c.drawImage(filepath+Pimg_list[0],30,height-250-30,158,175,mask='auto')
+        c.drawImage(filepath+Pimg_list[1],215,height-250-30,158,175,mask='auto')
+        c.drawImage(filepath+Pimg_list[2],400,height-250-30,158,175,mask='auto')
 
         c.setFillColorRGB(191/255,191/255,191/255)
         c.setStrokeColorRGB(191/255,191/255,191/255)
-        c.roundRect(300,height-63,70,20,10,fill=True)
-        c.roundRect(380,height-63,70,20,10,fill=True)
-        c.roundRect(460,height-63,70,20,10,fill=True)
+        c.roundRect(300,height-63-30,70,20,10,fill=True)
+        c.roundRect(380,height-63-30,70,20,10,fill=True)
+        c.roundRect(460,height-63-30,70,20,10,fill=True)
 
     elif Pimg_list[2]==None:
-        c.drawImage(filepath+Pimg_list[0],30,height-250,158,175,mask='auto')
-        c.drawImage(filepath+Pimg_list[1],215,height-250,158,175,mask='auto')
+        c.drawImage(filepath+Pimg_list[0],30,height-250-30,158,175,mask='auto')
+        c.drawImage(filepath+Pimg_list[1],215,height-250-30,158,175,mask='auto')
 
         c.setFillColorRGB(191/255,191/255,191/255)
         c.setStrokeColorRGB(191/255,191/255,191/255)
-        c.roundRect(300,height-63,70,20,10,fill=True)
-        c.roundRect(380,height-63,70,20,10,fill=True)
+        c.roundRect(300,height-63-30,70,20,10,fill=True)
+        c.roundRect(380,height-63-30,70,20,10,fill=True)
 
     c.setFillColorRGB(1,1,1)
     c.setFont(boldfont, 11)
     if Pcat=="활력":
-        c.drawString(315,height-57,"#비오틴")
-        c.drawString(390,height-57,"#비타민B1")
-        c.drawString(469,height-57,"#비타민B2")
+        c.drawString(315,height-57-30,"#비오틴")
+        c.drawString(390,height-57-30,"#비타민B1")
+        c.drawString(469,height-57-30,"#비타민B2")
 
     if Pcat=="항산화":
-        c.drawString(311,height-57,"#비타민C")
-        c.drawString(394,height-57,"#비타민E")
-        c.drawString(476,height-57,"#셀레늄")  
+        c.drawString(311,height-57-30,"#비타민C")
+        c.drawString(394,height-57-30,"#비타민E")
+        c.drawString(476,height-57-30,"#셀레늄")  
 
     if Pcat=="면역력":
-        c.drawString(319,height-57," #아연")
-        c.drawString(399,height-57," #엽산")   
+        c.drawString(319,height-57-30," #아연")
+        c.drawString(399,height-57-30," #엽산")   
 
     if Pcat=="근력":
-        c.drawString(310,height-57,"#마그네슘")
-        c.drawString(389,height-57,"#비타민B6")       
+        c.drawString(310,height-57-30,"#마그네슘")
+        c.drawString(389,height-57-30,"#비타민B6")       
 
     # 반찬 추천 유형결정 및 반찬 추천
     Scat=set_sidedish_cat(Nutrition,NutriD)
     Simg_list=set_sidedish_image(Inbody.Recomcal,Scat)
     
-    c.drawImage(filepath+Simg_list[0],30,height-510,150,175,mask='auto')
-    c.drawImage(filepath+Simg_list[1],215,height-510,150,175,mask='auto')
-    c.drawImage(filepath+Simg_list[2],400,height-510,150,175,mask='auto')
+    c.drawImage(filepath+Simg_list[0],30,height-510-5,150,154,mask='auto')
+    c.drawImage(filepath+Simg_list[1],215,height-510-5,150,154,mask='auto')
+    c.drawImage(filepath+Simg_list[2],400,height-510-5,150,154,mask='auto')
 
     c.setFillColorRGB(255/255,239/255,225/255)
     c.setStrokeColorRGB(255/255,239/255,225/255)
-    c.roundRect(467,height-322,80,20,10,fill=True)
+    c.roundRect(467,height-322-25,80,20,10,fill=True)
 
     c.setFont(boldfont, 10)
-    c.setFillColorRGB(127/255,96/255,0/255)
-    c.drawString(482,height-315.5,"메인 식재료")
+    c.setFillColorRGB(0,0,0)
+    c.drawString(482,height-315.5-25,"메인 식재료")
 
     # 케이스에 따른 코멘트 작성
     c.setFont(mainfont, 12)
     c.setFillColorRGB(0.2,0.2,0.2)
-    c.drawString(25,height-58,'"나에게 부족한 영양소를 채워주는 맞춤 식재료"')
+    c.drawString(25,height-58-30,'"나에게 부족한 영양소를 채워주는 맞춤 식재료"')
 
     if Scat=="A":
-        c.drawString(25,height-318,'"저당/고식이섬유 맞춤 반찬으로 구성하는 집밥"')
+        c.drawString(25,height-318-25,'"저당/고식이섬유 맞춤 반찬으로 구성하는 집밥"')
         c.drawString(360,height-595,"나에게 맞는 저당/고식이섬유 건강상품")
     elif Scat=="B":
-        c.drawString(25,height-318,'"단백질이 풍부한 맞춤 반찬으로 구성하는 집밥"')
+        c.drawString(25,height-318-25,'"단백질이 풍부한 맞춤 반찬으로 구성하는 집밥"')
         c.drawString(360,height-595,"나에게 부족한 단백질을 채워줄 건강상품")    
     elif Scat=="C":
-        c.drawString(25,height-318,'"저나트륨 맞춤 반찬으로 구성하는 집밥"')
+        c.drawString(25,height-318-25,'"저나트륨 맞춤 반찬으로 구성하는 집밥"')
         c.drawString(360,height-595,"나에게 맞는 저나트륨 건강상품")  
     elif Scat=="D":
-        c.drawString(25,height-318,'"저지방/고식이섬유 맞춤 반찬으로 구성하는 집밥"')
+        c.drawString(25,height-318-25,'"저지방/고식이섬유 맞춤 반찬으로 구성하는 집밥"')
         c.drawString(360,height-595,"나에게 맞는 저지방/고식이섬유 건강상품")   
          
     c.drawString(206,height-595,Pcat+'에 좋은 영양소 가득') 

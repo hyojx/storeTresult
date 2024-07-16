@@ -637,9 +637,9 @@ def set_rank(skin_state: SkinState):
     print(skin_state.WState+"/"+str(skin_state.WScore - skin_state.WAScore))
     print(skin_state.TState+"/"+str(skin_state.TScore - skin_state.TAScore))
     sorted_elements = sorted(elements.items(), key=lambda x: (x[1][0], -x[1][1]))
-    if skin_state.Type=="D":
+    if skin_state.Type=="건성":   # 로직수정 07.15
         Glist.append("D")
-        Glist.extend(sorted_elements[0][0],sorted_elements[1][0],sorted_elements[2][0])
+        Glist.extend([sorted_elements[0][0],sorted_elements[1][0],sorted_elements[2][0]])   # 로직수정 07.15
     else :
         Slist=[skin_state.CState,skin_state.WState,skin_state.TState]
         num=Slist.count("")
@@ -796,60 +796,62 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     # 선 그리기 (x1, y1, x2, y2)
     c.setLineWidth(0.7)  # 라인의 굵기 설정
     c.setStrokeColorRGB(0.7, 0.7, 0.7)  # 라인의 색상 설정
-    c.line(10, height - 265, 580, height - 265)
-    c.line(10, height - 540, 580, height - 540)
+    c.line(10, height - 40, 580, height - 40)
+    c.line(10, height - 290, 580, height - 290)
+    c.line(10, height - 560, 580, height - 560)
     
     c.setFont(boldfont, 18)
     c.setFillColorRGB(0,0,0)
-    c.drawString(25,height-35,"맞춤 식재료")
-    c.drawString(25,height-295,"맞춤 샐러드")
-    c.drawString(310,height-295,"건강기능식품")
-    c.drawString(25,height-570,"맞춤 주스")
-    c.drawString(310,height-570,"건강한 피부 식습관")
+    draw_centered_string(c,Name+"님 맞춤상품 솔루션",height-30,boldfont,18,width)
+    c.drawString(25,height-65,"식재료")
+    c.drawString(25,height-315,"샐러드")
+    c.drawString(310,height-315,"영양제")
+    c.drawString(25,height-590,"착즙 주스")
+    c.drawString(310,height-590,"건강한 피부 식습관")
 
     c.setFont(mainfont, 12)
     c.setFillColorRGB(0.2,0.2,0.2)
-    c.drawString(25,height-58,'"건강한 피부를 위한 맞춤 식재료"')
-    c.drawString(25,height-319,'"내면까지 예뻐지는 이너뷰티 상품"')
-    c.drawString(310,height-319,'"나의 피부고민을 해결해줄 영양제"')
-    c.drawString(25,height-593,'"생기있는 나를 위한 뷰티 주스"')
-    c.drawString(310,height-593,'"피부 건강에 좋지않은 음식 tip"')
+    c.drawString(25,height-88,'"건강한 피부를 위한 맞춤 식재료"')
+    c.drawString(25,height-339,'"내면까지 예뻐지는 이너뷰티 상품"')
+    c.drawString(310,height-339,'"나의 피부고민을 해결해줄 영양제"')
+    c.drawString(25,height-613,'"생기있는 나를 위한 뷰티 주스"')
+    c.drawString(310,height-613,'"피부 건강에 좋지않은 음식 tip"')
 
 
-    c.drawImage(filepath+'I'+random.choice(['7','8'])+'.png',30,height-250,158,175,mask='auto')
-    c.drawImage(filepath+'I'+random.choice(['9','10'])+'.png',215,height-250,158,175,mask='auto')
-    c.drawImage(filepath+'I'+random.choice(['11','12'])+'.png',400,height-250,158,175,mask='auto')
+    c.drawImage(filepath+'I'+random.choice(['7','8'])+'.png',30,height-280,158,175,mask='auto')
+    c.drawImage(filepath+'I'+random.choice(['9','10'])+'.png',215,height-280,158,175,mask='auto')
+    c.drawImage(filepath+'I'+random.choice(['11','12'])+'.png',400,height-280,158,175,mask='auto')
 
     c.setFillColorRGB(191/255,191/255,191/255)
     c.setStrokeColorRGB(191/255,191/255,191/255)
-    c.roundRect(220,height-63,70,20,10,fill=True)
-    c.roundRect(300,height-63,70,20,10,fill=True)
-    c.roundRect(380,height-63,70,20,10,fill=True)
+    c.roundRect(220,height-93,70,20,10,fill=True)
+    c.roundRect(300,height-93,70,20,10,fill=True)
+    c.roundRect(380,height-93,70,20,10,fill=True)
 
     c.setFillColorRGB(1,1,1)
     c.setFont(boldfont, 11)
-    c.drawString(232,height-57,"#비타민C")
-    c.drawString(312,height-57,"#비타민E")
-    c.drawString(396.5,height-57,"#셀레늄")
+    c.drawString(232,height-87,"#비타민C")
+    c.drawString(312,height-87,"#비타민E")
+    c.drawString(396.5,height-87,"#셀레늄")
 
     # 맞춤 상품 추천
     c.setStrokeColorRGB(0.6,0.6,0.6)
     c.setLineWidth(0.2)
-    c.drawImage(filepath+"SS1.png",32,height-530,257,195,mask='auto')
-    c.roundRect(22,height-530,270,195,10)    #07.09 7시 수정
-    c.drawImage(filepath+"SF"+str(random.randint(1,5))+".png",310,height-515,270,167,mask='auto')
+    c.drawImage(filepath+"SS1.png",32,height-550,257,195,mask='auto')
+    c.roundRect(22,height-550,270,195,10)    #07.09 7시 수정
+    c.drawImage(filepath+"SF"+str(random.randint(1,5))+".png",310,height-535,270,167,mask='auto')
 
     # 주스 추천
     c.setStrokeColorRGB(0.6,0.6,0.6)
     c.setLineWidth(0.2)
-    c.roundRect(22,height-820,270,210,10)
-    c.drawImage(filepath+"SJ1.png",22,height-820,270,210,mask='auto')
+    c.roundRect(22,height-830,270,200,10)
+    c.drawImage(filepath+"SJ1.png",37,height-830,270,200,mask='auto')
 
     # 건기식 추천
     c.setStrokeColorRGB(0.6,0.6,0.6)
     c.setLineWidth(0.2)
-    c.roundRect(310,height-820,270,210,10)
-    c.drawImage(filepath+"SC1.png",316,height-805,260,180,mask='auto')
+    c.roundRect(310,height-830,270,200,10)
+    c.drawImage(filepath+"SC1.png",316,height-820,260,180,mask='auto')
 
     # 2페이지 저장
     c.showPage()
@@ -865,6 +867,6 @@ def create_skin_pdf(Name,SkinState,Agesensor):
     return img_path 
 
 if __name__=="__main__":
-    SState=SkinState(Concern=["모공크기","잡티"],Type="복합성",TZWater="Normal",UZWater="Normal",TZOil="Sebum",UZOil="Sebum",CScore=20,CAScore=40,CState="거의 깨끗함",WScore=80,WAScore=80,WState="거의 깨끗함",TScore=10,TAScore=15,TState="보통",HScore=40,HAScore=45,HState="매우 나쁨")
+    SState=SkinState(Concern=["모공크기","잡티"],Type="건성",TZWater="Normal",UZWater="Normal",TZOil="Sebum",UZOil="Sebum",CScore=20,CAScore=40,CState="거의 깨끗함",WScore=80,WAScore=80,WState="거의 깨끗함",TScore=10,TAScore=15,TState="보통",HScore=40,HAScore=45,HState="매우 나쁨")
     Age=Agesensor(Rating="",Rank=30)
     create_skin_pdf("김건강",SState,Age)

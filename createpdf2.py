@@ -77,9 +77,9 @@ def set_category(Inbody):
         else:
             C_id="N"     
     elif weightP<=85:
-        if 90<skeletalP and fatP<=80:
+        if 90<=skeletalP and fatP<=160: # 로직수정 07.15
             C_id="D_ls"
-        elif skeletalP<90 and fatP<=80:
+        elif skeletalP<90 and fatP<=160: # 로직수정 07.15
             C_id="I_lw"    
         else:
             C_id="N"             
@@ -253,17 +253,17 @@ def draw_inbody(c,Inbody,height):
         c.roundRect(90,height2, skeletalW, 15,7.5,fill=1)    
 
 
-    if fatP<=85 :
+    if fatP<=80 :   # 로직수정 07.15
         c.setFillColorRGB(1,208/255,20/255)
         c.setStrokeColorRGB(1,208/255,20/255)
         c.roundRect(90,height3, fatW, 15,7.5,fill=1)
 
-    if 85<fatP<115 :
+    if 80<fatP<160 :   # 로직수정 07.15
         c.setFillColorRGB(134/255,206/255,2/255)
         c.setStrokeColorRGB(134/255,206/255,2/255)
         c.roundRect(90,height3, fatW, 15,7.5,fill=1)
 
-    if 115<=fatP :
+    if 160<=fatP :   # 로직수정 07.15
         c.setFillColorRGB(1,111/255,111/255)
         c.setStrokeColorRGB(1,111/255,111/255)
         c.roundRect(90,height3, fatW, 15,7.5,fill=1)     
@@ -378,7 +378,7 @@ def set_comment(IDetail):
         comments["first_Fcomment"]="체지방 부족"
 
         if lowfat_count==4:
-            comments["second_Fcomment"]="전신" 
+            comments["second_Fcomment"]="전신 체지방" 
             comments["fat_img"]="LF_all.png"
 
         elif lowfat_count==3:
@@ -549,7 +549,7 @@ def set_comment(IDetail):
         comments["first_Scomment"]="근육량 강화"
 
         if lowske_count==4:
-            comments["second_Scomment"]="전신" 
+            comments["second_Scomment"]="전신 근육량" 
             comments["muscle_img"]="LM_all.png"
 
         elif lowske_count==3:
@@ -604,7 +604,7 @@ def set_comment(IDetail):
 
     else: 
         comments["first_Scomment"]="근육량 적정"
-        comments["second_Scomment"]="전신 근육량 적정" 
+        comments["second_Scomment"]="전신 근육량" 
         comments["muscle_img"]="AM_good.png"   
 
        
@@ -897,15 +897,17 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     # 선 그리기 (x1, y1, x2, y2)
     c.setLineWidth(0.7)  # 라인의 굵기 설정
     c.setStrokeColorRGB(0.7, 0.7, 0.7)  # 라인의 색상 설정
-    c.line(10, height - 265, 580, height - 265)
-    c.line(10, height - 540, 580, height - 540)
+    c.line(10, height - 40, 580, height - 40)
+    c.line(10, height - 265-25, 580, height - 265-25)
+    c.line(10, height - 540-20, 580, height - 540-20)
     
     c.setFont(boldfont, 18)
     c.setFillColorRGB(0,0,0)
-    c.drawString(25,height-35,"맞춤 식재료")
-    c.drawString(25,height-295,"맞춤 샐러드")
-    c.drawString(25,height-570,"맞춤 주스")
-    c.drawString(310,height-570,"맞춤 상품")
+    draw_centered_string(c,Name+"님 맞춤상품 솔루션",height-30,boldfont,18,width)
+    c.drawString(25,height-35-30,"식재료")
+    c.drawString(25,height-295-25,"샐러드")
+    c.drawString(25,height-570-20,"착즙 주스")
+    c.drawString(310,height-570-20,"상품")
 
     # 샐러드 칼로리 구간 결정
     if (DGoal.Rcal-foodcontrol)/3<=1000:
@@ -920,78 +922,78 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     # 코멘트 작성
     c.setFont(mainfont, 12)
     c.setFillColorRGB(0.2,0.2,0.2)
-    c.drawString(25,height-58,'"다이어터를 위해 에너지 대사에 도움을 주는 식재료"')
-    c.drawString(25,height-318,'"하루 '+str(foodcontrol)+"kcal를 줄이기 위한 "+str(salad_cal)+'kcal 샐러드 토핑추천"')
-    c.drawString(25,height-593,'"신진대사를 활발하게 하는 영양소 가득"')
+    c.drawString(25,height-58-30,'"다이어터를 위해 에너지 대사에 도움을 주는 식재료"')
+    c.drawString(25,height-318-25,'"하루 '+str(foodcontrol)+"kcal를 줄이기 위한 "+str(salad_cal)+'kcal 샐러드 토핑추천"')
+    c.drawString(25,height-593-20,'"신진대사를 활발하게 하는 영양소 가득"')
     c.setFont(mainfont, 10)
     c.setFillColorRGB(0.5,0.5,0.5)
-    c.drawString(30,height-335,"저칼로리 드레싱과 함께 했을 때 "+str(salad_cal)+"kcal에요.")
+    c.drawString(30,height-335-25,"저칼로리 드레싱과 함께 했을 때 "+str(salad_cal)+"kcal에요.")
 
 
     # 식재료 추천
-    c.drawImage(filepath+'I'+random.choice(['21','22'])+'.png',30,height-250,158,175,mask='auto')
-    c.drawImage(filepath+'I'+random.choice(['23','24'])+'.png',215,height-250,158,175,mask='auto')
-    c.drawImage(filepath+'I'+random.choice(['25','26'])+'.png',400,height-250,158,175,mask='auto')
+    c.drawImage(filepath+'I'+random.choice(['21','22'])+'.png',30,height-250-30,158,175,mask='auto')
+    c.drawImage(filepath+'I'+random.choice(['23','24'])+'.png',215,height-250-30,158,175,mask='auto')
+    c.drawImage(filepath+'I'+random.choice(['25','26'])+'.png',400,height-250-30,158,175,mask='auto')
 
     c.setFillColorRGB(191/255,191/255,191/255)
     c.setStrokeColorRGB(191/255,191/255,191/255)
-    c.roundRect(320,height-63,70,20,10,fill=True)
-    c.roundRect(400,height-63,70,20,10,fill=True)
-    c.roundRect(480,height-63,70,20,10,fill=True)
+    c.roundRect(320,height-63-30,70,20,10,fill=True)
+    c.roundRect(400,height-63-30,70,20,10,fill=True)
+    c.roundRect(480,height-63-30,70,20,10,fill=True)
 
     c.setFillColorRGB(1,1,1)
     c.setFont(boldfont, 11)
-    c.drawString(330,height-57,"#비타민B1")
-    c.drawString(411,height-57,"#판토텐산")
-    c.drawString(495,height-57,"#비오틴")
+    c.drawString(330,height-57-30,"#비타민B1")
+    c.drawString(411,height-57-30,"#판토텐산")
+    c.drawString(495,height-57-30,"#비오틴")
      
-    c.drawImage(filepath+"DS0.png",470,height-335,100,50) 
+    c.drawImage(filepath+"DS0.png",470,height-335-25,100,50) 
 
     # 샐러드 추천
     if salad_cal==300:
-        c.drawImage(filepath+"DS1.png",20,height-530,551,180,mask='auto')
+        c.drawImage(filepath+"DS1.png",20,height-530-15,551,180,mask='auto')
     elif salad_cal==400:
-        c.drawImage(filepath+"DS2.png",20,height-530,551,180,mask='auto')
+        c.drawImage(filepath+"DS2.png",20,height-530-15,551,180,mask='auto')
     elif salad_cal==500:
-        c.drawImage(filepath+"DS3.png",20,height-530,551,180,mask='auto')    
+        c.drawImage(filepath+"DS3.png",20,height-530-15,551,180,mask='auto')    
     elif salad_cal==600:
-        c.drawImage(filepath+"DS4.png",20,height-530,551,180,mask='auto')    
+        c.drawImage(filepath+"DS4.png",20,height-530-15,551,180,mask='auto')    
 
     c.setStrokeColorRGB(0.6,0.6,0.6)
     c.setLineWidth(0.2)
-    c.roundRect(22,height-530,180,180,10)
-    c.roundRect(206,height-530,180,180,10)
-    c.roundRect(395,height-530,180,180,10)     #07.09 7시 수정
+    c.roundRect(22,height-530-20,180,180,10)
+    c.roundRect(206,height-530-20,180,180,10)
+    c.roundRect(395,height-530-20,180,180,10)     #07.09 7시 수정
 
     # 주스 추천
     c.setStrokeColorRGB(0.6,0.6,0.6)
     c.setLineWidth(0.2)
-    c.roundRect(22,height-820,270,190,10)
-    c.drawImage(filepath+"DJ1.png",22,height-820,270,190,mask='auto')
+    c.roundRect(22,height-835,270,180,10)
+    c.drawImage(filepath+"DJ1.png",27,height-835,260,180,mask='auto')
 
     c.setFillColorRGB(191/255,191/255,191/255)
     c.setStrokeColorRGB(191/255,191/255,191/255)
-    c.roundRect(30,height-623,70,20,10,fill=True)
-    c.roundRect(110,height-623,70,20,10,fill=True)
-    c.roundRect(190,height-623,70,20,10,fill=True)
+    c.roundRect(30,height-623-20,70,20,10,fill=True)
+    c.roundRect(110,height-623-20,70,20,10,fill=True)
+    c.roundRect(190,height-623-20,70,20,10,fill=True)
 
     c.setFillColorRGB(1,1,1)
     c.setFont(boldfont, 11)
-    c.drawString(40,height-616.5,"#비타민B1")
-    c.drawString(121,height-616.5,"#판토텐산")
-    c.drawString(205,height-616.5,"#비오틴")
+    c.drawString(40,height-616.5-20,"#비타민B1")
+    c.drawString(121,height-616.5-20,"#판토텐산")
+    c.drawString(205,height-616.5-20,"#비오틴")
 
     # 상품 추천
     c.setStrokeColorRGB(0.6,0.6,0.6)
     c.setLineWidth(0.2)
-    c.drawImage(filepath+"DP"+str(random.randint(1,5))+".png",310,height-695,270,115,mask='auto')
-    c.drawImage(filepath+"DF"+str(random.randint(1,3))+".png",310,height-820,270,115,mask='auto')
-    c.roundRect(310,height-820,270,115,10)
-    c.roundRect(310,height-695,270,115,10)
+    c.drawImage(filepath+"DP"+str(random.randint(1,5))+".png",315,height-695-25,265,110,mask='auto')
+    c.drawImage(filepath+"DF"+str(random.randint(1,3))+".png",315,height-820-15,265,110,mask='auto')
+    c.roundRect(310,height-820-15,270,110,10)
+    c.roundRect(310,height-695-25,270,110,10)
     c.setFont(mainfont, 12)
     c.setFillColorRGB(0.2,0.2,0.2)
-    c.drawString(320,height-599,'가벼운 한끼를 위해 꿀조합 "간식"')
-    c.drawString(320,height-724,'지치지 않는 다이어트 서포트 "영양제"')
+    c.drawString(320,height-599-27,'가벼운 한끼를 위해 꿀조합 "간식"')
+    c.drawString(320,height-724-17,'지치지 않는 다이어트 서포트 "영양제"')
 
 
     # 2페이지 저장
@@ -1008,8 +1010,8 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     return img_path 
 
 if __name__=="__main__":
-    Inbo=Inbody(InbodyScore=83,Weight=83.7,BodyFat=16.1,FatFree=67.6,ApproWeight=79.5,WeightControl=-4.2,MuscleControl=0,FatControl=-4.2)
+    Inbo=Inbody(InbodyScore=72,Weight=42.1,BodyFat=11.5,FatFree=30.6,ApproWeight=50.4,WeightControl=8.3,MuscleControl=8.2,FatControl=0.1)
     Age=Agesensor(Rating="",Rank=30)
     DGoal=DietGoal(Period="2주",Gweight=80,Rcal=2800,FoodR=5,WorkOutR=5)
-    IDetail=InbodyDetail(UpperLF="표준",UpperRF="이상",LowerLF="표준",LowerRF="이상",UpperLS="표준",UpperRS="이하",LowerLS="표준",LowerRS="이상")
+    IDetail=InbodyDetail(UpperLF="표준",UpperRF="표준",LowerLF="표준",LowerRF="표준",UpperLS="이하",UpperRS="이하",LowerLS="표준",LowerRS="표준")
     create_diet_pdf("김건강",Inbo,Age,DGoal,IDetail)
