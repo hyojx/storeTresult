@@ -893,21 +893,22 @@ def draw_inbody(c,Inbody,height):
         c.setStrokeColorRGB(1,111/255,111/255)
         c.roundRect(90,height-740, skeletalW, 15,7.5,fill=1)    
 
-
-    if fatP<=85 :
+    # 로직 수정 07.16 3시 ---------------------------------------
+    if fatP<=80 :
         c.setFillColorRGB(1,208/255,20/255)
         c.setStrokeColorRGB(1,208/255,20/255)
         c.roundRect(90,height-770, fatW, 15,7.5,fill=1)
 
-    if 85<fatP<115 :
+    if 80<fatP<160 :
         c.setFillColorRGB(134/255,206/255,2/255)
         c.setStrokeColorRGB(134/255,206/255,2/255)
         c.roundRect(90,height-770, fatW, 15,7.5,fill=1)
 
-    if 115<=fatP :
+    if 160<=fatP :
         c.setFillColorRGB(1,111/255,111/255)
         c.setStrokeColorRGB(1,111/255,111/255)
-        c.roundRect(90,height-770, fatW, 15,7.5,fill=1)     
+        c.roundRect(90,height-770, fatW, 15,7.5,fill=1)    
+    # 로직 수정 07.16 3시 ---------------------------------------     
 
     c.setLineWidth(0.5)
     c.setStrokeColorRGB(0.9,0.9,0.9)
