@@ -907,7 +907,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.drawString(25,height-35-30,"식재료")
     c.drawString(25,height-295-25,"샐러드")
     c.drawString(25,height-570-20,"착즙 주스")
-    c.drawString(310,height-570-20,"상품")
+    c.drawString(310,height-570-20,"상품﹒영양제")    # 멘트 수정 07.15 오후
 
     # 샐러드 칼로리 구간 결정
     if (DGoal.Rcal-foodcontrol)/3<=1000:
@@ -992,8 +992,8 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.roundRect(310,height-695-25,270,110,10)
     c.setFont(mainfont, 12)
     c.setFillColorRGB(0.2,0.2,0.2)
-    c.drawString(320,height-599-27,'가벼운 한끼를 위해 꿀조합 "간식"')
-    c.drawString(320,height-724-17,'지치지 않는 다이어트 서포트 "영양제"')
+    c.drawString(320,height-599-27,'다이어터도 즐기는 맛있는 "간식"')
+    c.drawString(320,height-724-17,'지치지 않는 다이어트 서포트 "영양제"')   # 멘트 수정 07.15 오후
 
 
     # 2페이지 저장

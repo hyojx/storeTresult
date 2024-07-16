@@ -507,13 +507,13 @@ def draw_skin_graph(c,SkinState,height):
         c.drawString(baseX+74,height-540,str(SkinState.HScore))
     else:
         c.drawString(baseX+47+(170*SkinState.HScore/100),height-540,str(SkinState.HScore))    
-
+    # 로직 수정 07.15 오후------------------------------------------------------------------
     c.setFont(mainfont, 8)
     c.setFillColorRGB(0.7, 0.7, 0.7)
     if SkinState.TAScore==0:
         pass
     elif SkinState.TAScore<10:
-        c.drawString(baseX+65+(170*SkinState.TAScore/100),baseY+22,"▼")
+        c.drawString(baseX+65+(170*SkinState.TAScore/100),baseY+22,"▼") 
         c.drawString(baseX+65+(170*SkinState.TAScore/100),baseY+30,str(SkinState.TAScore))
     else :
         c.drawString(baseX+65+(170*SkinState.TAScore/100),baseY+22,"▼")
@@ -522,8 +522,8 @@ def draw_skin_graph(c,SkinState,height):
     if SkinState.CAScore==0:
         pass
     elif SkinState.CAScore<10:
-        c.drawString(baseX+65+(170*SkinState.CAScore/100),baseY+22,"▼")
-        c.drawString(baseX+65+(170*SkinState.CAScore/100),baseY+30,str(SkinState.CAScore))
+        c.drawString(baseX+65+(170*SkinState.CAScore/100),baseY-23,"▼")
+        c.drawString(baseX+65+(170*SkinState.CAScore/100),baseY-15,str(SkinState.CAScore))
     else :
         c.drawString(baseX+65+(170*SkinState.CAScore/100),baseY-23,"▼")
         c.drawString(baseX+63+(170*SkinState.CAScore/100),baseY-15,str(SkinState.CAScore))
@@ -531,8 +531,8 @@ def draw_skin_graph(c,SkinState,height):
     if SkinState.WAScore==0:
         pass
     elif SkinState.WAScore<10:
-        c.drawString(baseX+65+(170*SkinState.WAScore/100),baseY+22,"▼")
-        c.drawString(baseX+65+(170*SkinState.WAScore/100),baseY+30,str(SkinState.WAScore))
+        c.drawString(baseX+65+(170*SkinState.WAScore/100),baseY-68,"▼")
+        c.drawString(baseX+65+(170*SkinState.WAScore/100),baseY-60,str(SkinState.WAScore))
     else :
         c.drawString(baseX+65+(170*SkinState.WAScore/100),baseY-68,"▼")
         c.drawString(baseX+63+(170*SkinState.WAScore/100),baseY-60,str(SkinState.WAScore))
@@ -540,12 +540,12 @@ def draw_skin_graph(c,SkinState,height):
     if SkinState.HAScore==0:
         pass
     elif SkinState.HAScore<10:
-        c.drawString(baseX+65+(170*SkinState.HAScore/100),baseY+22,"▼")
-        c.drawString(baseX+65+(170*SkinState.HAScore/100),baseY+30,str(SkinState.HAScore))
+        c.drawString(baseX+65+(170*SkinState.HAScore/100),baseY-113,"▼")
+        c.drawString(baseX+65+(170*SkinState.HAScore/100),baseY-105,str(SkinState.HAScore))
     else :
         c.drawString(baseX+65+(170*SkinState.HAScore/100),baseY-113,"▼")
         c.drawString(baseX+63+(170*SkinState.HAScore/100),baseY-105,str(SkinState.HAScore))
-
+     # 로직 수정 07.15 오후------------------------------------------------------------------
 
 # 에이지 센서 패널
 def draw_panel(c,Agesensor,height):

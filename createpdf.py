@@ -735,9 +735,9 @@ def set_category(Inbody):
         else:
             C_id="N"     
     elif weightP<=85:                     #(07.09 4시 수정)
-        if 90<skeletalP and fatP<=80:
+        if 90<=skeletalP and fatP<=160:   # 로직 수정 07.15 오후
             C_id="D_ls"
-        elif skeletalP<90 and fatP<=80:
+        elif skeletalP<90 and fatP<=160:  # 로직 수정 07.15 오후
             C_id="I_lw"    
         else:
             C_id="N"             
