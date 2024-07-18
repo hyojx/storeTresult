@@ -910,13 +910,13 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     c.drawString(310,height-570-20,"상품﹒영양제")    # 멘트 수정 07.15 오후
 
     # 샐러드 칼로리 구간 결정
-    if (DGoal.Rcal-foodcontrol)/3<=1000:
+    if (DGoal.Rcal-foodcontrol)<=1000:
         salad_cal=300
-    elif 1000<(DGoal.Rcal-foodcontrol)/3<=1300:
+    elif 1000<(DGoal.Rcal-foodcontrol)<=1300:
         salad_cal=400
-    elif 1300<(DGoal.Rcal-foodcontrol)/3<=1700:
+    elif 1300<(DGoal.Rcal-foodcontrol)<=1700:
         salad_cal=500 
-    elif 1700<(DGoal.Rcal-foodcontrol)/3:
+    elif 1700<(DGoal.Rcal-foodcontrol):
         salad_cal=600       
 
     # 코멘트 작성
@@ -1012,6 +1012,6 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
 if __name__=="__main__":
     Inbo=Inbody(InbodyScore=72,Weight=42.1,BodyFat=11.5,FatFree=30.6,ApproWeight=50.4,WeightControl=8.3,MuscleControl=8.2,FatControl=0.1)
     Age=Agesensor(Rating="",Rank=30)
-    DGoal=DietGoal(Period="2주",Gweight=80,Rcal=2800,FoodR=5,WorkOutR=5)
+    DGoal=DietGoal(Period="2주",Gweight=40,Rcal=1800,FoodR=5,WorkOutR=5)
     IDetail=InbodyDetail(UpperLF="표준",UpperRF="표준",LowerLF="표준",LowerRF="표준",UpperLS="이하",UpperRS="이하",LowerLS="표준",LowerRS="표준")
     create_diet_pdf("김건강",Inbo,Age,DGoal,IDetail)
