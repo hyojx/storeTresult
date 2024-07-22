@@ -1010,8 +1010,8 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     return img_path 
 
 if __name__=="__main__":
-    Inbo=Inbody(InbodyScore=72,Weight=42.1,BodyFat=11.5,FatFree=30.6,ApproWeight=50.4,WeightControl=8.3,MuscleControl=8.2,FatControl=0.1)
+    Inbo=Inbody(InbodyScore=67,Weight=54.4,BodyFat=20.9,FatFree=33.5,ApproWeight=47.9,WeightControl=-6.5,MuscleControl=3.4,FatControl=-9.9)
     Age=Agesensor(Rating="",Rank=30)
-    DGoal=DietGoal(Period="2주",Gweight=40,Rcal=3000,FoodR=5,WorkOutR=5)
-    IDetail=InbodyDetail(UpperLF="표준",UpperRF="표준",LowerLF="표준",LowerRF="표준",UpperLS="이하",UpperRS="이하",LowerLS="표준",LowerRS="표준")
+    DGoal=DietGoal(Period="2주",Gweight=50,Rcal=3000,FoodR=5,WorkOutR=5)
+    IDetail=InbodyDetail(UpperLF="이상",UpperRF="이상",LowerLF="이상",LowerRF="이상",UpperLS="이하",UpperRS="표준",LowerLS="이하",LowerRS="이하")
     create_diet_pdf("김건강",Inbo,Age,DGoal,IDetail)
