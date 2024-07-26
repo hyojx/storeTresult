@@ -910,6 +910,11 @@ def draw_inbody(c,Inbody,height):
         c.roundRect(90,height-770, fatW, 15,7.5,fill=1)    
     # 로직 수정 07.16 3시 ---------------------------------------     
 
+    c.setFillColorRGB(1,1,1)
+    c.drawString(65+weightW,height-710+5,str(Inbody.Weight))    
+    c.drawString(65+skeletalW,height-740+5,str(Inbody.SkeletalMuscle))  
+    c.drawString(65+fatW,height-770+5,str(Inbody.BodyFat))
+
     c.setLineWidth(0.5)
     c.setStrokeColorRGB(0.9,0.9,0.9)
     c.line(126, height - 695, 126, height - 710)

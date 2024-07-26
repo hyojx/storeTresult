@@ -69,6 +69,7 @@ class Inbody:
     MuscleControl: float = field(default=0.0)
     FatControl: float = field(default=0.0)
     Recomcal: float = field(default=0.0)
+    SkeletalMuscle: float = field(default=0.0)
 
 @dataclass
 class Agesensor:

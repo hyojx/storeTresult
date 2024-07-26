@@ -12,7 +12,7 @@ def update_ratio(slider_value):
 def process_basic_inputs(Name,Gender,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,Unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Recomcal,Rating,Rank,CarbH,CarbV,ProteinL,ProteinV,FatH,FatV,FiberL,FiberV,SodiumH,SodiumV,SugarH,SatFatH,SatFatV,CholesterolH,CholesterolV):
     Nutri=Nutrition(EatScore=EatScore, Carb=Carb, Protein=Protein, Fat=Fat, Fiber=Fiber, Sodium=Sodium, Sugar=Sugar, SatFat=SatFat, Cholesterol=Cholesterol)
     Vita=Vitastiq(Unused=Unused,Biotin=Biotin, VitC=VitC, Mg=Mg, VitB1=VitB1, VitB2=VitB2, Zn=Zn, Se=Se, VitB6=VitB6, VitE=VitE, Folate=Folate)
-    Inbo=Inbody(InbodyScore=InbodyScore,Weight=Weight,BodyFat=BodyFat,ApproWeight=ApproWeight,FatFree=FatFree,WeightControl=WeightControl,MuscleControl=MuscleControl,FatControl=FatControl,Recomcal=Recomcal)
+    Inbo=Inbody(InbodyScore=InbodyScore,Weight=Weight,BodyFat=BodyFat,ApproWeight=ApproWeight,FatFree=FatFree,WeightControl=WeightControl,MuscleControl=MuscleControl,FatControl=FatControl,Recomcal=Recomcal,SkeletalMuscle=SkeletalMuscle)
     Age=Agesensor(Rating,Rank)
     NutriD=NutritionDetail(CarbH=CarbH,CarbV=CarbV,ProteinL=ProteinL,ProteinV=ProteinV,FatH=FatH,FatV=FatV,FiberL=FiberL,FiberV=FiberV,SodiumH=SodiumH,SodiumV=SodiumV,SugarH=SugarH,SatFatH=SatFatH,SatFatV=SatFatV,CholesterolH=CholesterolH,CholesterolV=CholesterolV)
     Supple=Supplements(sup1="영양진단 영양제1",sup2="영양진단 영양제2",sup3="영양진단 영양제3",sup4="영양진단 영양제4",inter1="근력",inter2="소화기/장건강",inter3="면역력")
@@ -22,7 +22,7 @@ def process_basic_inputs(Name,Gender,EatScore,Carb,Protein,Fat,Fiber,Sodium,Suga
 
 def process_diet_inputs(Name,GWeight,NMeal,RCal,Period,FoodR,WorkOutR,InbodyScore,Weight,BodyFat,BMI,ApproWeight,WeightControl,MuscleControl,FatControl,FatFree,UpperLF,UpperRF,LowerLF,LowerRF,UpperLS,UpperRS,LowerLS,LowerRS,Rating,Rank):
     DGoal=DietGoal(Gweight=GWeight,NMeal=NMeal,Rcal=RCal,Period=Period,FoodR=FoodR,WorkOutR=WorkOutR)
-    Inbo=Inbody(InbodyScore=InbodyScore,Weight=Weight,BodyFat=BodyFat,BMI=BMI,ApproWeight=ApproWeight,WeightControl=WeightControl,MuscleControl=MuscleControl,FatControl=FatControl,FatFree=FatFree)
+    Inbo=Inbody(InbodyScore=InbodyScore,Weight=Weight,BodyFat=BodyFat,BMI=BMI,ApproWeight=ApproWeight,WeightControl=WeightControl,MuscleControl=MuscleControl,FatControl=FatControl,FatFree=FatFree,SkeletalMuscle=SkeletalMuscle)
     InboD=InbodyDetail(UpperLF=UpperLF,UpperRF=UpperRF,LowerLF=LowerLF,LowerRF=LowerRF,UpperLS=UpperLS,UpperRS=UpperRS,LowerLS=LowerLS,LowerRS=LowerRS)
     Age=Agesensor(Rating=Rating,Rank=Rank)
 
@@ -108,6 +108,7 @@ with gr.Blocks() as basic_health:
         MuscleControl=gr.Number(minimum=-100, maximum=100, label="근육조절",min_width=80)
         FatControl=gr.Number(minimum=-100, maximum=100, label="지방조절",min_width=80)
         Recomcal=gr.Number(minimum=0, maximum=10000,label="권장열량",min_width=80)
+        SkeletalMuscle=gr.Number(minimum=0, maximum=1000,label="골격근량",min_width=80)
 
     gr.HTML("""<h2 style = 'border-radius: 5px; text-indent: 10px; padding-top: 5px; padding-bottom: 5px;'>4. Age Sensor</h2>""")
     with gr.Row():
@@ -122,7 +123,7 @@ with gr.Blocks() as basic_health:
         inputs=[Name,Gender,
                 EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,
                 unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,
-                InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Recomcal,
+                InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Recomcal,SkeletalMuscle,
                 Rating,Rank,
                 CarbH,CarbV,ProteinL,ProteinV,FatH,FatV,FiberL,FiberV,SodiumH,SodiumV,SugarH,SatFatH,SatFatV,CholesterolH,CholesterolV],
         outputs=output_image
@@ -157,6 +158,7 @@ with gr.Blocks() as diet:
         MuscleControl=gr.Number(minimum=-100, maximum=100, label="근육조절",min_width=80)
         FatControl=gr.Number(minimum=-100, maximum=100, label="지방조절",min_width=80)
         FatFree=gr.Number(minimum=0, maximum=100, label="제지방량",min_width=80)
+        SkeletalMuscle=gr.Number(minimum=0, maximum=1000, label="골격근량",min_width=80)
 
 
     gr.HTML("""<h3 style = 'border-radius: 5px; text-indent: 10px; padding-top: 5px; padding-bottom: 5px;'>집중관리 부위</h3>""")
@@ -190,7 +192,7 @@ with gr.Blocks() as diet:
 
     generate_btn.click(
         fn=process_diet_inputs,
-        inputs=[Name,GWeight,NMeal,RCal,Period,FoodR,WorkOutR,InbodyScore,Weight,BodyFat,Bmi,ApproWeight,WeightControl,MuscleControl,FatControl,FatFree,UpperLF,UpperRF,LowerLF,LowerRF,UpperLS,UpperRS,LowerLS,LowerRS,Rating,Rank],
+        inputs=[Name,GWeight,NMeal,RCal,Period,FoodR,WorkOutR,InbodyScore,Weight,BodyFat,Bmi,ApproWeight,WeightControl,MuscleControl,FatControl,FatFree,SkeletalMuscle,UpperLF,UpperRF,LowerLF,LowerRF,UpperLS,UpperRS,LowerLS,LowerRS,Rating,Rank],
         outputs=output_image
     )    
  

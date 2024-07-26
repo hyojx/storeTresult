@@ -268,6 +268,11 @@ def draw_inbody(c,Inbody,height):
         c.setStrokeColorRGB(1,111/255,111/255)
         c.roundRect(90,height3, fatW, 15,7.5,fill=1)     
 
+    c.setFillColorRGB(1,1,1)
+    c.drawString(65+weightW,height1+5,str(Inbody.Weight))    
+    c.drawString(65+skeletalW,height2+5,str(Inbody.SkeletalMuscle))  
+    c.drawString(65+fatW,height3+5,str(Inbody.BodyFat))   
+
     c.setLineWidth(0.5)
     c.setStrokeColorRGB(0.9,0.9,0.9)
     c.line(126, height1+15, 126, height1)
