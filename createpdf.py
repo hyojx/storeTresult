@@ -1065,7 +1065,7 @@ def set_product_cat(Gender,Vitastiq,Agesensor):
                 else:     
                     subset=[sorted_variables[0][0],sorted_variables[1][0]]
 
-                if 'antiageS' in subset:
+                if '항산화' in subset:
                     Pcategory="항산화"
                 else:
                     if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]:
