@@ -12,6 +12,7 @@ class Nutrition:
     Sugar: str =field(default="")
     SatFat: str =field(default="")
     Cholesterol: str =field(default="")
+    UserHeight: float =field(default=0)
 
 @dataclass
 class NutritionDetail:    

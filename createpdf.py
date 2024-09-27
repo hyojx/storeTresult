@@ -743,6 +743,52 @@ def set_category(Inbody):
             C_id="N"             
     return C_id
 
+# 판교점 인바디 유형결정
+def set_category_small(Inbody,UserHeight,Gender):
+    C_id=""
+    SWeight=((UserHeight*UserHeight)/10000)*22
+    if Gender=="남성":
+        SFatFree=Inbody.Weight*0.8
+    elif Gender=="여성":
+        SFatFree=Inbody.Weight*0.72    
+    weightP=Inbody.Weight/SWeight*100
+    skeletalP=(Inbody.FatFree/SFatFree)*100
+    if (SFatFree-Inbody.FatFree)<=0:
+        fatP=Inbody.BodyFat/(Inbody.BodyFat+(SWeight-Inbody.Weight))*100
+    else:    
+        fatP=Inbody.BodyFat/(Inbody.BodyFat+((SWeight-Inbody.Weight)-(SFatFree-Inbody.FatFree)))*100
+    print(weightP)
+    print(skeletalP)
+    print(fatP)
+    if 85 < weightP <115:
+        if skeletalP <= 90 and 80<fatP <160:
+            C_id="C_sw"
+        elif skeletalP<= 110 and 160<=fatP:
+            C_id="C_so"
+        elif 110<=skeletalP and fatP<160:
+            C_id="D_ss"
+        elif 90<skeletalP<110 and 80<fatP<160:
+            C_id="I_sh"
+        else:
+            C_id="N"    
+    elif 115<=weightP:                  
+        if skeletalP<=110 and 160<=fatP:
+            C_id="C_ow"
+        elif 110<=skeletalP and 80<fatP<160:
+            C_id="D_os"
+        elif 110<=skeletalP and 160<=fatP:
+            C_id="I_oo"
+        else:
+            C_id="N"     
+    elif weightP<=85:           
+        if 90<=skeletalP and fatP<=80:  
+            C_id="D_ls"
+        elif skeletalP<90 and fatP<=80:  
+            C_id="I_lw"    
+        else:
+            C_id="N"             
+    return C_id    
+
 #인바디 유형별 코멘트 작성
 def write_comment(c,Inbody_cat,height):
     if Inbody_cat=="C_sw":
@@ -926,6 +972,103 @@ def draw_inbody(c,Inbody,height):
     c.line(162, height - 755, 162, height - 770)
 
     return
+
+#인바디 그래프 그리기
+def draw_inbody_small(c,Inbody,UserHeight,Gender,height):
+    SWeight=((UserHeight*UserHeight)/10000)*22
+    if Gender=="남성":
+        SFatFree=Inbody.Weight*0.8
+    elif Gender=="여성":
+        SFatFree=Inbody.Weight*0.72    
+    weightP=Inbody.Weight/SWeight*100
+    skeletalP=(Inbody.FatFree/SFatFree)*100
+    if (SFatFree-Inbody.FatFree)<=0:
+        fatP=Inbody.BodyFat/(Inbody.BodyFat+(SWeight-Inbody.Weight))*100
+    else:    
+        fatP=Inbody.BodyFat/(Inbody.BodyFat+((SWeight-Inbody.Weight)-(SFatFree-Inbody.FatFree)))*100
+
+    c.setFillColorRGB(0.9, 0.9, 0.9)
+    c.setStrokeColorRGB(0.9, 0.9, 0.9)
+    c.roundRect(90,height-710, 180, 15,7.5,fill=1)
+    c.roundRect(90,height-740, 180, 15,7.5,fill=1)
+    c.roundRect(90,height-770, 180, 15,7.5,fill=1)
+
+    weightW=180*(weightP-55)/150
+    skeletalW=180*(skeletalP-70)/100
+    if fatP<=100:
+        fatW=54*(fatP-40)/60
+    elif 100<fatP:    
+        fatW=54+126*(fatP-100)/420
+
+    """if Gender=="남성":
+        fatW=180*(fatP)/50
+    elif Gender=="여성":    
+        fatW=180*(fatP-8)/50"""
+
+    if weightP<=85 :
+        c.setFillColorRGB(1,208/255,20/255)
+        c.setStrokeColorRGB(1,208/255,20/255)
+        c.roundRect(90,height-710, weightW, 15,7.5,fill=1)
+
+    if 85<weightP<115 :
+        c.setFillColorRGB(134/255,206/255,2/255)
+        c.setStrokeColorRGB(134/255,206/255,2/255)
+        c.roundRect(90,height-710, weightW, 15,7.5,fill=1)
+
+    if 115<=weightP :
+        c.setFillColorRGB(1,111/255,111/255)
+        c.setStrokeColorRGB(1,111/255,111/255)
+        c.roundRect(90,height-710, weightW, 15,7.5,fill=1)   
+
+
+    if skeletalP<=90 :
+        c.setFillColorRGB(1,208/255,20/255)
+        c.setStrokeColorRGB(1,208/255,20/255)
+        c.roundRect(90,height-740, skeletalW, 15,7.5,fill=1)
+
+    if 90<skeletalP<110 :
+        c.setFillColorRGB(134/255,206/255,2/255)
+        c.setStrokeColorRGB(134/255,206/255,2/255)
+        c.roundRect(90,height-740, skeletalW, 15,7.5,fill=1)
+
+    if 110<=skeletalP :
+        c.setFillColorRGB(1,111/255,111/255)
+        c.setStrokeColorRGB(1,111/255,111/255)
+        c.roundRect(90,height-740, skeletalW, 15,7.5,fill=1)    
+
+    # 로직 수정 07.16 3시 ---------------------------------------
+    if fatP<=80 :
+        c.setFillColorRGB(1,208/255,20/255)
+        c.setStrokeColorRGB(1,208/255,20/255)
+        c.roundRect(90,height-770, fatW, 15,7.5,fill=1)
+
+    if 80<fatP<160 :
+        c.setFillColorRGB(134/255,206/255,2/255)
+        c.setStrokeColorRGB(134/255,206/255,2/255)
+        c.roundRect(90,height-770, fatW, 15,7.5,fill=1)
+
+    if 160<=fatP :
+        c.setFillColorRGB(1,111/255,111/255)
+        c.setStrokeColorRGB(1,111/255,111/255)
+        c.roundRect(90,height-770, fatW, 15,7.5,fill=1)    
+    # 로직 수정 07.16 3시 ---------------------------------------     
+
+    c.setFillColorRGB(1,1,1)
+    c.drawString(65+weightW,height-710+5,str(Inbody.Weight))    
+    c.drawString(65+skeletalW,height-740+5,str(Inbody.FatFree))  
+    c.drawString(65+fatW,height-770+5,str(Inbody.BodyFat))
+
+    c.setLineWidth(0.5)
+    c.setStrokeColorRGB(0.9,0.9,0.9)
+    c.line(126, height - 695, 126, height - 710)
+    c.line(126, height - 725, 126, height - 740)
+    c.line(126, height - 755, 126, height - 770)
+
+    c.line(162, height - 695, 162, height - 710)
+    c.line(162, height - 725, 162, height - 740)
+    c.line(162, height - 755, 162, height - 770)
+
+    return    
 
 #인바디 유형 그리기
 def draw_alpha(c,Inbody_cat,height):
@@ -1285,7 +1428,7 @@ def set_sidedish_image(recomcal,Scat):
     return img_list
 
 # PDF 파일 생성
-def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supple):
+def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supple,Store):
     filename=resultfilepath+'Basic_Health_Report.pdf'
     c = canvas.Canvas(filename, pagesize=A4)
     width, height = A4
@@ -1431,24 +1574,33 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 
     #-------------- part4 인바디 --------------
     # 본문 채우기 
-    if Inbody.InbodyScore==0:
+    if Inbody.InbodyScore==0 and Inbody.Weight==0 and Inbody.BodyFat==0 and Inbody.FatFree==0:
         c.drawImage(filepath+"InbodyBlur.png", 30, height - 810, 250,157,mask='auto')
     else:    
         c.setFillColorRGB(0, 0, 0)
         c.setFont(boldfont, 12)
         c.drawString(35,height-655,"인바디")
 
-        Inbody_cat=set_category(Inbody)
+        if Store=="판교점":
+            Inbody_cat=set_category_small(Inbody,Nutrition.UserHeight,Gender)
+        else:    
+            Inbody_cat=set_category(Inbody)
         print("Inbody_cat"+Inbody_cat)
         write_comment(c,Inbody_cat,height)
 
         c.setFont(mainfont, 9)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(37,height-705,'체중')
-        c.drawString(37,height-735,'골격근량')
+        if Store=="판교점":
+            c.drawString(37,height-735,'제지방량')
+        else:    
+            c.drawString(37,height-735,'골격근량')
         c.drawString(37,height-765,'체지방량')
-
-        draw_inbody(c,Inbody,height)
+        
+        if Store=="판교점":
+            draw_inbody_small(c,Inbody,Nutrition.UserHeight,Gender,height)
+        else:    
+            draw_inbody(c,Inbody,height)
         draw_alpha(c,Inbody_cat,height)
 
     #-------------- part5 Age sensor --------------
@@ -1743,10 +1895,10 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 
 # PDF 생성 테스트용
 if __name__ == "__main__":
-    Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다")
+    Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다",UserHeight=147)
     Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="낮음", VitB2="", Zn="낮음", Se="", VitB6="", VitE="", Folate="")
-    Inbo=Inbody(InbodyScore=65,Weight=93.4,BodyFat=27.2,FatFree=66.2,ApproWeight=77.9,WeightControl=-15.5,MuscleControl=0,FatControl=-15.5,Recomcal=2800)
+    Inbo=Inbody(InbodyScore=73,Weight=48.3,BodyFat=15.3,FatFree=33,ApproWeight=45.4,WeightControl=-2.9,MuscleControl=2,FatControl=-4.9,Recomcal=1634,SkeletalMuscle=17.6)
     Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
     Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
-    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple)
+    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"판교점")

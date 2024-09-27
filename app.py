@@ -9,18 +9,18 @@ from createpdf3 import create_skin_pdf
 def update_ratio(slider_value):
     return slider_value, 100 - slider_value
 
-def process_basic_inputs(Name,Gender,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,Unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Recomcal,Rating,Rank,CarbH,CarbV,ProteinL,ProteinV,FatH,FatV,FiberL,FiberV,SodiumH,SodiumV,SugarH,SatFatH,SatFatV,CholesterolH,CholesterolV):
-    Nutri=Nutrition(EatScore=EatScore, Carb=Carb, Protein=Protein, Fat=Fat, Fiber=Fiber, Sodium=Sodium, Sugar=Sugar, SatFat=SatFat, Cholesterol=Cholesterol)
+def process_basic_inputs(Name,Gender,Height,Store,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,Unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,InbodyScore,Weight,BodyFat,ApproWeight,FatFree,SkeletalMuscle,WeightControl,MuscleControl,FatControl,Recomcal,Rating,Rank,CarbH,CarbV,ProteinL,ProteinV,FatH,FatV,FiberL,FiberV,SodiumH,SodiumV,SugarH,SatFatH,SatFatV,CholesterolH,CholesterolV):
+    Nutri=Nutrition(EatScore=EatScore, Carb=Carb, Protein=Protein, Fat=Fat, Fiber=Fiber, Sodium=Sodium, Sugar=Sugar, SatFat=SatFat, Cholesterol=Cholesterol,UserHeight=Height)
     Vita=Vitastiq(Unused=Unused,Biotin=Biotin, VitC=VitC, Mg=Mg, VitB1=VitB1, VitB2=VitB2, Zn=Zn, Se=Se, VitB6=VitB6, VitE=VitE, Folate=Folate)
     Inbo=Inbody(InbodyScore=InbodyScore,Weight=Weight,BodyFat=BodyFat,ApproWeight=ApproWeight,FatFree=FatFree,WeightControl=WeightControl,MuscleControl=MuscleControl,FatControl=FatControl,Recomcal=Recomcal,SkeletalMuscle=SkeletalMuscle)
     Age=Agesensor(Rating,Rank)
     NutriD=NutritionDetail(CarbH=CarbH,CarbV=CarbV,ProteinL=ProteinL,ProteinV=ProteinV,FatH=FatH,FatV=FatV,FiberL=FiberL,FiberV=FiberV,SodiumH=SodiumH,SodiumV=SodiumV,SugarH=SugarH,SatFatH=SatFatH,SatFatV=SatFatV,CholesterolH=CholesterolH,CholesterolV=CholesterolV)
     Supple=Supplements(sup1="영양진단 영양제1",sup2="영양진단 영양제2",sup3="영양진단 영양제3",sup4="영양진단 영양제4",inter1="근력",inter2="소화기/장건강",inter3="면역력")
-    img_adress=create_basic_pdf(Nutri,Vita,Inbo,Age,Name,Gender,NutriD,Supple)
+    img_adress=create_basic_pdf(Nutri,Vita,Inbo,Age,Name,Gender,NutriD,Supple,Store)
 
     return img_adress
 
-def process_diet_inputs(Name,GWeight,NMeal,RCal,Period,FoodR,WorkOutR,InbodyScore,Weight,BodyFat,BMI,ApproWeight,WeightControl,MuscleControl,FatControl,FatFree,UpperLF,UpperRF,LowerLF,LowerRF,UpperLS,UpperRS,LowerLS,LowerRS,Rating,Rank):
+def process_diet_inputs(Name,GWeight,NMeal,RCal,Period,FoodR,WorkOutR,InbodyScore,Weight,BodyFat,BMI,ApproWeight,WeightControl,MuscleControl,FatControl,FatFree,SkeletalMuscle,UpperLF,UpperRF,LowerLF,LowerRF,UpperLS,UpperRS,LowerLS,LowerRS,Rating,Rank):
     DGoal=DietGoal(Gweight=GWeight,NMeal=NMeal,Rcal=RCal,Period=Period,FoodR=FoodR,WorkOutR=WorkOutR)
     Inbo=Inbody(InbodyScore=InbodyScore,Weight=Weight,BodyFat=BodyFat,BMI=BMI,ApproWeight=ApproWeight,WeightControl=WeightControl,MuscleControl=MuscleControl,FatControl=FatControl,FatFree=FatFree,SkeletalMuscle=SkeletalMuscle)
     InboD=InbodyDetail(UpperLF=UpperLF,UpperRF=UpperRF,LowerLF=LowerLF,LowerRF=LowerRF,UpperLS=UpperLS,UpperRS=UpperRS,LowerLS=LowerLS,LowerRS=LowerRS)
@@ -41,8 +41,10 @@ def process_skin_inputs(Name,Concern,Type,TZWater,UZWater,TZOil,UZOil,CScore,CAS
 with gr.Blocks() as basic_health:
     gr.Markdown("""<h1 style = 'border-radius: 5px; padding-top: 10px; padding-bottom: 10px;'>기본건강 고객정보 입력</h1>""")
     with gr.Row():
-        Name=gr.Textbox(label="이름",placeholder="내담자명을 입력해주세요",elem_id="name",scale=3)
-        Gender=gr.Radio(['남성','여성'],label="성별",scale=1)
+        Name=gr.Textbox(label="이름",placeholder="내담자명을 입력해주세요",elem_id="name")
+        Gender=gr.Radio(['남성','여성'],label="성별")
+        Height=gr.Number(minimum=0,maximum=300,label="키(cm)")
+        Store=gr.Dropdown(['판교점','중동점','본사'],label="지점")
     
     with gr.Column():
         gr.HTML("""<h2 style = 'border-radius: 5px; text-indent: 10px; padding-top: 5px; padding-bottom: 5px;'>1. 영양진단</h2>""")
@@ -120,7 +122,7 @@ with gr.Blocks() as basic_health:
 
     generate_btn.click(
         fn=process_basic_inputs,
-        inputs=[Name,Gender,
+        inputs=[Name,Gender,Height,Store,
                 EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,
                 unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,
                 InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightControl,MuscleControl,FatControl,Recomcal,SkeletalMuscle,
