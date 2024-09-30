@@ -1004,6 +1004,14 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     # 2페이지 저장
     c.showPage()
 
+    if salad_cal==300:
+        c.drawImage(filepath+"300.png",0,0,width,height,mask='auto')
+    elif salad_cal==400:
+        c.drawImage(filepath+"400.png",0,0,width,height,mask='auto')
+    elif salad_cal==500:
+        c.drawImage(filepath+"500.png",0,0,width,height,mask='auto')    
+    elif salad_cal==600:
+        c.drawImage(filepath+"600.png",0,0,width,height,mask='auto')
     c.save()
 
     # PDF를 이미지로 변환
