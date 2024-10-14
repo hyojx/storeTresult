@@ -1428,7 +1428,7 @@ def set_sidedish_image(recomcal,Scat):
     return img_list
 
 # PDF 파일 생성
-def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supple,Store):
+def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supple,Store,Activity,Age):
     filename=resultfilepath+'Basic_Health_Report.pdf'
     c = canvas.Canvas(filename, pagesize=A4)
     width, height = A4
@@ -1596,7 +1596,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         else:    
             c.drawString(37,height-735,'골격근량')
         c.drawString(37,height-765,'체지방량')
-        
+
         if Store=="판교점":
             draw_inbody_small(c,Inbody,Nutrition.UserHeight,Gender,height)
         else:    
@@ -1686,7 +1686,51 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 
     # 반찬 추천 유형결정 및 반찬 추천
     Scat=set_sidedish_cat(Nutrition,NutriD)
-    Simg_list=set_sidedish_image(Inbody.Recomcal,Scat)
+    if Store=="판교점":
+        if 19<=Age and Gender=="남성":
+            if Activity=="비활동적":
+                actLevel=1
+            elif Activity=="저활동적":
+                actLevel=1.11
+            elif Activity=="활동적":
+                actLevel=1.25
+            elif Activity=="매우 활동적":
+                actLevel=1.48            
+            Recomcal=662+(-9.53*Age)+actLevel*((15.91*Inbody.Weight)+(539.6*Nutrition.UserHeight/100))
+        elif 19<=Age and Gender=="여성":
+            if Activity=="비활동적":
+                actLevel=1
+            elif Activity=="저활동적":
+                actLevel=1.12
+            elif Activity=="활동적":
+                actLevel=1.27
+            elif Activity=="매우 활동적":
+                actLevel=1.45
+            Recomcal=354+(-6.91*Age)+actLevel*((9.36*Inbody.Weight)+(726*Nutrition.UserHeight/100))
+        elif 1<=Age<19 and Gender=="남성":
+            if Activity=="비활동적":
+                actLevel=1
+            elif Activity=="저활동적":
+                actLevel=1.13
+            elif Activity=="활동적":
+                actLevel=1.26
+            elif Activity=="매우 활동적":
+                actLevel=1.42
+            Recomcal=88.5+(-61.91*Age)+actLevel*((26.7*Inbody.Weight)+(903*Nutrition.UserHeight/100))       
+        elif 1<=Age<19 and Gender=="여성":
+            if Activity=="비활동적":
+                actLevel=1
+            elif Activity=="저활동적":
+                actLevel=1.16
+            elif Activity=="활동적":
+                actLevel=1.31
+            elif Activity=="매우 활동적":
+                actLevel=1.56
+            Recomcal=135.3+(-30.8*Age)+actLevel*((10.0*Inbody.Weight)+(934*Nutrition.UserHeight/100))
+
+        Simg_list=set_sidedish_image(Recomcal,Scat)
+    else :     
+        Simg_list=set_sidedish_image(Inbody.Recomcal,Scat) 
     
     c.drawImage(filepath+Simg_list[0],30,height-510-5,150,154,mask='auto')
     c.drawImage(filepath+Simg_list[1],215,height-510-5,150,154,mask='auto')
@@ -1715,8 +1759,8 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         c.drawString(25,height-318-25,'"저나트륨 맞춤 반찬으로 구성하는 집밥"')
         c.drawString(360,height-595,"나에게 맞는 저나트륨 건강상품")  
     elif Scat=="D":
-        c.drawString(25,height-318-25,'"저지방/고식이섬유 맞춤 반찬으로 구성하는 집밥"')
-        c.drawString(360,height-595,"나에게 맞는 저지방/고식이섬유 건강상품")   
+        c.drawString(25,height-318-25,'"저지방 맞춤 반찬으로 구성하는 집밥"')
+        c.drawString(360,height-595,"나에게 맞는 저지방 건강상품")   
          
     c.drawString(206,height-595,Pcat+'에 좋은 영양소 가득') 
 
@@ -1901,4 +1945,4 @@ if __name__ == "__main__":
     Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
     Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
-    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"판교점")
+    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"판교점","활동적",24)
