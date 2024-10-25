@@ -50,9 +50,9 @@ def draw_centered_string_in(c, text, startp,y, font_name, font_size, width):
 # 인바디 유형결정
 def set_category(Inbody):
     C_id=""
-    weightP=Inbody.Weight/(Inbody.Weight+Inbody.WeightControl)*100
-    skeletalP=Inbody.FatFree/(Inbody.FatFree+Inbody.MuscleControl)*100
-    fatP=Inbody.BodyFat/(Inbody.BodyFat+Inbody.FatControl)*100
+    weightP=(Inbody.Weight*115)/Inbody.WeightMax
+    skeletalP=Inbody.SkeletalMuscle*110/Inbody.MuscleMax
+    fatP=Inbody.BodyFat*160/Inbody.FatMax
     print(weightP)
     print(skeletalP)
     print(fatP)
@@ -200,9 +200,9 @@ def write_comment(c,Inbody_cat,height):
 
 #인바디 그래프 그리기
 def draw_inbody(c,Inbody,height):
-    weightP=Inbody.Weight/(Inbody.Weight+Inbody.WeightControl)*100
-    skeletalP=Inbody.FatFree/(Inbody.FatFree+Inbody.MuscleControl)*100
-    fatP=Inbody.BodyFat/(Inbody.BodyFat+Inbody.FatControl)*100
+    weightP=(Inbody.Weight*115)/Inbody.WeightMax
+    skeletalP=Inbody.SkeletalMuscle*110/Inbody.MuscleMax
+    fatP=Inbody.BodyFat*160/Inbody.FatMax
 
     height1=height-420
     height2=height-450
@@ -1023,7 +1023,7 @@ def create_diet_pdf(Name,Inbody,Agesensor,DGoal,IDetail):
     return img_path 
 
 if __name__=="__main__":
-    Inbo=Inbody(InbodyScore=67,Weight=54.4,BodyFat=20.9,FatFree=33.5,ApproWeight=47.9,WeightControl=-6.5,MuscleControl=3.4,FatControl=-9.9)
+    Inbo=Inbody(InbodyScore=67,Weight=54.4,BodyFat=20.9,FatFree=33.5,ApproWeight=47.9,WeightMax=49,MuscleMax=20,FatMax=16,MuscleControl=4.5)
     Age=Agesensor(Rating="",Rank=30)
     DGoal=DietGoal(Period="2주",Gweight=50,Rcal=3000,FoodR=5,WorkOutR=5)
     IDetail=InbodyDetail(UpperLF="이상",UpperRF="이상",LowerLF="이상",LowerRF="이상",UpperLS="이하",UpperRS="표준",LowerLS="이하",LowerRS="이하")

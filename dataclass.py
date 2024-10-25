@@ -66,9 +66,10 @@ class Inbody:
     BodyFat: float = field(default=0.0)
     ApproWeight: float = field(default=0.0)
     FatFree: float = field(default=0.0)
-    WeightControl: float = field(default=0.0)
+    WeightMax: float = field(default=0.0)
+    MuscleMax: float = field(default=0.0)
+    FatMax: float = field(default=0.0)
     MuscleControl: float = field(default=0.0)
-    FatControl: float = field(default=0.0)
     Recomcal: float = field(default=0.0)
     SkeletalMuscle: float = field(default=0.0)
 

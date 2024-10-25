@@ -708,9 +708,9 @@ def draw_star(c,Vitastiq,height):
 # 인바디 유형결정
 def set_category(Inbody):
     C_id=""
-    weightP=Inbody.Weight/(Inbody.Weight+Inbody.WeightControl)*100
-    skeletalP=Inbody.FatFree/(Inbody.FatFree+Inbody.MuscleControl)*100
-    fatP=Inbody.BodyFat/(Inbody.BodyFat+Inbody.FatControl)*100
+    weightP=(Inbody.Weight*115)/Inbody.WeightMax
+    skeletalP=Inbody.SkeletalMuscle*110/Inbody.MuscleMax
+    fatP=Inbody.BodyFat*160/Inbody.FatMax
     print(weightP)
     print(skeletalP)
     print(fatP)
@@ -891,9 +891,9 @@ def write_comment(c,Inbody_cat,height):
 
 #인바디 그래프 그리기
 def draw_inbody(c,Inbody,height):
-    weightP=Inbody.Weight/(Inbody.Weight+Inbody.WeightControl)*100
-    skeletalP=Inbody.FatFree/(Inbody.FatFree+Inbody.MuscleControl)*100
-    fatP=Inbody.BodyFat/(Inbody.BodyFat+Inbody.FatControl)*100
+    weightP=(Inbody.Weight*115)/Inbody.WeightMax
+    skeletalP=Inbody.SkeletalMuscle*110/Inbody.MuscleMax
+    fatP=Inbody.BodyFat*160/Inbody.FatMax
 
     c.setFillColorRGB(0.9, 0.9, 0.9)
     c.setStrokeColorRGB(0.9, 0.9, 0.9)
@@ -1941,7 +1941,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 if __name__ == "__main__":
     Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다",UserHeight=147)
     Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="낮음", VitB2="", Zn="낮음", Se="", VitB6="", VitE="", Folate="")
-    Inbo=Inbody(InbodyScore=73,Weight=48.3,BodyFat=15.3,FatFree=33,ApproWeight=45.4,WeightControl=-2.9,MuscleControl=2,FatControl=-4.9,Recomcal=1634,SkeletalMuscle=17.6)
+    Inbo=Inbody(InbodyScore=73,Weight=48.3,BodyFat=15.3,FatFree=33,ApproWeight=45.4,WeightMax=48,MuscleMax=20,FatMax=15,Recomcal=1634,SkeletalMuscle=17.6)
     Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
     Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
