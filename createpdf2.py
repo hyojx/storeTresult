@@ -214,10 +214,10 @@ def draw_inbody(c,Inbody,height):
     c.roundRect(90,height2, 180, 15,7.5,fill=1)
     c.roundRect(90,height3, 180, 15,7.5,fill=1)
 
-    weightW=180*(weightP-55)/150
-    skeletalW=180*(skeletalP-70)/100
+    weightW=max(0,180*(weightP-55)/150)
+    skeletalW=max(0,180*(skeletalP-70)/100)
     if fatP<=100:
-        fatW=54*(fatP-40)/60
+        fatW=max(0,54*(fatP-40)/60)
     elif 100<fatP:    
         fatW=54+126*(fatP-100)/420
 
