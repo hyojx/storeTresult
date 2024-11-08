@@ -1145,7 +1145,7 @@ def draw_panel(c,Agesensor,height):
 
 # 상품추천 유형구분 함수
 def set_product_cat(Gender,Vitastiq,Agesensor):
-    if Vitastiq.Unused==True or Agesensor.Rating=="":
+    if Vitastiq.Unused==True :
         Pcategory="항산화"
     else:
         i=0
@@ -1176,7 +1176,7 @@ def set_product_cat(Gender,Vitastiq,Agesensor):
         ('근력', muscleS)
         ]
         
-        if Agesensor.Rating=="A" or Agesensor.Rating=="B":
+        if Agesensor.Rating=="A" or Agesensor.Rating=="B" or Agesensor.Rating=="":
             sorted_variables = sorted(variables, key=lambda x: x[1]) # 오름차순 정렬 (07.09 4시 수정)
             print(sorted_variables)
             if sorted_variables[0][1]==sorted_variables[1][1]==sorted_variables[2][1]==sorted_variables[3][1]:
