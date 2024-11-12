@@ -723,6 +723,8 @@ def set_category(Inbody):
             C_id="D_ss"
         elif 90<skeletalP<110 and 80<fatP<160:
             C_id="I_sh"
+        elif 90<skeletalP<110 and fatP<80:
+            C_id="D_ss"    
         else:
             C_id="N"    
     elif 115<=weightP:                    #(07.09 4시 수정)
@@ -769,6 +771,8 @@ def set_category_small(Inbody,UserHeight,Gender):
             C_id="D_ss"
         elif 90<skeletalP<110 and 80<fatP<160:
             C_id="I_sh"
+        elif 90<skeletalP<110 and fatP<80:
+            C_id="D_ss"    
         else:
             C_id="N"    
     elif 115<=weightP:                  
@@ -1941,8 +1945,8 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 if __name__ == "__main__":
     Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다",UserHeight=147)
     Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="낮음", VitB2="", Zn="낮음", Se="", VitB6="", VitE="", Folate="")
-    Inbo=Inbody(InbodyScore=73,Weight=48.3,BodyFat=15.3,FatFree=33,ApproWeight=45.4,WeightMax=48,MuscleMax=20,FatMax=15,Recomcal=1634,SkeletalMuscle=17.6)
+    Inbo=Inbody(InbodyScore=78,Weight=67.2,BodyFat=7.9,FatFree=59.3,ApproWeight=69.7,WeightMax=80.2,MuscleMax=36.5,FatMax=16.7,Recomcal=2581,SkeletalMuscle=33.7)
     Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
     Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
-    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"판교점","활동적",24)
+    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"중동점","활동적",24)
