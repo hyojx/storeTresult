@@ -793,6 +793,31 @@ def set_category_small(Inbody,UserHeight,Gender):
             C_id="N"             
     return C_id    
 
+# FS 인바디 유형결정
+def set_category_fs(InbodyCat):
+    #'표준체중 허약형','표준체중 비만형','표준체중 강인형','표준체중 건강형','과체중 허약형','과체중 강인형','과체중 비만형','저체중 강인형','저체중 허약형'
+    if InbodyCat=="표준체중 허약형":
+        C_id="C_sw"
+    elif InbodyCat=="표준체중 비만형":
+        C_id="C_so"
+    elif InbodyCat=="표준체중 강인형":
+        C_id="D_ss"      
+    elif InbodyCat=="표준체중 건강형":
+        C_id="I_sh" 
+    elif InbodyCat=="과체중 허약형":
+        C_id="C_ow"
+    elif InbodyCat=="과체중 강인형":
+        C_id="D_os"      
+    elif InbodyCat=="과체중 비만형":
+        C_id="I_oo"
+    elif InbodyCat=="저체중 강인형":
+        C_id="D_ls"  
+    elif InbodyCat=="저체중 허약형":
+        C_id="I_lw"    
+    else:
+        C_id="N"     
+    return C_id                  
+
 #인바디 유형별 코멘트 작성
 def write_comment(c,Inbody_cat,height):
     if Inbody_cat=="C_sw":
@@ -892,8 +917,8 @@ def write_comment(c,Inbody_cat,height):
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(35,height-675,'"유형을 분류할 수 없습니다. 인바디 값을 확인해주세요."')
     return
-
-#인바디 그래프 그리기
+ 
+#인바디 그래프 그리기(270이상 기기)
 def draw_inbody(c,Inbody,height):
     weightP=(Inbody.Weight*115)/Inbody.WeightMax
     skeletalP=Inbody.SkeletalMuscle*110/Inbody.MuscleMax
@@ -977,7 +1002,7 @@ def draw_inbody(c,Inbody,height):
 
     return
 
-#인바디 그래프 그리기
+#인바디 그래프 그리기(270이하 기기)
 def draw_inbody_small(c,Inbody,UserHeight,Gender,height):
     SWeight=((UserHeight*UserHeight)/10000)*22
     if Gender=="남성":
@@ -1073,6 +1098,127 @@ def draw_inbody_small(c,Inbody,UserHeight,Gender,height):
     c.line(162, height - 755, 162, height - 770)
 
     return    
+
+#인바디 그래프 그리기(270이하 추가 그래프_체지방률,골격근량,복주지방률,내장지방레벨)
+def draw_inbody_small_adddetail(c,Inbody,UserHeight,Gender,height):
+    BFR=Inbody.BodyFatRatio
+    SMM=Inbody.SkeletalMuscle    
+    WHR=Inbody.WaistHipRatio
+    VFL=Inbody.VisceralFatLevel
+
+    if Gender=="남성":
+        BFRmax=20
+        BFRmin=10
+        SMMmax=8*UserHeight*UserHeight/10000
+        SMMmin=7*UserHeight*UserHeight/10000
+    else:
+        BFRmax=28
+        BFRmin=18
+        SMMmax=6.7*UserHeight*UserHeight/10000
+        SMMmin=5.7*UserHeight*UserHeight/10000    
+    WHRmax=75
+    WHRmin=25
+    VFLmax=10
+    VFLmin=5
+
+    c.setFillColorRGB(0.9, 0.9, 0.9)
+    c.setStrokeColorRGB(0.9, 0.9, 0.9)
+    c.roundRect(370,height-680-15, 180, 15,7.5,fill=1)
+    c.roundRect(370,height-710-10, 180, 15,7.5,fill=1)
+    c.roundRect(370,height-740-5, 180, 15,7.5,fill=1)
+    c.roundRect(370,height-770, 180, 15,7.5,fill=1)
+
+    BFRwidth=max(0,180*(BFR)/60)
+    SMMwidth=max(0,180*(SMM)/Inbody.Weight)
+    WHRwidth=max(0,180*(WHR)/100)
+    VFLwidth=max(0,180*(VFL)/20)
+
+    if BFR<BFRmin :
+        c.setFillColorRGB(1,208/255,20/255)
+        c.setStrokeColorRGB(1,208/255,20/255)
+        c.roundRect(370,height-680-15, BFRwidth, 15,7.5,fill=1)
+
+    if BFRmin<=BFR<=BFRmax :
+        c.setFillColorRGB(134/255,206/255,2/255)
+        c.setStrokeColorRGB(134/255,206/255,2/255)
+        c.roundRect(370,height-680-15, BFRwidth, 15,7.5,fill=1)
+
+    if BFRmax<BFR :
+        c.setFillColorRGB(1,111/255,111/255)
+        c.setStrokeColorRGB(1,111/255,111/255)
+        c.roundRect(370,height-680-15, BFRwidth, 15,7.5,fill=1)   
+
+
+    if SMM<SMMmin :
+        c.setFillColorRGB(1,111/255,111/255)
+        c.setStrokeColorRGB(1,111/255,111/255)
+        c.roundRect(370,height-710-10, SMMwidth, 15,7.5,fill=1)
+
+    if SMMmin<=SMM<=SMMmax :
+        c.setFillColorRGB(134/255,206/255,2/255)
+        c.setStrokeColorRGB(134/255,206/255,2/255)
+        c.roundRect(370,height-710-10, SMMwidth, 15,7.5,fill=1)
+
+    if SMMmax<SMM :
+        c.setFillColorRGB(134/255,206/255,2/255)
+        c.setStrokeColorRGB(134/255,206/255,2/255)
+        c.roundRect(370,height-710-10, SMMwidth, 15,7.5,fill=1)    
+
+    
+    if WHR<WHRmin :
+        c.setFillColorRGB(1,208/255,20/255)
+        c.setStrokeColorRGB(1,208/255,20/255)
+        c.roundRect(370,height-740-5, WHRwidth, 15,7.5,fill=1)
+
+    if WHRmin<=WHR<=WHRmax :
+        c.setFillColorRGB(134/255,206/255,2/255)
+        c.setStrokeColorRGB(134/255,206/255,2/255)
+        c.roundRect(370,height-740-5, WHRwidth, 15,7.5,fill=1)
+
+    if WHRmax<WHR :
+        c.setFillColorRGB(1,111/255,111/255)
+        c.setStrokeColorRGB(1,111/255,111/255)
+        c.roundRect(370,height-740-5, WHRwidth, 15,7.5,fill=1) 
+
+
+
+    if VFL<VFLmin :
+        c.setFillColorRGB(1,208/255,20/255)
+        c.setStrokeColorRGB(1,208/255,20/255)
+        c.roundRect(370,height-770, VFLwidth, 15,7.5,fill=1)
+
+    if VFLmin<=VFL<=VFLmax :
+        c.setFillColorRGB(134/255,206/255,2/255)
+        c.setStrokeColorRGB(134/255,206/255,2/255)
+        c.roundRect(370,height-770, VFLwidth, 15,7.5,fill=1)
+
+    if VFLmax<VFL :
+        c.setFillColorRGB(1,111/255,111/255)
+        c.setStrokeColorRGB(1,111/255,111/255)
+        c.roundRect(370,height-770, VFLwidth, 15,7.5,fill=1)      
+        
+
+    c.setFillColorRGB(1,1,1)
+    c.drawString(345+BFRwidth,height-690,str(BFR))    
+    c.setFillColorRGB(1,1,1)
+    c.drawString(345+SMMwidth,height-715,str(SMM))  
+    c.drawString(345+WHRwidth,height-740,str(WHR))  
+    c.drawString(345+VFLwidth,height-770+5,str(VFL))
+
+    c.setLineWidth(0.5)
+    c.setStrokeColorRGB(1,1,1)
+    #최소값 표기
+    c.line((BFRmin*180)/60+370, height - 665-15, (BFRmin*180)/60+370, height - 680-15)
+    c.line((SMMmin*180)/Inbody.Weight+370, height - 695-10, (SMMmin*180)/Inbody.Weight+370, height - 710-10)
+    c.line((WHRmin*180)/100+370, height - 725-5, (WHRmin*180)/100+370, height - 740-5)
+    c.line((VFLmin*180)/20+370, height - 755, (VFLmin*180)/20+370, height - 770)
+    #최대값 표기
+    c.line((BFRmax*180)/60+370, height - 665-15, (BFRmax*180)/60+370, height - 680-15)
+    c.line((SMMmax*180)/Inbody.Weight+370, height - 695-10, (SMMmax*180)/Inbody.Weight+370, height - 710-10)
+    c.line((WHRmax*180)/100+370, height - 725-5, (WHRmax*180)/100+370, height - 740-5)
+    c.line((VFLmax*180)/20+370, height - 755, (VFLmax*180)/20+370, height - 770)
+
+    return   
 
 #인바디 유형 그리기
 def draw_alpha(c,Inbody_cat,height):
@@ -1432,7 +1578,7 @@ def set_sidedish_image(recomcal,Scat):
     return img_list
 
 # PDF 파일 생성
-def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supple,Store,Activity,Age):
+def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supple,Store,Activity,Age,InbodyCat):
     filename=resultfilepath+'Basic_Health_Report.pdf'
     c = canvas.Canvas(filename, pagesize=A4)
     width, height = A4
@@ -1441,9 +1587,13 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     register_fonts()
     
     # 제목1 추가 (한글) - 페이지 가운데에 배치
-    draw_centered_string(c, "Greating store healthcare", height - 40, mainfont, 12, width)
-    draw_centered_string(c, "맞춤영양 프로그램 결과차트", height - 70, boldfont, 20, width) #07.09 5시 수정
-    
+    # FS용 분기 생성(24.12.12)
+    if Store=="FS":
+        draw_centered_string(c, "영양상담 결과 리포트", height - 67, boldfont, 23, width)
+    else:
+        draw_centered_string(c, "Greating store healthcare", height - 40, mainfont, 12, width)
+        draw_centered_string(c, "맞춤영양 프로그램 결과차트", height - 70, boldfont, 20, width) #07.09 5시 수정
+        
     # 선 그리기 (x1, y1, x2, y2)
     c.setLineWidth(0.7)  # 라인의 굵기 설정
     c.setStrokeColorRGB(0.75, 0.75, 0.75)  # 라인의 색상 설정
@@ -1464,8 +1614,12 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     c.roundRect(20,height-430, 265+5, 310,15)
     c.roundRect(300,height-430, 265+5, 310,15)
     c.roundRect(20,height-625, 545+5, 185,15)
-    c.roundRect(20,height-820-10, 265+5, 185+10,15)
-    c.roundRect(300,height-820-10, 265+5, 185+10,15)
+    # FS용 분기 생성(24.12.12)
+    if Store=="FS":
+        c.roundRect(20,height-820-10, 545+5, 185+10,15)
+    else:    
+        c.roundRect(20,height-820-10, 265+5, 185+10,15)
+        c.roundRect(300,height-820-10, 265+5, 185+10,15)
     
 
     #-------------- part1 그리팅 헬스 스코어 --------------
@@ -1473,18 +1627,8 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     # 본문 채우기 
     c.setFont(boldfont, 12)
     c.setFillColorRGB(0, 0, 0)
-    c.drawString(35,height-140,"그리팅 헬스 스코어")
-    c.setFont(mainfont, 10)
-    c.setFillColorRGB(0.5, 0.5, 0.5)
-    c.drawString(35,height-160,"•4가지 항목의 종합적인 점수에요.")
-
-    # 4가지 점수표현 칸
-    c.drawImage(filepath+"score.png", 185, height - 240, 80,45,mask='auto')
-    c.drawImage(filepath+"score.png", 185, height - 295, 80,45,mask='auto')
-    c.drawImage(filepath+"score.png", 185, height - 350, 80,45,mask='auto')
-    c.drawImage(filepath+"score.png", 185, height - 405, 80,45,mask='auto')
-
-    # 점수
+    
+    # 점수 계산
     vitascore=100
     for field in fields(Vitastiq):
         field_name = field.name
@@ -1509,12 +1653,20 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     else:
         InboS=str(Inbody.InbodyScore)+"점"
 
-    if Agesensor.Rank==0:
-        AgeS="   -"
+    # FS용 분기 생성(24.12.12)    
+    if Store=="FS":
+        pass
     else:
-        AgeS=str(100-Agesensor.Rank)+"점"
+        if Agesensor.Rank==0:
+            AgeS="   -"
+        else:
+            AgeS=str(100-Agesensor.Rank)+"점"
 
-    TotalScore=float(Nutrition.EatScore+vitascore+Inbody.InbodyScore+100-Agesensor.Rank)/4
+    # FS용 분기 생성(24.12.12)
+    if Store=="FS":
+        TotalScore=round(float(Nutrition.EatScore+vitascore+Inbody.InbodyScore)/3,1)
+    else:    
+        TotalScore=round(float(Nutrition.EatScore+vitascore+Inbody.InbodyScore+100-Agesensor.Rank)/4,1)
     
     print("Total Score : "+str(TotalScore))
 
@@ -1525,24 +1677,65 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         draw_score_string(c,height,TotalScore)
         draw_part1_graph(c,height,TotalScore)
 
-    c.setFont(mainfont, 10)
-    c.setFillColorRGB(0, 0, 0)
-    c.drawString(213,height-231,EatS)
-    c.drawString(213,height-287,VitaS)
-    c.drawString(213,height-342,InboS)
-    c.drawString(213,height-396,AgeS)
+    # FS용 분기 생성(24.12.12)
+    if Store=="FS":
+        c.setFont(boldfont, 12)
+        c.setFillColorRGB(0, 0, 0)
+        c.drawString(35,height-140,"헬스 스코어")
+        c.setFont(mainfont, 10)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height-160,"•3가지 항목의 종합적인 점수에요.")
 
-    c.setFont(mainfont, 9)
-    c.setFillColorRGB(0, 0, 0)
-    c.drawString(195,height-211,"영양 섭취 상태")
-    c.drawString(196,height-266,"비타민/무기질")
-    c.drawString(210,height-321,"인바디")
-    c.drawString(198,height-376,"AGEs sensor")
+        # 4가지 점수표현 칸
+        c.drawImage(filepath+"score.png", 185, height - 260-10, 80,45,mask='auto')
+        c.drawImage(filepath+"score.png", 185, height - 315-10, 80,45,mask='auto')
+        c.drawImage(filepath+"score.png", 185, height - 370-10, 80,45,mask='auto')
+
+        c.setFont(mainfont, 10)
+        c.setFillColorRGB(0, 0, 0)
+        c.drawString(213,height-251-10,EatS)
+        c.drawString(213,height-307-10,VitaS)
+        c.drawString(213,height-362-10,InboS)
+
+        c.setFont(mainfont, 9)
+        c.setFillColorRGB(0, 0, 0)
+        c.drawString(195,height-231-10,"영양 섭취 상태")
+        c.drawString(196,height-286-10,"비타민/무기질")
+        c.drawString(210,height-341-10,"인바디")
+
+    else:    
+        c.setFont(boldfont, 12)
+        c.setFillColorRGB(0, 0, 0)
+        c.drawString(35,height-140,"그리팅 헬스 스코어")
+
+        c.setFont(mainfont, 10)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(35,height-160,"•4가지 항목의 종합적인 점수에요.")
+
+        # 4가지 점수표현 칸
+        c.drawImage(filepath+"score.png", 185, height - 240, 80,45,mask='auto')
+        c.drawImage(filepath+"score.png", 185, height - 295, 80,45,mask='auto')
+        c.drawImage(filepath+"score.png", 185, height - 350, 80,45,mask='auto')
+        c.drawImage(filepath+"score.png", 185, height - 405, 80,45,mask='auto')
+
+        c.setFont(mainfont, 10)
+        c.setFillColorRGB(0, 0, 0)
+        c.drawString(213,height-231,EatS)
+        c.drawString(213,height-287,VitaS)
+        c.drawString(213,height-342,InboS)
+        c.drawString(213,height-396,AgeS)
+
+        c.setFont(mainfont, 9)
+        c.setFillColorRGB(0, 0, 0)
+        c.drawString(195,height-211,"영양 섭취 상태")
+        c.drawString(196,height-266,"비타민/무기질")
+        c.drawString(210,height-321,"인바디")
+        c.drawString(198,height-376,"AGEs sensor")
 
     # 가운데 라인
     c.setDash([3, 2], 0)  # 대시 패턴 설정: 길이 3의 대시와 길이 2의 공백을 반복
     c.line(170, height - 195, 170, height - 405)  # (100, height-100)에서 시작하여 (400, height-100)까지 선 그리기
-
+    c.setDash(1,0) # 대시 패턴 없애기
 
     #-------------- part2 한 눈에 보는 나의 식습관 --------------
     # 본문 채우기 
@@ -1583,10 +1776,17 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     else:    
         c.setFillColorRGB(0, 0, 0)
         c.setFont(boldfont, 12)
-        c.drawString(35,height-655,"인바디")
+        # FS용 분기 생성(24.12.12)
+        if Store=="FS":
+            c.drawString(35,height-655,"신체계측")
+        else:    
+            c.drawString(35,height-655,"인바디")
 
         if Store=="판교점":
             Inbody_cat=set_category_small(Inbody,Nutrition.UserHeight,Gender)
+        # FS용 분기 생성(24.12.12)    
+        elif Store=="FS":
+            Inbody_cat=set_category_fs(InbodyCat)    
         else:    
             Inbody_cat=set_category(Inbody)
         print("Inbody_cat"+Inbody_cat)
@@ -1595,28 +1795,59 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         c.setFont(mainfont, 9)
         c.setFillColorRGB(0.5, 0.5, 0.5)
         c.drawString(37,height-705,'체중')
-        if Store=="판교점":
+        # FS용 분기 생성(24.12.12)
+        if Store=="판교점" or "FS":
             c.drawString(37,height-735,'제지방량')
         else:    
             c.drawString(37,height-735,'골격근량')
         c.drawString(37,height-765,'체지방량')
 
-        if Store=="판교점":
+        # FS용 분기 생성(24.12.12)
+        if Store=="판교점" or "FS":
             draw_inbody_small(c,Inbody,Nutrition.UserHeight,Gender,height)
         else:    
             draw_inbody(c,Inbody,height)
         draw_alpha(c,Inbody_cat,height)
 
-    #-------------- part5 Age sensor --------------
-    # 본문 채우기 
-    if Agesensor.Rating=="" or Agesensor.Rank==0:
-        c.drawImage(filepath+"AGEsBlur.png", 310, height - 810, 250,157,mask='auto')
-    else:    
+    #-------------- part5 Age sensor or Inbody --------------
+    # FS용 분기 생성(24.12.12)
+    if Store=="FS":
+        c.setFont(mainfont, 9)
+        c.setFillColorRGB(0.5, 0.5, 0.5)
+        c.drawString(313,height-655-14,'기초대사량')
+        c.drawString(313,height-675-15,'체지방률')
+        c.drawString(313,height-705-10,'골격근량')
+        c.drawString(313,height-735-5,'복부지방률')
+        c.drawString(313,height-765,'내장지방레벨')
+        c.drawString(370,height-655-14,str(Inbody.BMR)+"kcal") 
+
+        draw_inbody_small_adddetail(c,Inbody,Nutrition.UserHeight,Gender,height)
+        
+        c.setFillColorRGB(0.97, 0.97, 0.97)
+        c.roundRect(315,height-823,230,40,5,fill=1)
+        c.setFont(mainfont, 8)
         c.setFillColorRGB(0, 0, 0)
-        c.setFont(boldfont, 12)
-        c.drawString(315,height-655,"AGEs sensor")
-    
-        draw_panel(c,Agesensor,height)
+        c.drawString(326,height-795,'※ 제지방량이란?')
+        c.setFont(mainfont, 7)
+        c.drawString(328,height-806,'체중에서 체지방량을 뺀 뼈,근육,장기 등의 무게로 근육량에 영향을')
+        c.drawString(328,height-816,'많이 받으며 체지방량이 증가하면 기초대사량도 함께 증가')
+
+        c.setStrokeColorRGB(200/255,200/255,200/255)
+        c.setLineWidth(0.7)
+        c.setDash([3, 2], 0)  # 대시 패턴 설정: 길이 3의 대시와 길이 2의 공백을 반복
+        c.line(290, height - 660, 290, height - 820)
+        c.setDash(1,0) # 대시 패턴 없애기
+
+
+    else:
+        if Agesensor.Rating=="" or Agesensor.Rank==0:
+            c.drawImage(filepath+"AGEsBlur.png", 310, height - 810, 250,157,mask='auto')
+        else:    
+            c.setFillColorRGB(0, 0, 0)
+            c.setFont(boldfont, 12)
+            c.drawString(315,height-655,"AGEs sensor")
+        
+            draw_panel(c,Agesensor,height)
     
     #-------------- 페이지 저장 및 이미지 변환 --------------
 
@@ -1794,7 +2025,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     c.setFillColorRGB(0,0,0)
     if Pcat=="활력":
         biotinlist=["닥터트루 프리미엄 유기농 비오틴","프롬바이오 비오틴","바이너랩 마이 비오틴"]
-        totallist=["비타바움 비타민 B12+ V-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
+        totallist=["솔가 멀티비타민"]
         c.drawString(27,height-730-20,"﹒"+random.choice(biotinlist))
         c.drawString(27,height-730-40,"﹒"+"프롬바이오 비타민B")
         c.drawString(27,height-730-60,"﹒"+"모비타 리버칸 릴렉스")
@@ -1806,8 +2037,8 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         c.drawRightString(189,height-730-80,"#종합")
 
     elif Pcat=="근력":
-        mglist=["오리진 칼슘 마그네슘 비타민 D","닥터라인 마그네슘","삼진제약 쿨멜팅 마그네슘 400","닥터트루 프리미엄 마그네슘"]   #07.09 7시 수정
-        totallist=["비타바움 비타민 B12+ V-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
+        mglist=["퓨리탄 프라이드 마그네슘 500","닥터라인 마그네슘","닥터트루 프리미엄 마그네슘","엔바이탈 마그네슘 비타민B6 Ease"]   #07.09 7시 수정
+        totallist=["솔가 멀티비타민"]
         c.drawString(27,height-730-20,"﹒"+random.choice(mglist))
         c.drawString(27,height-730-40,"﹒"+"엔바이탈 마그네슘 Vit B6 Ease")
         c.drawString(27,height-730-60,"﹒"+random.choice(totallist)) 
@@ -1818,9 +2049,10 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         
     elif Pcat=="면역력":
         folatelist=["닥터트루 프리미엄 유기농 엽산 800","프롬바이오 활성 엽산"]
-        totallist=["비타바움 비타민 B12+ V-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
+        totallist=["솔가 멀티비타민"]
+        znlist=["퓨리탄프라이드 아연구미","닥터라인 셀렌+징크"]
         c.drawString(27,height-730-20,"﹒"+random.choice(folatelist))
-        c.drawString(27,height-730-40,"﹒"+"닥터라인 셀렌 징크")       #07.09 7시 수정
+        c.drawString(27,height-730-40,"﹒"+random.choice(znlist)) 
         c.drawString(27,height-730-60,"﹒"+random.choice(totallist)) 
         c.setFillColorRGB(0.5,0.5,0.5)
         c.drawRightString(189,height-730-20,"#엽산")
@@ -1828,10 +2060,11 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         c.drawRightString(189,height-730-60,"#종합")
 
     elif Pcat=="항산화":
-        totallist=["비타바움 비타민 B12+ V-콤플렉스","아임비타 멀티 비타민 이뮨플러스"]
-        clist=["프롬바이오 비타민C 1000","비타바움 퓨어비타민C250","탑헬스 리포조미아 비타민C","오리진 활력 비타민C 1000"]     #07.09 7시 수정
+        totallist=["솔가 멀티비타민"]
+        clist=["프롬바이오 비타민C 1000","비타바움 퓨어비타민C250","탑헬스 리포조미아 비타민C","솔가 에스터-C 비타민 1000"]
+        selist=["솔가 셀레늄","닥터라인 셀렌 징크"]
         c.drawString(27,height-730-20,"﹒"+random.choice(clist))
-        c.drawString(27,height-730-40,"﹒"+"닥터라인 셀렌 징크")
+        c.drawString(27,height-730-40,"﹒"+random.choice(selist))
         c.drawString(27,height-730-60,"﹒오리진 프리미엄 비타민 E 400IU")
         c.drawString(27,height-730-80,"﹒"+random.choice(totallist)) 
         c.setFillColorRGB(0.5,0.5,0.5)
@@ -1943,10 +2176,10 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 
 # PDF 생성 테스트용
 if __name__ == "__main__":
-    Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다",UserHeight=147)
+    Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다",UserHeight=167)
     Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="낮음", VitB2="", Zn="낮음", Se="", VitB6="", VitE="", Folate="")
-    Inbo=Inbody(InbodyScore=78,Weight=67.2,BodyFat=7.9,FatFree=59.3,ApproWeight=69.7,WeightMax=80.2,MuscleMax=36.5,FatMax=16.7,Recomcal=2581,SkeletalMuscle=33.7)
+    Inbo=Inbody(InbodyScore=78,Weight=67.2,BodyFat=7.9,FatFree=59.3,ApproWeight=69.7,WeightMax=80.2,MuscleMax=36.5,FatMax=16.7,Recomcal=2581,SkeletalMuscle=33.7,BodyFatRatio=19,WaistHipRatio=30,VisceralFatLevel=12,BMR=1800)
     Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
     Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
-    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"중동점","활동적",24)
+    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"FS","활동적",24,'과체중 비만형')

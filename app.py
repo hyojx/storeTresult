@@ -9,14 +9,14 @@ from createpdf3 import create_skin_pdf
 def update_ratio(slider_value):
     return slider_value, 100 - slider_value
 
-def process_basic_inputs(Name,Gender,Height,Store,Activity,Age,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,Unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightMax,MuscleMax,FatMax,Recomcal,SkeletalMuscle,Rating,Rank,CarbH,CarbV,ProteinL,ProteinV,FatH,FatV,FiberL,FiberV,SodiumH,SodiumV,SugarH,SugarV,SatFatH,SatFatV,CholesterolH,CholesterolV):
+def process_basic_inputs(Name,Gender,Height,Store,Activity,Age,EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,Unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightMax,MuscleMax,FatMax,Recomcal,SkeletalMuscle,BodyFatRatio,WaistHipRatio,VisceralFatLevel,BMR,InbodyCat,Rating,Rank,CarbH,CarbV,ProteinL,ProteinV,FatH,FatV,FiberL,FiberV,SodiumH,SodiumV,SugarH,SugarV,SatFatH,SatFatV,CholesterolH,CholesterolV):
     Nutri=Nutrition(EatScore=EatScore, Carb=Carb, Protein=Protein, Fat=Fat, Fiber=Fiber, Sodium=Sodium, Sugar=Sugar, SatFat=SatFat, Cholesterol=Cholesterol,UserHeight=Height)
     Vita=Vitastiq(Unused=Unused,Biotin=Biotin, VitC=VitC, Mg=Mg, VitB1=VitB1, VitB2=VitB2, Zn=Zn, Se=Se, VitB6=VitB6, VitE=VitE, Folate=Folate)
-    Inbo=Inbody(InbodyScore=InbodyScore,Weight=Weight,BodyFat=BodyFat,ApproWeight=ApproWeight,FatFree=FatFree,WeightMax=WeightMax,MuscleMax=MuscleMax,FatMax=FatMax,Recomcal=Recomcal,SkeletalMuscle=SkeletalMuscle)
+    Inbo=Inbody(InbodyScore=InbodyScore,Weight=Weight,BodyFat=BodyFat,ApproWeight=ApproWeight,FatFree=FatFree,WeightMax=WeightMax,MuscleMax=MuscleMax,FatMax=FatMax,Recomcal=Recomcal,SkeletalMuscle=SkeletalMuscle,BodyFatRatio=BodyFatRatio,WaistHipRatio=WaistHipRatio,VisceralFatLevel=VisceralFatLevel,BMR=BMR)
     Age=Agesensor(Rating,Rank)
     NutriD=NutritionDetail(CarbH=CarbH,CarbV=CarbV,ProteinL=ProteinL,ProteinV=ProteinV,FatH=FatH,FatV=FatV,FiberL=FiberL,FiberV=FiberV,SodiumH=SodiumH,SodiumV=SodiumV,SugarH=SugarH,SugarV=SugarV,SatFatH=SatFatH,SatFatV=SatFatV,CholesterolH=CholesterolH,CholesterolV=CholesterolV)
     Supple=Supplements(sup1="영양진단 영양제1",sup2="영양진단 영양제2",sup3="영양진단 영양제3",sup4="영양진단 영양제4",inter1="근력",inter2="소화기/장건강",inter3="면역력")
-    img_adress=create_basic_pdf(Nutri,Vita,Inbo,Age,Name,Gender,NutriD,Supple,Store,Activity,Age)
+    img_adress=create_basic_pdf(Nutri,Vita,Inbo,Age,Name,Gender,NutriD,Supple,Store,Activity,Age,InbodyCat)
 
     return img_adress
 
@@ -45,7 +45,7 @@ with gr.Blocks() as basic_health:
         Gender=gr.Radio(['남성','여성'],label="성별")
         Height=gr.Number(minimum=0,maximum=300,label="키(cm)")
         Age=gr.Number(minimum=0,maximum=200,label="나이(만)")
-        Store=gr.Dropdown(['판교점','중동점','본사'],label="지점")
+        Store=gr.Dropdown(['판교점','중동점','본사','FS'],label="지점")
         Activity=gr.Dropdown(['비활동적','저활동적','활동적','매우 활동적'],label="활동량")
     
     with gr.Column():
@@ -114,6 +114,13 @@ with gr.Blocks() as basic_health:
         Recomcal=gr.Number(minimum=0, maximum=10000,label="권장열량",min_width=80)
         SkeletalMuscle=gr.Number(minimum=0, maximum=1000,label="골격근량",min_width=80)
 
+        BodyFatRatio=gr.Number(minimum=0,maximum=100,label="체지방률")
+        WaistHipRatio=gr.Number(minimum=0,maximum=100,label="복부지방률")
+        VisceralFatLevel=gr.Number(minimum=1,maximum=15,label="내장지방 레벨")
+        BMR=gr.Number(minimum=0,maximum=4000,label="기초대사량")
+        InbodyCat=gr.Dropdown(['표준체중 허약형','표준체중 비만형','표준체중 강인형','표준체중 건강형','과체중 허약형','과체중 강인형','과체중 비만형','저체중 강인형','저체중 허약형'],label="인바디 유형")
+
+
     gr.HTML("""<h2 style = 'border-radius: 5px; text-indent: 10px; padding-top: 5px; padding-bottom: 5px;'>4. Age Sensor</h2>""")
     with gr.Row():
         Rating=gr.Dropdown(["A","B","C","D","E"], label="등급(A ~ E)")
@@ -127,7 +134,7 @@ with gr.Blocks() as basic_health:
         inputs=[Name,Gender,Height,Store,Activity,Age,
                 EatScore,Carb,Protein,Fat,Fiber,Sodium,Sugar,SatFat,Cholesterol,
                 unused,Biotin,VitC,Mg,VitB1,VitB2,Zn,Se,VitB6,VitE,Folate,
-                InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightMax,MuscleMax,FatMax,Recomcal,SkeletalMuscle,
+                InbodyScore,Weight,BodyFat,ApproWeight,FatFree,WeightMax,MuscleMax,FatMax,Recomcal,SkeletalMuscle,BodyFatRatio,WaistHipRatio,VisceralFatLevel,BMR,InbodyCat,
                 Rating,Rank,
                 CarbH,CarbV,ProteinL,ProteinV,FatH,FatV,FiberL,FiberV,SodiumH,SodiumV,SugarH,SugarV,SatFatH,SatFatV,CholesterolH,CholesterolV],
         outputs=output_image
