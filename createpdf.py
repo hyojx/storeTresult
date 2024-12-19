@@ -1803,7 +1803,9 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         c.drawString(37,height-765,'체지방량')
 
         # FS용 분기 생성(24.12.12)
-        if Store=="판교점" or "FS":
+        if Store=="판교점":
+            draw_inbody_small(c,Inbody,Nutrition.UserHeight,Gender,height)
+        elif Store=="FS":
             draw_inbody_small(c,Inbody,Nutrition.UserHeight,Gender,height)
         else:    
             draw_inbody(c,Inbody,height)
@@ -2182,4 +2184,4 @@ if __name__ == "__main__":
     Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
     Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
-    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"FS","활동적",24,'과체중 비만형')
+    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"본사","활동적",24,'과체중 비만형')
