@@ -1129,7 +1129,7 @@ def draw_inbody_small_adddetail(c,Inbody,UserHeight,Gender,height):
     c.roundRect(370,height-770, 180, 15,7.5,fill=1)
 
     BFRwidth=max(0,180*(BFR)/60)
-    SMMwidth=max(0,180*(SMM)/Inbody.Weight)
+    SMMwidth=max(0,180*(SMM)/(Inbody.Weight-Inbody.BodyFat))
     WHRwidth=max(0,180*(WHR)/100)
     VFLwidth=max(0,180*(VFL)/20)
 
@@ -1209,12 +1209,12 @@ def draw_inbody_small_adddetail(c,Inbody,UserHeight,Gender,height):
     c.setStrokeColorRGB(1,1,1)
     #최소값 표기
     c.line((BFRmin*180)/60+370, height - 665-15, (BFRmin*180)/60+370, height - 680-15)
-    c.line((SMMmin*180)/Inbody.Weight+370, height - 695-10, (SMMmin*180)/Inbody.Weight+370, height - 710-10)
+    c.line((SMMmin*180)/(Inbody.Weight-Inbody.BodyFat)+370, height - 695-10, (SMMmin*180)/(Inbody.Weight-Inbody.BodyFat)+370, height - 710-10)
     c.line((WHRmin*180)/100+370, height - 725-5, (WHRmin*180)/100+370, height - 740-5)
     c.line((VFLmin*180)/20+370, height - 755, (VFLmin*180)/20+370, height - 770)
     #최대값 표기
     c.line((BFRmax*180)/60+370, height - 665-15, (BFRmax*180)/60+370, height - 680-15)
-    c.line((SMMmax*180)/Inbody.Weight+370, height - 695-10, (SMMmax*180)/Inbody.Weight+370, height - 710-10)
+    c.line((SMMmax*180)/(Inbody.Weight-Inbody.BodyFat)+370, height - 695-10, (SMMmax*180)/(Inbody.Weight-Inbody.BodyFat)+370, height - 710-10)
     c.line((WHRmax*180)/100+370, height - 725-5, (WHRmax*180)/100+370, height - 740-5)
     c.line((VFLmax*180)/20+370, height - 755, (VFLmax*180)/20+370, height - 770)
 
@@ -1670,12 +1670,20 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     
     print("Total Score : "+str(TotalScore))
 
+    # FS용 분기 생성(25.01.07)
     # 점수표현
-    if Nutrition.EatScore==0 or Inbody.InbodyScore==0 or Agesensor.Rank==0 or Vitastiq.Unused==True:
-        c.drawImage(filepath+"TotalBlur.png", 30, height - 400, 144,230,mask='auto')
-    else:     
-        draw_score_string(c,height,TotalScore)
-        draw_part1_graph(c,height,TotalScore)
+    if Store=="FS":
+        if Nutrition.EatScore==0 or Inbody.InbodyScore==0 or Vitastiq.Unused==True:
+            c.drawImage(filepath+"TotalBlur.png", 30, height - 400, 144,230,mask='auto')
+        else:     
+            draw_score_string(c,height,TotalScore)
+            draw_part1_graph(c,height,TotalScore)    
+    else:        
+        if Nutrition.EatScore==0 or Inbody.InbodyScore==0 or Agesensor.Rank==0 or Vitastiq.Unused==True:
+            c.drawImage(filepath+"TotalBlur.png", 30, height - 400, 144,230,mask='auto')
+        else:     
+            draw_score_string(c,height,TotalScore)
+            draw_part1_graph(c,height,TotalScore)
 
     # FS용 분기 생성(24.12.12)
     if Store=="FS":
@@ -1821,7 +1829,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         c.drawString(313,height-705-10,'골격근량')
         c.drawString(313,height-735-5,'복부지방률')
         c.drawString(313,height-765,'내장지방레벨')
-        c.drawString(370,height-655-14,str(Inbody.BMR)+"kcal") 
+        c.drawString(370,height-655-14,str(format(Inbody.BMR,','))+"kcal") 
 
         draw_inbody_small_adddetail(c,Inbody,Nutrition.UserHeight,Gender,height)
         
@@ -2180,8 +2188,8 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 if __name__ == "__main__":
     Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다",UserHeight=167)
     Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="낮음", VitB2="", Zn="낮음", Se="", VitB6="", VitE="", Folate="")
-    Inbo=Inbody(InbodyScore=78,Weight=67.2,BodyFat=7.9,FatFree=59.3,ApproWeight=69.7,WeightMax=80.2,MuscleMax=36.5,FatMax=16.7,Recomcal=2581,SkeletalMuscle=33.7,BodyFatRatio=19,WaistHipRatio=30,VisceralFatLevel=12,BMR=1800)
+    Inbo=Inbody(InbodyScore=78,Weight=67.2,BodyFat=20.9,FatFree=59.3,ApproWeight=69.7,WeightMax=80.2,MuscleMax=36.5,FatMax=16.7,Recomcal=2581,SkeletalMuscle=33.7,BodyFatRatio=19,WaistHipRatio=30,VisceralFatLevel=12,BMR=1800)
     Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
     Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
-    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"본사","활동적",24,'과체중 비만형')
+    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"FS","활동적",24,'과체중 비만형')
