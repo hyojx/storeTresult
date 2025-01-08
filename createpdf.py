@@ -1177,7 +1177,7 @@ def draw_inbody_home(c,height,C_id,Inbody):
 def draw_inbody_small_adddetail(c,Inbody,UserHeight,Gender,height):
     BFR=Inbody.BodyFatRatio
     SMM=Inbody.SkeletalMuscle    
-    WHR=Inbody.WaistHipRatio
+    WHR=Inbody.WaistHipRatio*100
     VFL=Inbody.VisceralFatLevel
 
     if Gender=="남성":
