@@ -986,9 +986,9 @@ def draw_inbody(c,Inbody,height):
     # 로직 수정 07.16 3시 ---------------------------------------     
 
     c.setFillColorRGB(1,1,1)
-    c.drawString(65+weightW,height-710+5,str(Inbody.Weight))    
-    c.drawString(65+skeletalW,height-740+5,str(Inbody.SkeletalMuscle))  
-    c.drawString(65+fatW,height-770+5,str(Inbody.BodyFat))
+    c.drawString(95,height-710+5,str(Inbody.Weight))    
+    c.drawString(95,height-740+5,str(Inbody.SkeletalMuscle))  
+    c.drawString(95,height-770+5,str(Inbody.BodyFat))
 
     c.setLineWidth(0.5)
     c.setStrokeColorRGB(0.9,0.9,0.9)
@@ -1083,9 +1083,9 @@ def draw_inbody_small(c,Inbody,UserHeight,Gender,height):
     # 로직 수정 07.16 3시 ---------------------------------------     
 
     c.setFillColorRGB(1,1,1)
-    c.drawString(65+weightW,height-710+5,str(Inbody.Weight))    
-    c.drawString(65+skeletalW,height-740+5,str(Inbody.FatFree))  
-    c.drawString(65+fatW,height-770+5,str(Inbody.BodyFat))
+    c.drawString(95,height-710+5,str(Inbody.Weight))    
+    c.drawString(95,height-740+5,str(Inbody.FatFree))  
+    c.drawString(95,height-770+5,str(Inbody.BodyFat))
 
     c.setLineWidth(0.5)
     c.setStrokeColorRGB(0.9,0.9,0.9)
@@ -1123,7 +1123,7 @@ def draw_inbody_home(c,height,C_id,Inbody):
         c.roundRect(90,height-710, 90, 15,7.5,fill=1)
         weightW=90
     c.setFillColorRGB(1,1,1)
-    c.drawString(65+weightW,height-710+5,str(Inbody.Weight))    
+    c.drawString(95,height-710+5,str(Inbody.Weight))    
 
     if C_id=="C_sw" or C_id == "C_so"or C_id=="I_lw":
         c.setFillColorRGB(1,208/255,20/255) #Yellow
@@ -1141,7 +1141,7 @@ def draw_inbody_home(c,height,C_id,Inbody):
         c.roundRect(90,height-740, 90, 15,7.5,fill=1)
         fatfreeW=90
     c.setFillColorRGB(1,1,1)
-    c.drawString(65+fatfreeW,height-740+5,str(Inbody.Weight-Inbody.BodyFat)) 
+    c.drawString(95,height-740+5,str(Inbody.Weight-Inbody.BodyFat)) 
 
     if C_id=="D_ls" or C_id=="I_lw":
         c.setFillColorRGB(134/255,206/255,2/255) #Green
@@ -1159,7 +1159,7 @@ def draw_inbody_home(c,height,C_id,Inbody):
         c.roundRect(90,height-770, 90, 15,7.5,fill=1)   
         fatW=90 
     c.setFillColorRGB(1,1,1)
-    c.drawString(65+fatW,height-770+5,str(Inbody.BodyFat))
+    c.drawString(95,height-770+5,str(Inbody.BodyFat))
 
     c.setLineWidth(0.5)
     c.setStrokeColorRGB(0.9,0.9,0.9)
@@ -1273,11 +1273,11 @@ def draw_inbody_small_adddetail(c,Inbody,UserHeight,Gender,height):
         
 
     c.setFillColorRGB(1,1,1)
-    c.drawString(345+BFRwidth,height-690,str(BFR))    
+    c.drawString(378,height-690,str(BFR))    
     c.setFillColorRGB(1,1,1)
-    c.drawString(345+SMMwidth,height-715,str(SMM))  
-    c.drawString(345+WHRwidth,height-740,str(WHR))  
-    c.drawString(345+VFLwidth,height-770+5,str(VFL))
+    c.drawString(378,height-715,str(SMM))  
+    c.drawString(378,height-740,str(WHR))  
+    c.drawString(378,height-770+5,str(VFL))
 
     c.setLineWidth(0.5)
     c.setStrokeColorRGB(1,1,1)
@@ -2264,7 +2264,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 if __name__ == "__main__":
     Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다",UserHeight=159)
     Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="낮음", VitB2="", Zn="낮음", Se="", VitB6="", VitE="", Folate="")
-    Inbo=Inbody(InbodyScore=78,Weight=48,BodyFat=10.8,FatFree=0,ApproWeight=0,WeightMax=0,MuscleMax=0,FatMax=0,Recomcal=0,SkeletalMuscle=18.3,BodyFatRatio=23.9,WaistHipRatio=79,VisceralFatLevel=4,BMR=1114)
+    Inbo=Inbody(InbodyScore=78,Weight=48,BodyFat=10.8,FatFree=0,ApproWeight=0,WeightMax=0,MuscleMax=0,FatMax=0,Recomcal=0,SkeletalMuscle=18.3,BodyFatRatio=23.9,WaistHipRatio=0.79,VisceralFatLevel=4,BMR=1114)
     Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
     Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
