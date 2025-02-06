@@ -1366,13 +1366,15 @@ def draw_inbody_small_adddetail(c,Inbody,UserHeight,Gender,height):
         BFRmin=10
         SMMmax=7.7*UserHeight*UserHeight/10000
         SMMmin=6.3*UserHeight*UserHeight/10000
+        WHRmax=90
+        WHRmin=25
     else:
         BFRmax=28
         BFRmin=18
         SMMmax=6.27*UserHeight*UserHeight/10000
         SMMmin=5.13*UserHeight*UserHeight/10000    
-    WHRmax=75
-    WHRmin=25
+        WHRmax=85
+        WHRmin=25
     VFLmax=10
     VFLmin=5
 
@@ -1385,7 +1387,7 @@ def draw_inbody_small_adddetail(c,Inbody,UserHeight,Gender,height):
 
     BFRwidth=max(0,180*(BFR)/60)
     SMMwidth=max(0,180*(SMM)/(Inbody.Weight-Inbody.BodyFat))
-    WHRwidth=max(0,180*(WHR)/100)
+    WHRwidth=min(180,180*(WHR)/100)
     VFLwidth=max(0,180*(VFL)/20)
 
     Yellow=(1,208/255,20/255)
@@ -1469,8 +1471,7 @@ def draw_inbody_small_adddetail(c,Inbody,UserHeight,Gender,height):
     #최소값 표기
     c.line((BFRmin*180)/60+100, height - 726, (BFRmin*180)/60+100, height - 711)
     c.line((SMMmin*180)/(Inbody.Weight-Inbody.BodyFat)+100, height - 749, (SMMmin*180)/(Inbody.Weight-Inbody.BodyFat)+100, height - 734)
-    c.line((WHRmin*180)/100+100, height - 772, (WHRmin*180)/100+100, height - 757)
-    c.line((VFLmin*180)/20+100, height - 795, (VFLmin*180)/20+100, height - 780)
+
     #최대값 표기
     c.line((BFRmax*180)/60+100, height - 726, (BFRmax*180)/60+100, height - 711)
     c.line((SMMmax*180)/(Inbody.Weight-Inbody.BodyFat)+100, height - 749, (SMMmax*180)/(Inbody.Weight-Inbody.BodyFat)+100, height - 734)
@@ -2484,7 +2485,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
 if __name__ == "__main__":
     Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다",UserHeight=159)
     Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="낮음", VitB2="", Zn="낮음", Se="", VitB6="", VitE="", Folate="")
-    Inbo=Inbody(InbodyScore=78,Weight=45.3,BodyFat=10.8,FatFree=0,ApproWeight=0,WeightMax=0,MuscleMax=0,FatMax=0,Recomcal=0,SkeletalMuscle=18.3,BodyFatRatio=23.9,WaistHipRatio=0.79,VisceralFatLevel=4,BMR=1114)
+    Inbo=Inbody(InbodyScore=78,Weight=45.3,BodyFat=10.8,FatFree=0,ApproWeight=0,WeightMax=0,MuscleMax=0,FatMax=0,Recomcal=0,SkeletalMuscle=18.3,BodyFatRatio=23.9,WaistHipRatio=1.15,VisceralFatLevel=4,BMR=1114)
     Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
     Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
