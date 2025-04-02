@@ -758,10 +758,17 @@ def set_category_small(Inbody,UserHeight,Gender):
     if (SFatFree-(Inbody.Weight-Inbody.BodyFat))<=0:
         fatP=Inbody.BodyFat/(Inbody.BodyFat+(SWeight-Inbody.Weight))*100
     else:     
-        fatP=Inbody.BodyFat/(Inbody.BodyFat+((SWeight-Inbody.Weight)-(SFatFree-(Inbody.Weight-Inbody.BodyFat))))*100
+        fatP=Inbody.BodyFat/(Inbody.BodyFat+((SWeight-Inbody.Weight)-(SFatFree-(Inbody.Weight-Inbody.BodyFat))) )*100
+    print("체중계산:"+str((SWeight-Inbody.Weight)))    
+    print("제지방계산:"+str((SFatFree-(Inbody.Weight-Inbody.BodyFat))))
+    print("두개 계산:"+str(((SWeight-Inbody.Weight)-(SFatFree-(Inbody.Weight-Inbody.BodyFat)))))     
+    print("체지방표준량:"+str((Inbody.BodyFat+((SWeight-Inbody.Weight)-(SFatFree-(Inbody.Weight-Inbody.BodyFat)))))) 
+    print("??:"+str((SFatFree-(Inbody.Weight-Inbody.BodyFat))))
+    print("SFatFree:"+str(SFatFree))
+    print("SWeight:"+str(SWeight))
     print(weightP)
     print(skeletalP)
-    print(fatP)
+    print("fatP:"+str(fatP))
     if 85 < weightP <115:
         if skeletalP <= 90 and 80<fatP <160:
             C_id="C_sw"
@@ -1431,12 +1438,12 @@ def draw_inbody_small_adddetail(c,Inbody,UserHeight,Gender,height):
         c.setStrokeColorRGB(*Green)
         c.roundRect(100,height-772, WHRwidth, 15,7.5,fill=1)
 
-    if WHRmin<=WHR<=WHRmax :
+    if WHRmin<=WHR<WHRmax :
         c.setFillColorRGB(*Green)
         c.setStrokeColorRGB(*Green)
         c.roundRect(100,height-772, WHRwidth, 15,7.5,fill=1)
 
-    if WHRmax<WHR :
+    if WHRmax<=WHR :
         c.setFillColorRGB(*Red)
         c.setStrokeColorRGB(*Red)
         c.roundRect(100,height-772, WHRwidth, 15,7.5,fill=1) 
@@ -1448,12 +1455,12 @@ def draw_inbody_small_adddetail(c,Inbody,UserHeight,Gender,height):
         c.setStrokeColorRGB(*Green)
         c.roundRect(100,height-795, VFLwidth, 15,7.5,fill=1)
 
-    if VFLmin<=VFL<=VFLmax :
+    if VFLmin<=VFL<VFLmax :
         c.setFillColorRGB(*Green)
         c.setStrokeColorRGB(*Green)
         c.roundRect(100,height-795, VFLwidth, 15,7.5,fill=1)
 
-    if VFLmax<VFL :
+    if VFLmax<=VFL :
         c.setFillColorRGB(*Red)
         c.setStrokeColorRGB(*Red)
         c.roundRect(100,height-795, VFLwidth, 15,7.5,fill=1)      
@@ -2057,7 +2064,7 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
         c.setFillColorRGB(0, 0, 0)
         c.setFont(boldfont, 12)
         # FS용 분기 생성(24.12.12)
-        if Store=="판교":
+        if Store=="판교점":
             c.drawString(35,height-655,"인바디")  
             Inbody_cat=set_category_small(Inbody,Nutrition.UserHeight,Gender)    
             write_comment(c,Inbody_cat,height)
@@ -2481,15 +2488,25 @@ def create_basic_pdf(Nutrition,Vitastiq,Inbody,Agesensor,Name,Gender,NutriD,Supp
     return img_path 
 
 
-# PDF 생성 테스트용
+'''# PDF 생성 테스트용
 if __name__ == "__main__":
-    Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다",UserHeight=159)
+    Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다",UserHeight=154)
     Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="낮음", VitB2="", Zn="낮음", Se="", VitB6="", VitE="", Folate="")
-    Inbo=Inbody(InbodyScore=78,Weight=45.3,BodyFat=10.8,FatFree=0,ApproWeight=0,WeightMax=0,MuscleMax=0,FatMax=0,Recomcal=0,SkeletalMuscle=18.3,BodyFatRatio=23.9,WaistHipRatio=1.15,VisceralFatLevel=4,BMR=1114)
+    Inbo=Inbody(InbodyScore=78,Weight=70,BodyFat=29.8,FatFree=40.2,ApproWeight=0,WeightMax=0,MuscleMax=0,FatMax=0,Recomcal=0,SkeletalMuscle=0,BodyFatRatio=0,WaistHipRatio=0,VisceralFatLevel=4,BMR=1114)
     Age=Agesensor(Rating="B",Rank=34)
     NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
     Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
-    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","남성",NutriD,Supple,"FS","활동적",24,'표준체중 허약형')
+    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"판교점","활동적",24,'표준체중 허약형')'''
+
+# PDF 생성 테스트용
+if __name__ == "__main__":
+    Nutri=Nutrition(EatScore=70, Carb="과다", Protein="과다", Fat="과다", Fiber="적정", Sodium="과다", Sugar="과다", SatFat="과다", Cholesterol="과다",UserHeight=174)
+    Vita=Vitastiq(Unused=False,Biotin="", VitC="낮음", Mg="", VitB1="낮음", VitB2="", Zn="낮음", Se="", VitB6="", VitE="", Folate="")
+    Inbo=Inbody(InbodyScore=78,Weight=58,BodyFat=20,FatFree=38,ApproWeight=0,WeightMax=0,MuscleMax=0,FatMax=0,Recomcal=0,SkeletalMuscle=0,BodyFatRatio=0,WaistHipRatio=0,VisceralFatLevel=4,BMR=1114)
+    Age=Agesensor(Rating="B",Rank=34)
+    NutriD=NutritionDetail(CarbH=324.3,CarbV=74.9,ProteinL=34.9,ProteinV=19,FatH=66.5,FatV=22.6,FiberL=23.9,FiberV=8,SodiumH=2300,SodiumV=774,SugarH=50,SugarV=20.6,SatFatH=15.5,SatFatV=3.7,CholesterolH=300,CholesterolV=78)
+    Supple=Supplements(sup1="추천 영양제 1번",sup2="추천 영양제 2번",sup3="추천 영양제 3번",sup4="추천 영양제 4번",inter1="근력",inter2="소화기/장건강",inter3="면역력")
+    create_basic_pdf(Nutri,Vita,Inbo,Age,"김건강","여성",NutriD,Supple,"판교점","활동적",24,'표준체중 허약형')    
 
 # PDF 생성 테스트용2
 '''if __name__ == "__main__":
